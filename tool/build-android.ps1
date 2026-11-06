@@ -32,6 +32,9 @@ try {
   $versionLine = Select-String -LiteralPath 'pubspec.yaml' -Pattern '^version:\s*(\S+)'
   $versionParts = $versionLine.Matches[0].Groups[1].Value.Split('+')
   $packageVersion = $versionParts[0]
+  # Keep deobfuscation symbols private so production crashes remain diagnosable.
+  $symbols = Join-Path $projectRoot "dist/private-symbols/android-$packageVersion-$($versionParts[1])"
+  New-Item -ItemType Directory -Path $symbols -Force | Out-Null
   if ($Offline) {
     # Flutter must have configured this checkout at least once. Avoid lint's
     # optional online SDK-index lookup when all build dependencies are cached.
@@ -43,12 +46,12 @@ try {
     [IO.File]::WriteAllText($propertiesPath, $properties, [Text.UTF8Encoding]::new($false))
     Push-Location 'android'
     try {
-      & ./gradlew.bat :app:assembleRelease --offline --console=plain '-Ptarget-platform=android-arm,android-arm64,android-x64' '-Ptarget=lib/main_android.dart' '-Pbuild-mode=release' "-Pdart-defines=$($serviceConfig.DartDefines)"
+      & ./gradlew.bat :app:assembleRelease --offline --console=plain '-Ptarget-platform=android-arm,android-arm64,android-x64' '-Ptarget=lib/main_android.dart' '-Pbuild-mode=release' '-Pdart-obfuscation=true' "-Psplit-debug-info=$symbols" "-Pdart-defines=$($serviceConfig.DartDefines)"
       if ($LASTEXITCODE -ne 0) { throw 'Android offline build failed.' }
     } finally { Pop-Location }
     $apk = 'build/app/outputs/apk/release/app-release.apk'
   } else {
-    & $Flutter build apk --release --no-pub --target lib/main_android.dart "--dart-define-from-file=$($serviceConfig.Path)"
+    & $Flutter build apk --release --no-pub --obfuscate "--split-debug-info=$symbols" --target lib/main_android.dart "--dart-define-from-file=$($serviceConfig.Path)"
     if ($LASTEXITCODE -ne 0) { throw 'Android build failed.' }
     $apk = 'build/app/outputs/flutter-apk/app-release.apk'
   }

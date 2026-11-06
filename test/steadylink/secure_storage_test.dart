@@ -12,6 +12,26 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final prefs = SharedPrefsService.instance;
     await prefs.init();
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(
+      const MethodChannel('steadylink/credentials'),
+      (_) async => throw PlatformException(code: 'storage-unavailable'),
+    );
+    await expectLater(
+      prefs.initializeSecureStorage(),
+      throwsA(isA<PlatformException>()),
+    );
+    await expectLater(
+      prefs.setString('mi.account.token', 'must-not-leak'),
+      throwsStateError,
+    );
+    await expectLater(
+      prefs.setStringList('paired_devices', ['must-not-leak']),
+      throwsStateError,
+    );
+    expect((await SharedPreferences.getInstance()).getKeys(), isEmpty);
+    expect(prefs.getString('mi.account.token'), isNull);
     var stored = <String, dynamic>{};
     var failWrite = false;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

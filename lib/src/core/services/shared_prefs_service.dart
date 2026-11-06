@@ -13,6 +13,7 @@ class SharedPrefsService {
   static const _secure = MethodChannel('steadylink/credentials');
   final Map<String, Object?> _credentials = {};
   bool _secureReady = false;
+  bool _secureRequired = false;
   Future<void> _writeTail = Future<void>.value();
   bool _sensitive(String key) =>
       key == 'paired_devices' ||
@@ -23,6 +24,9 @@ class SharedPrefsService {
   /// Load before constructing the device manager, which reads synchronously.
   /// No plaintext fallback is used if the platform keystore is unavailable.
   Future<void> initializeSecureStorage() async {
+    _secureRequired = true;
+    _secureReady = false;
+    _credentials.clear();
     final raw = await _secure.invokeMethod<String>('read');
     _credentials.addAll(
       (jsonDecode(raw ?? '{}') as Map).cast<String, Object?>(),
@@ -69,14 +73,14 @@ class SharedPrefsService {
     return _prefs!;
   }
 
-  String? getString(String key) => _secureReady && _sensitive(key)
+  String? getString(String key) => _secureRequired && _sensitive(key)
       ? _credentials[key] as String?
       : _safePrefs.getString(key);
   Future<bool> setString(String key, String value) =>
-      _secureReady && _sensitive(key)
+      _secureRequired && _sensitive(key)
       ? _saveCredential(key, value)
       : _safePrefs.setString(key, value);
-  Future<bool> remove(String key) => _secureReady && _sensitive(key)
+  Future<bool> remove(String key) => _secureRequired && _sensitive(key)
       ? _saveCredential(key, null)
       : _safePrefs.remove(key);
 
@@ -91,11 +95,11 @@ class SharedPrefsService {
   Future<bool> setDouble(String key, double value) =>
       _safePrefs.setDouble(key, value);
 
-  List<String>? getStringList(String key) => _secureReady && _sensitive(key)
+  List<String>? getStringList(String key) => _secureRequired && _sensitive(key)
       ? (_credentials[key] as List?)?.cast<String>()
       : _safePrefs.getStringList(key);
   Future<bool> setStringList(String key, List<String> value) =>
-      _secureReady && _sensitive(key)
+      _secureRequired && _sensitive(key)
       ? _saveCredential(key, value)
       : _safePrefs.setStringList(key, value);
 }

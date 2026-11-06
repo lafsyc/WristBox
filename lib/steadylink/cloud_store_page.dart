@@ -865,7 +865,9 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (final entry in widget.app.models)
+                    for (final entry in widget.app.models.where(
+                      _ModelPicker._browseModels.contains,
+                    ))
                       ActionChip(
                         label: Text(storeModelNames[entry] ?? entry),
                         onPressed: _busy

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:logging/logging.dart';
 
+import 'diagnostic_redaction.dart';
+
 enum DiagnosticProcess { frontend, backend, cli, debugWindow, pluginWindow }
 
 class DiagnosticEvent {
@@ -31,7 +33,23 @@ class DiagnosticEvent {
 
   String get scope => pluginId == null ? process.name : 'plugin:$pluginId';
 
-  Map<String, Object?> toJson() => {
+  DiagnosticEvent redacted() => DiagnosticEvent(
+    time: time,
+    level: level,
+    source: redactDiagnosticText(source),
+    process: process,
+    message: redactDiagnosticText(message),
+    pluginId: pluginId == null ? null : redactDiagnosticText(pluginId!),
+    runtime: runtime == null ? null : redactDiagnosticText(runtime!),
+    error: error == null ? null : redactDiagnosticText(error.toString()),
+    stackTrace: stackTrace == null
+        ? null
+        : StackTrace.fromString(redactDiagnosticText(stackTrace.toString())),
+    fields: redactDiagnosticValue(fields) as Map<String, Object?>,
+  );
+
+  Map<String, Object?> toJson() => redacted()._toJson();
+  Map<String, Object?> _toJson() => {
     'time': time.toIso8601String(),
     'level': level.name,
     'source': source,
@@ -68,7 +86,8 @@ class DiagnosticEvent {
     );
   }
 
-  String format() {
+  String format() => redacted()._format();
+  String _format() {
     final buffer = StringBuffer('${_formatTime(time)} ')
       ..write(level.name.padRight(5))
       ..write(' [$scope] ')

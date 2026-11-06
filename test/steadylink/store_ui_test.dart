@@ -73,6 +73,7 @@ class PreviewStore extends CloudStore {
       '212': ['o66', 'band11'],
       '192': ['n66'],
       '432': ['o65', 'p65'],
+      'legacy': ['m67'],
     }.entries)
       {
         'id': pair.key,

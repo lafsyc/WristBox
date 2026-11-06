@@ -63,6 +63,7 @@ List<String> get recentOronBoxLogs =>
 bool _globalErrorLoggingInstalled = false;
 
 void publishDiagnostic(DiagnosticEvent event) {
+  event = event.redacted();
   _recentDiagnostics.add(event);
   if (_recentDiagnostics.length > 1000) _recentDiagnostics.removeAt(0);
   _diagnostics.add(event);
