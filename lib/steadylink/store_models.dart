@@ -40,6 +40,69 @@ String? storeModelForDevice(MiWearState? device, {SystemInfo? systemInfo}) {
 List<String> supportedModels(Map<String, dynamic> item) =>
     (item['supportedModels'] as List? ?? const []).whereType<String>().toList();
 
+List<int>? firmwareParts(String value) {
+  final raw = value.trim();
+  if (!RegExp(r'^[0-9]{1,6}(\.[0-9]{1,6}){1,5}$').hasMatch(raw)) return null;
+  final parts = raw.split('.').map(int.parse).toList();
+  return [...parts, ...List.filled(6 - parts.length, 0)];
+}
+
+int compareFirmware(List<int> a, List<int> b) {
+  for (var i = 0; i < 6; i++) {
+    final result = a[i].compareTo(b[i]);
+    if (result != 0) return result;
+  }
+  return 0;
+}
+
+String? firmwareMismatch(
+  Map<String, dynamic> item,
+  String model,
+  String firmware,
+) {
+  final rules = (item['firmwareRules'] as List? ?? const []).whereType<Map>();
+  final rule = rules.where((r) => r['model'] == model).firstOrNull;
+  if (rule == null || rule['mode'] == 'any') return null;
+  final current = firmwareParts(firmware);
+  if (current == null) return '此安装包限制固件版本，请连接手环并刷新设备信息后再试。';
+  if (rule['mode'] == 'exact') {
+    final versions = (rule['versions'] as List? ?? const [])
+        .whereType<String>();
+    if (versions.any(
+      (v) =>
+          firmwareParts(v) != null &&
+          compareFirmware(current, firmwareParts(v)!) == 0,
+    )) {
+      return null;
+    }
+    return '固件不匹配：当前 $firmware，需要 ${versions.join('、')}。';
+  }
+  final min = firmwareParts('${rule['minVersion'] ?? ''}');
+  final max = firmwareParts('${rule['maxVersion'] ?? ''}');
+  if (rule['mode'] == 'range' &&
+      min != null &&
+      max != null &&
+      compareFirmware(current, min) >= 0 &&
+      compareFirmware(current, max) <= 0) {
+    return null;
+  }
+  return '固件不匹配：当前 $firmware，需要 ${rule['minVersion']} 至 ${rule['maxVersion']}。';
+}
+
+String firmwareSummary(Map<String, dynamic> item) =>
+    (item['firmwareRules'] as List? ?? const [])
+        .whereType<Map>()
+        .map((r) {
+          final name = storeModelNames[r['model']] ?? r['model'];
+          final detail = switch (r['mode']) {
+            'exact' => (r['versions'] as List? ?? []).join('、'),
+            'range' => '${r['minVersion']} 至 ${r['maxVersion']}',
+            _ => '不限固件',
+          };
+          return '$name：$detail';
+        })
+        .join('\n');
+
 class StoreApp {
   StoreApp(this.id, Iterable<Map<String, dynamic>> resources)
     : variants = resources.toList() {
@@ -56,6 +119,17 @@ class StoreApp {
   }
   final String id;
   final List<Map<String, dynamic>> variants;
+  Map<String, dynamic>? forDevice(String? model, String firmware) {
+    if (model == null) return null;
+    return variants
+        .where(
+          (v) =>
+              supportedModels(v).contains(model) &&
+              firmwareMismatch(v, model, firmware) == null,
+        )
+        .firstOrNull;
+  }
+
   Map<String, dynamic>? forModel(String? model) {
     if (model == null) return null;
     for (final variant in variants) {

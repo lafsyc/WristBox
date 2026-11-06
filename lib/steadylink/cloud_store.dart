@@ -180,6 +180,7 @@ class CloudStore {
     String resource,
     String model,
     String serial, {
+    String firmware = '',
     String? grantId,
   }) async {
     final response = await dio.post<dynamic>(
@@ -188,6 +189,7 @@ class CloudStore {
         'resourceId': resource,
         'model': model,
         'serial': serial,
+        'firmware': firmware,
         if (grantId != null) 'grantId': grantId,
       },
     );
@@ -197,11 +199,17 @@ class CloudStore {
   Future<Map<String, dynamic>> activatedResources({
     String model = '',
     String serial = '',
+    String firmware = '',
     int offset = 0,
   }) async {
     final response = await dio.post<dynamic>(
       'v1/store/activation/library',
-      data: {'model': model, 'serial': serial, 'offset': offset},
+      data: {
+        'model': model,
+        'serial': serial,
+        'firmware': firmware,
+        'offset': offset,
+      },
     );
     return (response.data as Map).cast<String, dynamic>();
   }
@@ -210,14 +218,16 @@ class CloudStore {
     String resource,
     String model,
     String serial,
-    String code,
-  ) async {
+    String code, {
+    String firmware = '',
+  }) async {
     await dio.post<dynamic>(
       'v1/store/activation/redeem',
       data: {
         'resourceId': resource,
         'model': model,
         'serial': serial,
+        'firmware': firmware,
         'code': code,
       },
     );
@@ -228,6 +238,7 @@ class CloudStore {
     String device,
     String model, {
     String serial = '',
+    String firmware = '',
     bool activationRequired = false,
     String? grantId,
   }) async {
@@ -239,6 +250,7 @@ class CloudStore {
         device.toUpperCase(),
         model,
         serial: serial,
+        firmware: firmware,
         activationRequired: activationRequired,
         grantId: grantId,
       );
@@ -280,6 +292,7 @@ class CloudPackageSource extends MassPayloadSource {
     String device,
     String model, {
     String serial = '',
+    String firmware = '',
     bool activationRequired = false,
     String? grantId,
   }) async {
@@ -292,6 +305,7 @@ class CloudPackageSource extends MassPayloadSource {
       'device': device,
       'model': model,
       'serial': serial,
+      'firmware': firmware,
       'publicKey': public,
       if (grantId != null) 'grantId': grantId,
     };
@@ -317,6 +331,7 @@ class CloudPackageSource extends MassPayloadSource {
       'device': device,
       'resourceId': resource,
       'model': model,
+      'firmware': firmware,
       'activationRequired': activationRequired,
       'deviceIdentity': sha256
           .convert(utf8.encode('$model\u0000${serial.trim().toUpperCase()}'))

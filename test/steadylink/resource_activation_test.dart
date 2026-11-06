@@ -57,6 +57,7 @@ class ActivationStore extends CloudStore {
     String resource,
     String model,
     String serial, {
+    String firmware = '',
     String? grantId,
   }) async {
     expect(serial, 'TESTSN000001');
@@ -71,6 +72,7 @@ class ActivationStore extends CloudStore {
     String device,
     String model, {
     String serial = '',
+    String firmware = '',
     bool activationRequired = false,
     String? grantId,
   }) async {

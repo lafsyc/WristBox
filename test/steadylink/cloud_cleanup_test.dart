@@ -42,6 +42,7 @@ class InstallStore extends CloudStore {
     String device,
     String model, {
     String serial = '',
+    String firmware = '',
     bool activationRequired = false,
     String? grantId,
   }) async => source;
@@ -50,6 +51,7 @@ class InstallStore extends CloudStore {
     String resource,
     String model,
     String serial, {
+    String firmware = '',
     String? grantId,
   }) async => {'required': false, 'activated': true};
 }

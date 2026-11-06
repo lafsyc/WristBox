@@ -192,8 +192,10 @@ class SteadyBackend {
         throw StateError('连接后的手环型号与所选版本不一致，请刷新商店重新匹配');
       }
       final serial = state.systemInfo?.serialNumber.trim().toUpperCase() ?? '';
+      final firmware = state.systemInfo?.firmwareVersion.trim() ?? '';
       void checkTarget() {
-        if (state.currentDevice?.addr != deviceId ||
+        if ((state.systemInfo?.firmwareVersion.trim() ?? '') != firmware ||
+            state.currentDevice?.addr != deviceId ||
             state.protocolState != ProtocolState.ready ||
             (state.systemInfo?.serialNumber.trim().toUpperCase() ?? '') !=
                 serial ||
@@ -207,12 +209,13 @@ class SteadyBackend {
       }
 
       checkTarget();
-      onStage?.call('正在检查此手环的资源授权');
+      onStage?.call('正在校验型号、固件和资源授权');
       final entitlement = await store.activationStatus(
         resourceId,
         model,
         serial,
         grantId: expectedGrantId,
+        firmware: firmware,
       );
       checkTarget();
       if (entitlement['required'] == true && entitlement['activated'] != true) {
@@ -237,6 +240,7 @@ class SteadyBackend {
         serial: serial,
         activationRequired: entitlement['required'] == true,
         grantId: expectedGrantId,
+        firmware: firmware,
       );
       checkTarget();
       onStage?.call('安全校验完成，正在准备手环接收');

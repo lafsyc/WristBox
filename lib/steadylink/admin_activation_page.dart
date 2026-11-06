@@ -45,7 +45,10 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
     final catalog = await widget.api.store.catalog(manage: true);
     final packages = <String>{};
     final apps = catalog
-        .where((a) => packages.add(a['packageName'] as String))
+        .where(
+          (a) =>
+              packages.add((a['activationKey'] ?? a['packageName']) as String),
+        )
         .toList();
     if (!mounted) return;
     setState(() {
@@ -104,7 +107,7 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
         .map((c) => c['code'])
         .join('\n');
     final text =
-        '$name · 资源激活卡密\n每张绑定一台手环，不绑定账号；未使用卡密 $_days 天内有效。\n\n$codes\n';
+        '$name · 资源激活卡密\n每张绑定一台手环，不绑定账号；${_days == 0 ? '未使用卡密长期有效' : '未使用卡密 $_days 天内有效'}。\n\n$codes\n';
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -203,7 +206,7 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  '授权按安装包应用标识生效，同一应用后续版本共享授权。卡密使用后不可换绑；撤销会同时撤销设备授权并停止后续分发。',
+                  '授权按固定授权标识生效，后续替换安装包时选择相同标识即可沿用。新卡密为十二位随机字母数字。卡密使用后不可换绑；撤销会同时撤销设备授权并停止后续分发。',
                 ),
                 const SizedBox(height: 24),
                 if (_busy) const LinearProgressIndicator(),
@@ -259,7 +262,7 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
                               value ? '启用卡密激活？' : '改为免费资源？',
                               value
                                   ? '已有安装会话会结束，后续下载必须先绑定当前手环。'
-                                  : '所有登录用户都可下载此应用。已有卡密和绑定记录会保留。',
+                                  : '所有用户都可下载兼容此设备的版本。已有卡密和绑定记录会保留。',
                             )) {
                               return;
                             }
@@ -284,7 +287,7 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
                         child: DropdownButtonFormField<int>(
                           initialValue: _count,
                           decoration: const InputDecoration(labelText: '生成数量'),
-                          items: [1, 5, 10, 20, 50, 100]
+                          items: [1, 5, 10, 20, 50, 100, 500, 1000, 2000]
                               .map(
                                 (v) => DropdownMenuItem(
                                   value: v,
@@ -304,11 +307,11 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
                           decoration: const InputDecoration(
                             labelText: '未使用卡密有效期',
                           ),
-                          items: [7, 30, 90, 365]
+                          items: [0, 7, 30, 90, 365]
                               .map(
                                 (v) => DropdownMenuItem(
                                   value: v,
-                                  child: Text('$v 天'),
+                                  child: Text(v == 0 ? '长期有效' : '$v 天'),
                                 ),
                               )
                               .toList(),
@@ -347,14 +350,14 @@ class _AdminActivationPageState extends State<AdminActivationPage> {
                               ? '已撤销'
                               : card['redeemed'] != null
                               ? '已激活'
-                              : (card['expires'] as int) <= DateTime.now().millisecondsSinceEpoch ~/ 1000
+                              : (card['expires'] as int) != 0 && (card['expires'] as int) <= DateTime.now().millisecondsSinceEpoch ~/ 1000
                               ? '已过期'
                               : '未使用'}',
                         ),
                         subtitle: Text(
                           card['redeemed'] != null
                               ? '${card['email'] == null ? '免登录激活' : '原激活账号 ID ${card['userId'] ?? '—'} · ${card['email']}'}\n${storeModelNames[card['model']] ?? card['model']} · SN ${card['serialHint']}\n激活于 ${_date(card['redeemed'])}'
-                              : '生成于 ${_date(card['created'])} · 截止 ${_date(card['expires'])}',
+                              : '生成于 ${_date(card['created'])} · ${card['expires'] == 0 ? '长期有效' : '截止 ${_date(card['expires'])}'}',
                         ),
                         isThreeLine: true,
                         trailing: TextButton(

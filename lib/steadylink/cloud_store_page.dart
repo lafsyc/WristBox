@@ -301,6 +301,12 @@ class _CloudStorePageState extends ConsumerState<CloudStorePage> {
                     itemBuilder: (context, index) => StoreAppCard(
                       app: apps[index],
                       model: model,
+                      firmware:
+                          state.protocolState == ProtocolState.ready &&
+                              state.currentDevice?.addr == device?.addr &&
+                              model == current
+                          ? state.systemInfo?.firmwareVersion.trim() ?? ''
+                          : '',
                       store: _store!,
                       onTap: () => Navigator.push(
                         context,
@@ -392,7 +398,7 @@ class CreativeWorkshopPreview extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            '未来的 AI 应用与创作者作品\n将在这里展示。',
+            '敬请期待',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: c.onSurfaceVariant,
@@ -401,36 +407,7 @@ class CreativeWorkshopPreview extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 28),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 20,
-            runSpacing: 12,
-            children: [
-              for (final entry in [
-                (Icons.code_rounded, 'AI 创作'),
-                (Icons.collections_bookmark_outlined, '作品发布'),
-              ])
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(entry.$1, size: 18, color: c.onSurfaceVariant),
-                    const SizedBox(width: 7),
-                    Text(
-                      entry.$2,
-                      style: TextStyle(fontSize: 13, color: c.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-            ],
-          ),
-          const SizedBox(height: 28),
           OutlinedButton(onPressed: onBrowse, child: const Text('先逛逛精选应用')),
-          const SizedBox(height: 10),
-          Text(
-            '创作与发布功能尚未开放',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: c.onSurfaceVariant),
-          ),
         ],
       ),
     );
@@ -444,7 +421,9 @@ class StoreAppCard extends StatelessWidget {
     required this.model,
     required this.store,
     required this.onTap,
+    this.firmware = '',
   });
+  final String firmware;
   final StoreApp app;
   final String? model;
   final CloudStore store;
@@ -454,7 +433,7 @@ class StoreAppCard extends StatelessWidget {
     final item = app.display(model);
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    final match = app.forModel(model);
+    final match = app.forDevice(model, firmware);
     return Card(
       margin: EdgeInsets.zero,
       elevation: 0,
@@ -524,8 +503,8 @@ class StoreAppCard extends StatelessWidget {
                   model == null
                       ? '查看适用型号'
                       : match == null
-                      ? '暂无适配版本'
-                      : '适配所选型号',
+                      ? (app.forModel(model) == null ? '暂无适配版本' : '需核对固件版本')
+                      : '型号与固件匹配',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -639,6 +618,8 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
                           verifiedModel,
                           serial,
                           code,
+                          firmware:
+                              current.systemInfo?.firmwareVersion.trim() ?? '',
                         );
                       },
                     ),
@@ -697,8 +678,13 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
     final device = _target(state, widget.deviceId);
     final current = _model(state, device);
     final model = _browseModel ?? current;
-    final item = widget.app.display(model);
-    final variant = widget.app.forModel(model);
+    final firmware =
+        state.protocolState == ProtocolState.ready &&
+            state.currentDevice?.addr == device?.addr
+        ? state.systemInfo?.firmwareVersion.trim() ?? ''
+        : '';
+    final variant = widget.app.forDevice(model, firmware);
+    final item = variant ?? widget.app.display(model);
     final previews = (item['previewIds'] as List? ?? []).cast<String>();
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
@@ -715,7 +701,9 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
         : model != current
         ? '当前连接的是${storeModelNames[current]}，不能安装其他型号的版本。'
         : variant == null
-        ? '暂无适用于${storeModelNames[current]}的安装包，请等待开发者适配。'
+        ? (widget.app.forModel(current) == null
+              ? '暂无适用于${storeModelNames[current]}的安装包，请等待开发者适配。'
+              : firmwareMismatch(item, current, firmware) ?? '暂无匹配当前固件的安装包。')
         : null;
     return PopScope(
       canPop: !_busy,
@@ -730,6 +718,11 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(24, 14, 24, 28),
               children: [
+                if (firmwareSummary(item).isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 18),
+                    child: Text('安装包适用固件\n${firmwareSummary(item)}'),
+                  ),
                 Row(
                   children: [
                     StoreMediaImage(

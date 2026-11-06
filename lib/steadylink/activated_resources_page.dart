@@ -46,7 +46,7 @@ class _ActivatedResourcesPageState
 
   String _stamp(DeviceManagerState state) =>
       state.protocolState == ProtocolState.ready
-      ? '${state.currentDevice?.addr}\u0000${storeModelForDevice(state.currentDevice, systemInfo: state.systemInfo)}\u0000${state.systemInfo?.serialNumber}'
+      ? '${state.currentDevice?.addr}\u0000${storeModelForDevice(state.currentDevice, systemInfo: state.systemInfo)}\u0000${state.systemInfo?.serialNumber}\u0000${state.systemInfo?.firmwareVersion}'
       : '';
 
   @override
@@ -106,6 +106,7 @@ class _ActivatedResourcesPageState
                   ''
             : '',
         serial: ready ? state.systemInfo?.serialNumber ?? '' : '',
+        firmware: ready ? state.systemInfo?.firmwareVersion.trim() ?? '' : '',
         offset: more ? _nextOffset : 0,
       );
       if (!mounted || request != _request) return;

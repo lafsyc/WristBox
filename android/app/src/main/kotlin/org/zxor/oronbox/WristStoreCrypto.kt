@@ -80,6 +80,7 @@ class WristStoreCrypto(messenger: BinaryMessenger) {
             require(env.getInt("protocol") == 1 && meta.getInt("protocol") == 1)
             require(env.getString("device") == call.argument<String>("device"))
             require(env.getString("model") == call.argument<String>("model"))
+            require(env.optString("firmware", "") == (call.argument<String>("firmware") ?: ""))
             if (call.argument<Boolean>("activationRequired") == true || env.has("activationId")) {
                 require(env.getString("activationId").matches(Regex("[0-9a-f]{32}")))
                 require(env.getString("deviceIdentity") == call.argument<String>("deviceIdentity"))

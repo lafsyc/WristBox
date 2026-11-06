@@ -59,6 +59,7 @@ class LibraryStore extends CloudStore {
   Future<Map<String, dynamic>> activatedResources({
     String model = '',
     String serial = '',
+    String firmware = '',
     int offset = 0,
   }) async {
     serials.add(serial);
