@@ -11,6 +11,7 @@ import 'package:oronbox/src/protocols/xiaomi/transport/mass_payload_source.dart'
 import 'wristbox_account.dart';
 import 'network_error.dart';
 import 'error_message.dart';
+import 'client_updates.dart' show clientBuild;
 
 class CloudStore {
   CloudStore(this.dio);
@@ -146,17 +147,23 @@ class CloudStore {
 
   Future<Map<String, dynamic>> upload(
     String path,
-    void Function(double) progress,
-  ) async {
+    void Function(double) progress, {
+    Map<String, dynamic>? binaryMetadata,
+  }) async {
     final file = File(path);
     final length = await file.length();
-    if (!path.toLowerCase().endsWith('.rpk') ||
+    if (!(path.toLowerCase().endsWith('.rpk') ||
+            path.toLowerCase().endsWith('.bin')) ||
         length < 1 ||
         length > 32 * 1024 * 1024) {
-      throw StateError('请选择不超过 32 MB 的 RPK 安装包');
+      throw StateError('请选择不超过 32 MB 的 RPK 或 BIN 安装包');
     }
     final response = await dio.post<dynamic>(
       'v1/store/resources',
+      queryParameters: {
+        'packageFormat': path.toLowerCase().endsWith('.bin') ? 'bin' : 'rpk',
+        ...?binaryMetadata,
+      },
       data: file.openRead(),
       options: Options(
         contentType: 'application/octet-stream',
@@ -187,6 +194,7 @@ class CloudStore {
       'v1/store/activation/status',
       data: {
         'resourceId': resource,
+        'clientBuild': clientBuild,
         'model': model,
         'serial': serial,
         'firmware': firmware,
@@ -225,6 +233,7 @@ class CloudStore {
       'v1/store/activation/redeem',
       data: {
         'resourceId': resource,
+        'clientBuild': clientBuild,
         'model': model,
         'serial': serial,
         'firmware': firmware,
@@ -302,6 +311,7 @@ class CloudPackageSource extends MassPayloadSource {
     final public = await _crypto.invokeMethod<String>('prepare');
     final begin = <String, dynamic>{
       'resourceId': resource,
+      'clientBuild': clientBuild,
       'device': device,
       'model': model,
       'serial': serial,

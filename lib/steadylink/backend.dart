@@ -177,6 +177,7 @@ class SteadyBackend {
     Future<bool> Function(String model, String serial)? onActivationRequired,
   }) => queue.exclusive(deviceId, () async {
     CloudPackageSource? source;
+    var isWatchface = false;
     var success = false;
     await manager.setBatteryRefreshPaused(true);
     try {
@@ -244,7 +245,12 @@ class SteadyBackend {
       );
       checkTarget();
       onStage?.call('安全校验完成，正在准备手环接收');
-      if (expectedGrantId != null) {
+      final type = source.manifest['installType'] ?? 'app';
+      if (type != 'app' && type != 'watchface') {
+        throw StateError('此安装包类型暂不支持，请更新 WristBox');
+      }
+      isWatchface = type == 'watchface';
+      if (expectedGrantId != null && !isWatchface) {
         onStage?.call('正在核对已安装版本');
         await manager.fetchApps().timeout(const Duration(seconds: 15));
         checkTarget();
@@ -256,18 +262,26 @@ class SteadyBackend {
           throw StateError('手环已安装更高版本，无需降级安装');
         }
       }
-      await manager
-          .installCloudApp(
-            source,
-            deviceId: deviceId,
-            packageName: source.manifest['packageName'] as String,
-            versionCode: source.manifest['versionCode'] as int,
-            onProgress: (value) {
-              checkTarget();
-              progress(value);
-            },
-          )
-          .timeout(const Duration(minutes: 18));
+      void onProgress(double value) {
+        checkTarget();
+        progress(value);
+      }
+
+      final transfer = isWatchface
+          ? manager.installCloudWatchface(
+              source,
+              deviceId: deviceId,
+              watchfaceId: source.manifest['watchfaceId'] as String,
+              onProgress: onProgress,
+            )
+          : manager.installCloudApp(
+              source,
+              deviceId: deviceId,
+              packageName: source.manifest['packageName'] as String,
+              versionCode: source.manifest['versionCode'] as int,
+              onProgress: onProgress,
+            );
+      await transfer.timeout(const Duration(minutes: 18));
       success = true;
     } catch (error) {
       // Teardown must not replace the actual installation error or prevent the
@@ -294,7 +308,8 @@ class SteadyBackend {
       } catch (_) {}
     }
     try {
-      await manager.fetchApps().timeout(const Duration(seconds: 10));
+      await (isWatchface ? manager.fetchWatchfaces() : manager.fetchApps())
+          .timeout(const Duration(seconds: 10));
     } catch (_) {}
   });
 

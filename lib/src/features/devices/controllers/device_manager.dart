@@ -664,6 +664,13 @@ abstract class DeviceManager extends Notifier<DeviceManagerState> {
     void Function(double)? onProgress,
   }) => Future.error(StateError('当前连接模式不支持云端安装'));
 
+  Future<void> installCloudWatchface(
+    MassPayloadSource source, {
+    required String deviceId,
+    required String watchfaceId,
+    void Function(double)? onProgress,
+  }) => Future.error(StateError('当前连接模式不支持云端 BIN 安装'));
+
   Future<void> installApp(
     Uint8List packageBytes, {
     required String packageName,
@@ -3997,6 +4004,35 @@ class LocalDeviceManager extends DeviceManager {
         source: source,
         packageName: packageName,
         versionCode: versionCode,
+        onProgress: onProgress,
+      );
+    } finally {
+      component.sensitiveTransfer = false;
+    }
+  });
+
+  @override
+  Future<void> installCloudWatchface(
+    MassPayloadSource source, {
+    required String deviceId,
+    required String watchfaceId,
+    void Function(double)? onProgress,
+  }) => _withTransfer(() async {
+    final entity = _currentEntity;
+    if (entity == null ||
+        state.currentDevice?.addr != deviceId ||
+        state.protocolState != ProtocolState.ready) {
+      throw StateError('设备连接已改变');
+    }
+    final installer = entity.system<XiaomiInstallSystem>();
+    if (installer == null) throw StateError('此设备暂不支持云端 BIN 安装');
+    final component = entity.get<XiaomiDeviceComponent>()!;
+    component.sensitiveTransfer = true;
+    try {
+      await installer.installWatchface(
+        Uint8List(0),
+        source: source,
+        watchfaceId: watchfaceId,
         onProgress: onProgress,
       );
     } finally {

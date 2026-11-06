@@ -761,6 +761,11 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
                   ],
                 ),
                 const SizedBox(height: 30),
+                if (item['installType'] == 'watchface')
+                  const _MessageCard(
+                    icon: Icons.watch_outlined,
+                    text: 'BIN 资源 · 通过表盘通道安装\n安装完成后请在手环的表盘列表中查找。',
+                  ),
                 if (item['activationRequired'] == true)
                   const _MessageCard(
                     icon: Icons.key_rounded,

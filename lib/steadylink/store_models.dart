@@ -4,11 +4,13 @@ import 'package:oronbox/src/device/core/xiaomi_wearable_catalog.dart';
 const storeModelNames = <String, String>{
   'm67': '小米手环 8 Pro',
   'n66': '小米手环 9',
+  'n66nfc': '小米手环 9 NFC',
   'n67': '小米手环 9 Pro',
   'o66': '小米手环 10',
   'o66nfc': '小米手环 10 NFC',
   'p67': '小米手环 10 Pro',
   'band11': '小米手环 11',
+  'band11nfc': '小米手环 11 NFC',
   'l61': '小米手表 S1 Pro',
   'n62': '小米手表 S3',
   'o62': '小米手表 S4',
@@ -23,22 +25,56 @@ const storeModelNames = <String, String>{
 
 String? storeModelForDevice(MiWearState? device, {SystemInfo? systemInfo}) {
   if (device == null) return null;
-  for (final value in [systemInfo?.model, device.codename, device.name]) {
+  final values = [systemInfo?.model, device.codename, device.name];
+  final tokens = values
+      .map((v) => v?.toLowerCase().replaceAll(RegExp(r'\s+'), '') ?? '')
+      .toList();
+  bool nfcFor(int generation) => tokens.any(
+    (v) => {
+      '小米手环${generation}nfc',
+      '小米手环${generation}nfc版',
+      'xiaomismartband${generation}nfc',
+      'xiaomiband${generation}nfc',
+      if (generation == 9) ...['n66nfc', 'miwear.watch.n66nfc'],
+      if (generation == 11) 'band11nfc',
+    }.contains(v),
+  );
+  for (final value in values) {
     final identity = normalizeXiaomiWearableIdentity(value);
     if (identity != null && storeModelNames.containsKey(identity.codename)) {
+      if (identity.codename == 'n66' && nfcFor(9)) return 'n66nfc';
       return identity.codename;
     }
     // No guessed hardware codename: accept only an explicit Band 11 name.
     final name = value?.toLowerCase().replaceAll(RegExp(r'\s+'), '') ?? '';
-    if (['小米手环11', 'xiaomismartband11', 'xiaomiband11'].contains(name)) {
-      return 'band11';
+    if ([
+      '小米手环11',
+      'xiaomismartband11',
+      'xiaomiband11',
+      'band11',
+      '小米手环11nfc',
+      '小米手环11nfc版',
+      'xiaomismartband11nfc',
+      'xiaomiband11nfc',
+      'band11nfc',
+    ].contains(name)) {
+      return nfcFor(11) ? 'band11nfc' : 'band11';
     }
   }
   return null;
 }
 
-List<String> supportedModels(Map<String, dynamic> item) =>
-    (item['supportedModels'] as List? ?? const []).whereType<String>().toList();
+List<String> supportedModels(Map<String, dynamic> item) {
+  final models = (item['supportedModels'] as List? ?? const [])
+      .whereType<String>()
+      .toSet();
+  // Older listings grouped these NFC variants with their base model.
+  if (!item.containsKey('installType')) {
+    if (models.contains('n66')) models.add('n66nfc');
+    if (models.contains('band11')) models.add('band11nfc');
+  }
+  return models.toList();
+}
 
 List<int>? firmwareParts(String value) {
   final raw = value.trim();
@@ -60,6 +96,9 @@ String? firmwareMismatch(
   String model,
   String firmware,
 ) {
+  if (!item.containsKey('installType')) {
+    model = const {'n66nfc': 'n66', 'band11nfc': 'band11'}[model] ?? model;
+  }
   final rules = (item['firmwareRules'] as List? ?? const []).whereType<Map>();
   final rule = rules.where((r) => r['model'] == model).firstOrNull;
   if (rule == null || rule['mode'] == 'any') return null;

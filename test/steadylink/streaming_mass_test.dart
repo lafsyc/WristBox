@@ -31,24 +31,25 @@ void main() {
       final bytes = Uint8List.fromList(
         List.generate(size, (_) => random.nextInt(256)),
       );
-      for (final resume in {0, size ~/ 2, size}) {
-        for (final slice in [1, 238, 2044, 8192]) {
-          final source = _Source(bytes);
-          final payload = StreamingMassPayload(source, 64, resume);
-          final collected = BytesBuilder();
-          while (collected.length < payload.length) {
-            collected.add(
-              await payload.read(min(slice, payload.length - collected.length)),
+      for (final type in [MassDataType.thirdPartyApp, MassDataType.watchface]) {
+        for (final resume in {0, size ~/ 2, size}) {
+          for (final slice in [1, 238, 2044, 8192]) {
+            final source = _Source(bytes);
+            final payload = StreamingMassPayload(source, type.value, resume);
+            final collected = BytesBuilder();
+            while (collected.length < payload.length) {
+              collected.add(
+                await payload.read(
+                  min(slice, payload.length - collected.length),
+                ),
+              );
+            }
+            expect(
+              collected.takeBytes(),
+              MassPacket.build(bytes, type).encodeWithCrc32(sentLength: resume),
             );
+            expect(source.largestRead, lessThanOrEqualTo(slice));
           }
-          expect(
-            collected.takeBytes(),
-            MassPacket.build(
-              bytes,
-              MassDataType.thirdPartyApp,
-            ).encodeWithCrc32(sentLength: resume),
-          );
-          expect(source.largestRead, lessThanOrEqualTo(slice));
         }
       }
     }

@@ -85,6 +85,20 @@ const xiaomiWearableIdentities = <String, XiaomiWearableIdentity>{
       'M2346B1',
     ],
   ),
+  'n66nfc': XiaomiWearableIdentity(
+    codename: 'n66nfc',
+    displayName: 'Xiaomi Smart Band 9 NFC',
+    abV2Id: 'n66nfc',
+    family: XiaomiWearableFamily.band,
+    chip: XiaomiWearableChip.bes,
+    protocol: XiaomiWearableProtocol.sppV2,
+    aliases: [
+      '小米手环9 NFC',
+      '小米手环9 NFC版',
+      'Xiaomi Smart Band 9 NFC',
+      'miwear.watch.n66nfc',
+    ],
+  ),
   'n67': XiaomiWearableIdentity(
     codename: 'n67',
     displayName: 'Xiaomi Smart Band 9 Pro',
@@ -415,6 +429,11 @@ String normalizeXiaomiWearableCodename(String? input) {
 }
 
 String xiaomiDisplayNameForIdentity({required String name, String? codename}) {
+  final named = normalizeXiaomiWearableIdentity(name);
+  if (xiaomiWearableIdentityForCodename(codename)?.codename == 'n66' &&
+      named?.codename == 'n66nfc') {
+    return named!.displayName;
+  }
   final identity =
       xiaomiWearableIdentityForCodename(codename) ??
       normalizeXiaomiWearableIdentity(name);

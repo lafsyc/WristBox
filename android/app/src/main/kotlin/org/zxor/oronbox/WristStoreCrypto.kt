@@ -78,6 +78,14 @@ class WristStoreCrypto(messenger: BinaryMessenger) {
             val env = JSONObject(String(payload, Charsets.UTF_8))
             val meta = env.getJSONObject("manifest")
             require(env.getInt("protocol") == 1 && meta.getInt("protocol") == 1)
+            val installType = meta.optString("installType", "app")
+            require(installType == "app" || installType == "watchface")
+            if (installType == "watchface") {
+                require(meta.getString("packageFormat") == "bin")
+                val wid = meta.getString("watchfaceId")
+                require(wid.matches(Regex("[A-Za-z0-9_-]{1,12}")) && !wid.matches(Regex("0+")) && !wid.startsWith("1209"))
+                require(meta.getInt("size") > 0x34)
+            }
             require(env.getString("device") == call.argument<String>("device"))
             require(env.getString("model") == call.argument<String>("model"))
             require(env.optString("firmware", "") == (call.argument<String>("firmware") ?: ""))
@@ -121,6 +129,16 @@ class WristStoreCrypto(messenger: BinaryMessenger) {
             val plain = cipher.doFinal(encrypted)
             if (hex(sha(plain)) != hashes.getString(seq)) {
                 plain.fill(0); throw IllegalStateException()
+            }
+            if (seq == 0 && meta.optString("installType", "app") == "watchface") {
+                try {
+                    require(plain.size > 0x34)
+                    require(plain.take(4).map { it.toInt() and 255 } == listOf(0x5a, 0xa5, 0x34, 0x12))
+                    val wid = meta.getString("watchfaceId").toByteArray(Charsets.US_ASCII)
+                    for (i in 0 until 12) require(plain[0x28 + i] == if (i < wid.size) wid[i] else 0.toByte())
+                } catch (e: Exception) {
+                    plain.fill(0); throw e
+                }
             }
             plain
         }

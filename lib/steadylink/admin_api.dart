@@ -63,6 +63,7 @@ class AdminApi {
       CloudStore(dio).publish(id, value);
   Future<Map<String, dynamic>> upload(
     String path,
-    void Function(double) progress,
-  ) => store.upload(path, progress);
+    void Function(double) progress, {
+    Map<String, dynamic>? binaryMetadata,
+  }) => store.upload(path, progress, binaryMetadata: binaryMetadata);
 }

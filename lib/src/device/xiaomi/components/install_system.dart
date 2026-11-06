@@ -12,6 +12,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:oronbox/src/core/logging/logging_service.dart';
 import 'package:oronbox/src/device/core/event_bus.dart';
 import 'package:oronbox/src/device/core/watchface_install_policy.dart';
+import 'package:oronbox/src/device/core/cloud_watchface_policy.dart';
 import 'package:oronbox/src/device/xiaomi/components/info_system.dart';
 import 'package:oronbox/src/device/xiaomi/components/mass_system.dart';
 import 'package:oronbox/src/device/xiaomi/system/xiaomi_system.dart';
@@ -108,6 +109,7 @@ class XiaomiInstallSystem extends XiaomiPbSystem {
   Future<void> installWatchface(
     Uint8List watchfaceBytes, {
     required String watchfaceId,
+    MassPayloadSource? source,
     void Function(double progress)? onProgress,
   }) async {
     final restrictedId = restrictedWatchfaceIdFor(
@@ -126,16 +128,24 @@ class XiaomiInstallSystem extends XiaomiPbSystem {
       onProgress: onProgress,
       run: () async {
         final fileData = Uint8List.fromList(watchfaceBytes);
-        final effectiveWatchfaceId = _normalizeWatchfaceId(
-          watchfaceId,
-          fileData,
-        );
+        final String effectiveWatchfaceId;
+        if (source != null) {
+          final header = await source.read(0, 0x34);
+          try {
+            validateCloudWatchfaceHeader(header, watchfaceId, source.length);
+          } finally {
+            header.fillRange(0, header.length, 0);
+          }
+          effectiveWatchfaceId = watchfaceId;
+        } else {
+          effectiveWatchfaceId = _normalizeWatchfaceId(watchfaceId, fileData);
+        }
         final idBytes = Uint8List.fromList(effectiveWatchfaceId.codeUnits);
         final paddedIdBytes = Uint8List(12);
         for (var i = 0; i < 12 && i < idBytes.length; i++) {
           paddedIdBytes[i] = idBytes[i];
         }
-        for (var i = 0; i < 12; i++) {
+        for (var i = 0; source == null && i < 12; i++) {
           fileData[0x28 + i] = paddedIdBytes[i];
         }
 
@@ -149,7 +159,7 @@ class XiaomiInstallSystem extends XiaomiPbSystem {
             watchFace: pb_watchface.WatchFace(
               prepareInfo: pb_watchface.PrepareInfo(
                 id: effectiveWatchfaceId,
-                size: fileData.length,
+                size: source?.length ?? fileData.length,
                 versionCode: Int64(65536),
               ),
             ),
@@ -166,12 +176,13 @@ class XiaomiInstallSystem extends XiaomiPbSystem {
 
         final status = prepareRet.watchFace.prepareStatus;
         if (status != pb_common.PrepareStatus.READY) {
-          throw ProtocolException('Watchface prepare not READY: $status');
+          throw ProtocolException(xiaomiInstallPrepareError(status.value));
         }
 
         final result = await _sendMassAndWaitResult(
           dataType: MassDataType.watchface,
           fileData: fileData,
+          source: source,
           onProgress: onProgress,
           resultType: pb.WearPacket_Type.WATCH_FACE.value,
           resultId:
@@ -183,7 +194,9 @@ class XiaomiInstallSystem extends XiaomiPbSystem {
         _log.info('[${entity.id}] watchface install result: $code');
         if (code != pb_watchface.InstallResult_Code.INSTALL_SUCCESS &&
             code != pb_watchface.InstallResult_Code.INSTALL_USED) {
-          final error = ProtocolException('Watchface install failed: $code');
+          final error = ProtocolException(
+            'BIN 安装未完成（设备返回码 ${code.value}），请核对型号、固件、可用空间后重试',
+          );
           component.sar.abortPendingTransmissions(error);
           throw error;
         }
