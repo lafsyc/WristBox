@@ -1,0 +1,2220 @@
+{
+  "@@locale": "en",
+  "homeTab": "Home",
+  "exploreTab": "Explore",
+  "devicesTab": "Devices",
+  "pluginsTab": "Plugins",
+  "pluginImport": "Import plugin",
+  "pluginInstalled": "Installed",
+  "pluginMarket": "Plugin market",
+  "pluginMarketUnavailable": "The plugin market is not available yet",
+  "pluginEmpty": "No plugins installed",
+  "pluginSelectHint": "Select a plugin to view its features",
+  "pluginFeatures": "Features",
+  "pluginDetails": "Details",
+  "pluginNoFeatures": "This plugin has no available features",
+  "pluginAuthor": "Author",
+  "pluginVersion": "Version",
+  "pluginApiLevel": "API level",
+  "pluginWebsite": "Website",
+  "pluginPermissions": "Permissions",
+  "pluginInstallConfirmTitle": "Confirm plugin installation",
+  "pluginUpdateConfirmTitle": "Confirm plugin update",
+  "pluginDeclaredPermissions": "This plugin declares the following permissions:",
+  "pluginNoPermissions": "No permissions declared",
+  "pluginUpToDate": "Installed and up to date",
+  "pluginUninstallTitle": "Uninstall plugin",
+  "pluginUninstallMessage": "The plugin's data will also be removed",
+  "pluginUpload": "Upload plugin",
+  "pluginPublishTitle": "Publish plugin",
+  "pluginPublishNew": "Will be published as a new plugin",
+  "pluginPublishUpdate": "Will update the published plugin with the same ID",
+  "pluginTakedown": "Take down",
+  "pluginTakedownConfirm": "The plugin will be permanently removed from the market",
+  "pluginLoginRequired": "Sign in to upload plugins",
+  "pluginSubmittedForReview": "Submitted for review. It will be listed once approved",
+  "pluginStatePending": "Pending review",
+  "pluginStateRejected": "Rejected",
+  "pluginStateDelisted": "Delisted",
+  "pluginLegacyWarningTitle": "Legacy plugin",
+  "pluginLegacyWarningMessage": "This is an AstroBox v1 plugin. OronBox will try to run it in compatibility mode, but issues may occur.\nCheck for an updated native OronBox plugin, or ask the author to adapt it",
+  "settingsTab": "Settings",
+  "search": "Search",
+  "resourceListView": "List view",
+  "resourceGridView": "Card view",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing",
+  "notifications": "Notifications",
+  "newlyPublished": "Newly published",
+  "resourceLibrary": "Resource library",
+  "resourceDetails": "Resource details",
+  "resourceCollectionDetails": "Collection details",
+  "resourceArticleDetails": "Article details",
+  "creatorCenter": "Creator center",
+  "creatorNewResource": "New resource",
+  "creatorResourceName": "Resource name",
+  "creatorResourceSummary": "Resource summary",
+  "creatorResourceMetadataRequired": "Resource name and summary are required",
+  "creatorSubmitValidationFailed": "Please fix the following before submitting",
+  "creatorPaidType": "Payment type",
+  "creatorSaveDraft": "Save draft",
+  "creatorAddArtifact": "Add resource file",
+  "creatorBindDevices": "Bind devices",
+  "creatorDeleteResource": "Delete",
+  "creatorIconCover": "Icon & cover",
+  "creatorInvalidImage": "Unable to decode this image; use PNG/JPEG/WebP",
+  "creatorInvalidPackage": "This file is not a Vela quick app or watchface",
+  "creatorPublishPreparing": "Processing file {done}/{total}",
+  "@creatorPublishPreparing": {
+    "placeholders": {
+      "done": {},
+      "total": {}
+    }
+  },
+  "creatorPublishUploading": "Uploading {percent}%",
+  "@creatorPublishUploading": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "creatorPublishServer": "Server is processing…",
+  "creatorAstroBoxItemId": "Item ID",
+  "creatorAstroBoxRepository": "Repository name",
+  "creatorAstroBoxTags": "Tags (comma separated)",
+  "creatorAstroBoxAuthor": "Author (must match your AstroBox username)",
+  "creatorAstroBoxBindAccount": "Bind AstroBox account",
+  "replace": "Replace",
+  "delete": "Delete",
+  "creatorSubmitReview": "Submit",
+  "creatorArchiveAction": "Delist",
+  "creatorArchiveConfirm": "Delisting hides this resource from the store. You can restore it anytime.",
+  "creatorRestoreAction": "Relist",
+  "creatorDeleteConfirm": "This draft resource will be permanently deleted.",
+  "creatorDeletePublishedConfirm": "Permanently deletes the OronBox resource and the corresponding BandBBS resources. This cannot be undone. Content already published on AstroBox is not affected; contact the AstroBox-Repo maintainers to delist it.",
+  "creatorArtifactCount": "{count} packages",
+  "@creatorArtifactCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "creatorKindMismatchMessage": "This file looks like a {detected}, but this resource is a {expected}. You can keep it, but please confirm before submitting for review.",
+  "@creatorKindMismatchMessage": {
+    "placeholders": {
+      "detected": {},
+      "expected": {}
+    }
+  },
+  "creatorDeviceMoveBlocked": "\"{name}\" has only this device bound and cannot be moved",
+  "@creatorDeviceMoveBlocked": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "creatorSelectDevices": "Select supported devices",
+  "creatorSelectedDeviceCount": "{count} devices selected",
+  "creatorNoDevicesSelected": "No devices selected",
+  "creatorDeviceSelectionDone": "Done",
+  "creatorAtLeastOneDevice": "Each resource file must bind at least one device",
+  "resourceAstroBoxEncryptedTitle": "OronBox cannot process this AstroBox resource",
+  "resourceAstroBoxEncryptedMessage": "This resource uses AstroBox Creator Console's private encrypted upload. OronBox cannot decrypt, download, or install it. Please open it with AstroBox instead.",
+  "resourceAstroBoxEncryptedAction": "Got it",
+  "filter": "Filter",
+  "resourceTypeFilter": "Resource type",
+  "resourceCompatibleDevicesFilter": "Compatible devices",
+  "currentDevice": "Current device",
+  "currentWatchface": "Current watchface",
+  "all": "All",
+  "watchfaces": "Watchface",
+  "module": "Module",
+  "quickApps": "Quickapps",
+  "firmwareTools": "Firmware / Tools",
+  "oronBox": "OronBox",
+  "bandbbs": "BandBBS",
+  "astroBox": "AstroBox",
+  "local": "Local",
+  "install": "Install",
+  "update": "Update",
+  "description": "Description",
+  "supportedDevices": "Supported devices",
+  "downloads": "Downloads",
+  "downloadTimes": "{count} downloads",
+  "@downloadTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "changelog": "Changelog",
+  "changelogUnavailable": "No changelog yet",
+  "notFound": "Not found",
+  "downloadStarted": "Download started",
+  "compatible": "Compatible with",
+  "incompatible": "Incompatible with",
+  "incompatibleSuffix": "",
+  "myResources": "My resources",
+  "drafts": "Drafts",
+  "pendingReview": "Pending review",
+  "published": "Published",
+  "creatorStateSuspended": "Delisted",
+  "creatorStateFrozen": "Frozen",
+  "creatorSuspendedByOwnerNotice": "The resource is delisted. Keep editing and resubmit for review, or restore it directly",
+  "creatorSuspendedByAdminNotice": "An administrator delisted this resource. Edit and resubmit for review; it is restored once approved",
+  "creatorFrozenNotice": "An administrator froze this resource. It can no longer be edited and only an administrator can lift the freeze",
+  "creatorModerationReason": "Reason: {reason}",
+  "@creatorModerationReason": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "creatorBannedTitle": "Account banned",
+  "creatorBannedDescription": "Your account was banned by an administrator and the creator center is unavailable. Contact the team through a support ticket if you believe this is a mistake",
+  "creatorFrozenTitle": "Creator capability frozen",
+  "creatorFrozenDescription": "An administrator froze your creator capability, so you cannot submit or manage resources for now. The rest of your account is unaffected",
+  "creatorBandBbsNoDevices": "Select supported devices for the resource file first",
+  "creatorBandBbsUnmappedDevices": "No BandBBS category could be resolved for: {devices}",
+  "@creatorBandBbsUnmappedDevices": {
+    "placeholders": {
+      "devices": {}
+    }
+  },
+  "creatorBandBbsSharedCategory": "Devices in the same BandBBS category are bound to multiple packages. Bind one package per category",
+  "creatorBandBbsUnresolved": "Unable to resolve a BandBBS category",
+  "creatorOptionalIcon": "Icon (optional, 1:1)",
+  "creatorOptionalCover": "Cover (optional, 3:2)",
+  "creatorRequiredIcon": "Icon (required for AstroBox, 1:1)",
+  "creatorRequiredCover": "Cover (required for AstroBox, 3:2)",
+  "creatorIconShapeHint": "The icon is not square and may look wrong in AstroBox",
+  "creatorCoverShapeHint": "The cover is not 3:2 and may look wrong in AstroBox",
+  "creatorTermsBandBbs": "BandBBS community terms and rules",
+  "creatorTermsAstroBox": "AstroBox-Repo submission standards",
+  "creatorTermsAccept": "I have read and accept the publishing agreements above",
+  "creatorTermsContinue": "Enter Creator Center",
+  "agree": "Agree",
+  "creatorRulesAccept": "I have read and agree to the review rules above",
+  "creatorBandBbsTermsNotice": "After OronBox review, this resource is published directly to the matching BandBBS categories. Deleting the OronBox resource also deletes the corresponding BandBBS resources.",
+  "creatorBandBbsLimitsNotice": "One-click publishing to BandBBS has the following limitations, which must be fixed manually after publishing:\n1. BandBBS provides no API to upload the resource icon, so the icon will appear blank on BandBBS; please update it manually on the BandBBS site\n2. BandBBS provides no API for discussion-forum tags, so the resource's forum attributes will not be set, which may get the resource removed; please set the correct forum manually on the BandBBS site",
+  "creatorAstroBoxTermsNotice": "After OronBox review, a resource repository is created and a PR is submitted to the official AstroBox repository, reviewed independently by AstroBox maintainers. To delist after publication, contact the AstroBox-Repo maintainers.",
+  "creatorAstroBoxReviewNotice": "Resources published to AstroBox must meet the review requirements:\n1. The resource must not contain obscene, politically sensitive or otherwise illegal content\n2. The resource quality must not be too low, e.g. a watchface made by merely swapping a template, or an overly simple quickapp\n3. The cover should be attractive and aesthetically pleasing, with a 3:2 ratio (recommended 1200x800); icon recommended 192x192\n4. The resource must run its basic functions properly on supported devices\n5. Uploading others' resources without authorization is forbidden\n6. When using well-known IP assets, the preview must include a copyright notice image (stating the assets are unrelated to AstroBox and Xiaomi)",
+  "failed": "Failed / Needs action",
+  "basicInfo": "Basic info",
+  "packageFiles": "Resource files",
+  "publishTargets": "Publish targets",
+  "scan": "Scan",
+  "logs": "Logs",
+  "pairedDevices": "Paired devices",
+  "apps": "Apps",
+  "deviceAppCount": "App count",
+  "deviceWatchfaceCount": "Watchface count",
+  "connection": "Connection",
+  "protocol": "Protocol",
+  "error": "Error",
+  "errorBluetoothUnavailable": "Bluetooth is not available. Check that Bluetooth is enabled and OronBox has permission to use it",
+  "errorBluetoothConnectFailed": "Connection failed. Check Bluetooth permission, keep the device nearby and not in use, enable Connect new phone on the device, then try again",
+  "errorBluetoothDisconnected": "Bluetooth disconnected. Reconnect the device and try again",
+  "errorOperationTimeout": "Operation timed out. Make sure the device is still nearby and try again",
+  "errorDeviceNotReady": "Device is not ready. Connect and authenticate the device first",
+  "errorBleCharacteristicsMissing": "Required BLE channels were not found. Reconnect the device or check whether it supports this feature",
+  "errorWebSerialUnavailable": "This browser does not support Web Serial. Use Chrome, Edge, or another Web Serial compatible browser",
+  "errorAccountPasswordIncorrect": "Xiaomi account username or password is incorrect",
+  "errorAccountTwoFactorIncomplete": "Xiaomi account two-factor verification was not completed. Sign in again",
+  "errorXiaomiAccountSessionExpired": "Your Xiaomi account session has expired. Sign in again",
+  "errorOronBoxSessionExpired": "Your OronBox session has expired. Sign in to BandBBS again",
+  "errorNetworkUnavailable": "Unable to reach the service. Check your network and try again",
+  "errorServiceUnavailable": "The service is temporarily unavailable. Try again later",
+  "errorPermissionDenied": "You do not have permission to perform this operation",
+  "errorContentNotFound": "The requested content no longer exists or is unavailable",
+  "errorRequestConflict": "The content has changed. Refresh it and try again",
+  "errorCoinBalanceInsufficient": "You do not have enough coins",
+  "errorCoinResourceLimit": "You can give at most 2 coins to this resource",
+  "errorCoinOwnResource": "You cannot coin your own resource",
+  "errorCoinVotingFrozen": "Coin voting is currently frozen",
+  "errorCoinAccountTooNew": "Your account must be at least 24 hours old to give coins",
+  "errorCoinOperationFailed": "The coin could not be sent. Try again",
+  "errorCoinStatusUnavailable": "Coin status is unavailable. Tap to retry",
+  "errorOperationFailed": "The operation failed. Try again",
+  "errorUnknown": "Something went wrong. Try again",
+  "errorDownloadQuotaExceeded": "Today's download limit has been reached",
+  "errorGitHubNotConfigured": "GitHub publishing is not configured",
+  "errorRateLimited": "Too many requests. Wait a moment and try again",
+  "errorFileTooLarge": "The selected file is too large",
+  "errorInvalidRequest": "Some submitted information is invalid. Check it and try again",
+  "errorOperationCancelled": "Operation cancelled",
+  "errorUnsupportedFileType": "Unsupported or unrecognized file type",
+  "errorCertificateVerificationFailed": "Certificate verification failed. If you are using a proxy, disable HTTPS interception for this app or make sure its certificate is trusted",
+  "errorUnknownWithDetail": "Operation failed: {detail}",
+  "@errorUnknownWithDetail": {
+    "placeholders": {
+      "detail": {}
+    }
+  },
+  "appearance": "Appearance",
+  "resources": "Resources",
+  "communitySourceAstroBoxRepo": "AstroBox",
+  "communitySourceBandBbs": "BandBBS Community",
+  "communitySourceHuamiAppStore": "Amazfit App Store",
+  "devices": "Devices",
+  "creatorCompatibleDeviceCount": "{count} devices",
+  "@creatorCompatibleDeviceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categories": "Categories",
+  "advanced": "Advanced",
+  "openSourceLicenses": "Open source licenses",
+  "acknowledgements": "Special Acknowledgements",
+  "deviceNotConnected": "Not connected",
+  "deviceConnected": "Connected",
+  "deviceDisconnected": "Disconnected",
+  "deviceReconnect": "Reconnect",
+  "deviceConnect": "Connect",
+  "deviceSwitch": "Switch",
+  "deviceSyncTime": "Sync",
+  "deviceCharging": "Charging",
+  "deviceLastChargedNow": "Charged just now",
+  "deviceLastChargedMinutes": "Charged {count} min ago",
+  "@deviceLastChargedMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceLastChargedHours": "Charged {count} hr ago",
+  "@deviceLastChargedHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceLastChargedDays": "Charged {count} days ago",
+  "@deviceLastChargedDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceFeaturesInstallApp": "Install app",
+  "deviceFeaturesInstallWatchface": "Install watchface",
+  "deviceFeaturesInstallFirmware": "Firmware update",
+  "deviceFeaturesInstallFirmwareDesc": "Check for device updates or install local firmware",
+  "firmwareCheckingUpdates": "Checking for firmware updates",
+  "firmwareNoUpdatesFound": "No newer firmware was found for this device",
+  "firmwareSourceUnavailable": "An online firmware source is not yet available for this device type",
+  "firmwareVersionUnknown": "Current firmware version unavailable",
+  "firmwareCurrentVersion": "Current version",
+  "firmwareLatestRelease": "Latest firmware",
+  "firmwareHistoricalReleases": "Historical firmware",
+  "firmwareUpToDate": "Your firmware is up to date",
+  "firmwareUpdateAvailable": "An update is available",
+  "firmwareDownloadLatestFull": "Download latest full package",
+  "firmwareUpdateNow": "Update",
+  "firmwareReleaseNotes": "Release notes",
+  "firmwareReleaseNotesUnavailable": "No release notes available",
+  "download": "Download",
+  "downloadTaskAdded": "Added to the download queue",
+  "zeppOsMoreFeatures": "Special features",
+  "zeppOsMoreFeaturesDescription": "Manage additional features for Zepp OS devices",
+  "zeppOsDeviceFeaturesSection": "Device features",
+  "zeppOsAppsAndDevelopmentSection": "Apps and development",
+  "zeppOsAssistant": "Voice lab",
+  "zeppOsAssistantDescription": "Capture, monitor, and reply to watch voice assistant sessions",
+  "zeppOsScreenMirror": "Screen mirroring",
+  "zeppOsScreenMirrorDescription": "View the watch screen on this device",
+  "zeppOsScreenMirrorSemantics": "Zepp OS watch screen mirror",
+  "zeppOsScreenMirrorUnsupported": "This screen format cannot be displayed: {error}",
+  "@zeppOsScreenMirrorUnsupported": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "expand": "Expand",
+  "collapse": "Collapse",
+  "voiceLabTitle": "Voice lab",
+  "voiceLabXiaoAi": "XiaoAI",
+  "voiceLabReceivingAudio": "Receiving audio from the watch",
+  "voiceLabWaiting": "Waiting for a voice session",
+  "voiceLabContinuousCapture": "Continuous capture",
+  "voiceLabContinuousCaptureDescription": "Request the next recording when the current one ends",
+  "voiceLabDisableMonitoring": "Disable live monitoring",
+  "voiceLabEnableMonitoring": "Enable live monitoring",
+  "voiceLabReplyLabel": "Reply sent to the watch",
+  "voiceLabReplyHint": "Enter a reply",
+  "voiceLabReplyQueued": "Reply queued until the current recording ends",
+  "voiceLabReplySent": "Reply sent to the watch",
+  "voiceLabCapturedData": "Captured data",
+  "voiceLabDecoder": "Decoder",
+  "voiceLabOpusFrames": "Opus frames",
+  "voiceLabDataSize": "Data size",
+  "voiceLabPcmSamples": "PCM samples",
+  "voiceLabExportOpus": "Export Opus",
+  "voiceLabExportWav": "Export WAV",
+  "voiceLabClearCapture": "Clear captured data",
+  "voiceLabSaveRecording": "Save voice recording",
+  "voiceLabSaveOpus": "Save Opus audio",
+  "voiceLabAudioProcessingFailedPrefix": "Audio processing failed",
+  "voiceLabAudioProcessingFailed": "Audio processing failed: {error}",
+  "@voiceLabAudioProcessingFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabContinuousCaptureFailed": "Could not configure continuous capture: {error}",
+  "@voiceLabContinuousCaptureFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabAssistantSwitchFailed": "Could not switch voice assistant: {error}",
+  "@voiceLabAssistantSwitchFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabExportWavFailed": "Could not export WAV: {error}",
+  "@voiceLabExportWavFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabExportOpusFailed": "Could not export Opus: {error}",
+  "@voiceLabExportOpusFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "send": "Send",
+  "sendFailed": "Could not send: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "ready": "Ready",
+  "initializing": "Initializing",
+  "zeppOsMapSelectPackage": "Select a Zepp OS map package",
+  "zeppOsMapReadFailed": "Could not read the map package",
+  "zeppOsMapTransferTitle": "Transfer offline map",
+  "zeppOsMapGarminDetected": "{fileName}\nDetected a single-file Garmin IMG map: {mapName}",
+  "@zeppOsMapGarminDetected": {
+    "placeholders": {
+      "fileName": {},
+      "mapName": {}
+    }
+  },
+  "zeppOsMapGarminNoPreview": "This map does not contain a Zepp OS 11/x/y tile tree. The original IMG will be transferred as a single-file map package, so a coverage preview is unavailable.",
+  "zeppOsMapTileSummary": "{fileName} · {count} tiles\nThe preview shows package coverage, not the Garmin IMG rendering on the watch.",
+  "@zeppOsMapTileSummary": {
+    "placeholders": {
+      "fileName": {},
+      "count": {}
+    }
+  },
+  "zeppOsMapStartTransfer": "Start transfer",
+  "zeppOsMapTransferringBluetooth": "Transferring over Bluetooth",
+  "zeppOsMapTransferComplete": "Offline map transfer complete",
+  "zeppOsMapConversionFailed": "Map could not be converted safely",
+  "zeppOsMapBtClassicHint": "BT Classic bulk transfer is active. After transfer starts, confirm the installation on the watch.",
+  "zeppOsMapBleHint": "BLE supports map packages up to 2 MB. Switch to BT Classic before transferring a larger map. After transfer starts, confirm the installation on the watch.",
+  "zeppOsMapPreviewTooLarge": "The map area is too large to preview in full",
+  "zeppOsSettingPageLoadFailed": "Could not load the settings page: {error}",
+  "@zeppOsSettingPageLoadFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "zeppOsAppCompatibilitySaved": "Compatibility files saved for {appId}",
+  "@zeppOsAppCompatibilitySaved": {
+    "placeholders": {
+      "appId": {}
+    }
+  },
+  "zeppOsAppStorageSaved": "settingsStorage saved for {appId}",
+  "@zeppOsAppStorageSaved": {
+    "placeholders": {
+      "appId": {}
+    }
+  },
+  "zeppOsAppSupplementFiles": "Add app-side or setting files",
+  "zeppOsAppSupplementCompatibility": "Add mini-app compatibility files",
+  "zeppOsAppReplaceCompatibility": "Add or replace compatibility files",
+  "zeppOsAppSideAvailable": "app-side ✓",
+  "zeppOsAppSideMissing": "app-side missing",
+  "zeppOsSettingAvailable": "setting ✓",
+  "zeppOsSettingMissing": "setting missing",
+  "zeppOsAppEditStorage": "Edit settingsStorage",
+  "zeppOsStorageKeyRequired": "Key is required",
+  "zeppOsStorageDuplicateKey": "Duplicate key: {key}",
+  "@zeppOsStorageDuplicateKey": {
+    "placeholders": {
+      "key": {}
+    }
+  },
+  "zeppOsStorageDescription": "This data is shared by the setting page and app-side, and is stored as strings according to the Zepp OS specification.",
+  "zeppOsStorageEmpty": "No stored entries",
+  "zeppOsStorageKey": "Key",
+  "zeppOsStorageValue": "Value",
+  "clear": "Clear",
+  "save": "Save",
+  "selectedFileReadFailed": "Could not read the selected file",
+  "zeppOsAppInvalidHexId": "Enter a valid hexadecimal App ID",
+  "zeppOsAppSelectCompatibilityFile": "Select at least one app-side.js or setting.js file",
+  "zeppOsAppHexId": "App ID (hexadecimal)",
+  "optionalDisplayName": "Display name (optional)",
+  "zeppOsAppSideUnchanged": "Keep existing app-side",
+  "zeppOsSettingUnchanged": "Keep existing setting",
+  "selectFile": "Select file",
+  "zeppOsAppCompatibilityOverwriteHint": "Saving replaces compatibility files with the same name for this App ID, but does not modify the mini app on the watch.",
+  "zeppOsDebugRefreshFailed": "Automatic refresh failed: {error}",
+  "@zeppOsDebugRefreshFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "zeppOsDebugInvalidHex": "HEX must contain complete bytes separated by spaces, line breaks, 0x, commas, or similar separators",
+  "zeppOsDebugClearEventsTitle": "Clear events for the current app?",
+  "zeppOsDebugClearEventsDescription": "All debug events for {appId} will be cleared.",
+  "@zeppOsDebugClearEventsDescription": {
+    "placeholders": {
+      "appId": {}
+    }
+  },
+  "zeppOsDebugClearEvents": "Clear events",
+  "zeppOsDebugRefresh": "Refresh status and events",
+  "zeppOsDebugAppList": "App-side list",
+  "zeppOsDebugNoApps": "No cached scripts or watch app-side sessions have been detected.",
+  "zeppOsDebugCached": "Cached",
+  "zeppOsDebugNotCached": "Not cached",
+  "zeppOsDebugRuntimeRunning": "runtime running",
+  "zeppOsDebugRuntimeStopped": "runtime stopped",
+  "zeppOsDebugLocalRuntime": "Local runtime",
+  "zeppOsDebugCannotStart": "This App ID has no cached script and cannot be started locally.",
+  "zeppOsDebugCanStart": "The cached script can be started manually without fabricating watch session parameters.",
+  "zeppOsDebugScriptRunning": "The script is running in local QuickJS.",
+  "zeppOsDebugStartQuickJs": "Start QuickJS",
+  "stop": "Stop",
+  "zeppOsDebugMessageEditor": "Message editor",
+  "zeppOsDebugUtf8Text": "UTF-8 text",
+  "zeppOsDebugJsonCompact": "JSON (compacted before sending)",
+  "zeppOsDebugHexBytes": "HEX bytes",
+  "zeppOsDebugEncodingFailed": "The current content cannot be encoded in the selected mode",
+  "zeppOsDebugByteCountUnavailable": "Bytes: --",
+  "zeppOsDebugBytePreview": "Bytes: {count}\nHEX: {hex}",
+  "@zeppOsDebugBytePreview": {
+    "placeholders": {
+      "count": {},
+      "hex": {}
+    }
+  },
+  "zeppOsDebugInjectLocal": "Inject inbound message into local runtime",
+  "zeppOsDebugSendToWatch": "Send to watch",
+  "zeppOsDebugWaitingForWatch": "Send to watch (waiting for a real session)",
+  "zeppOsDebugEvents": "Debug events",
+  "zeppOsDebugClearCurrentApp": "Clear current app",
+  "zeppOsDebugSearch": "Search type, message, HEX, or readable text",
+  "zeppOsDebugWatchOnly": "Real watch messages only",
+  "zeppOsDebugNoEvents": "No events match the current filters",
+  "zeppOsDebugMessageActions": "Message actions",
+  "zeppOsDebugLoadEditor": "Load in editor",
+  "zeppOsDebugCopyHex": "Copy HEX",
+  "zeppOsDebugCopyText": "Copy text",
+  "zeppOsDebugSessionStatus": "Runtime and session status",
+  "zeppOsDebugCachedScript": "Cached script: {status}",
+  "@zeppOsDebugCachedScript": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "zeppOsDebugLocalRuntimeStatus": "Local runtime: {status}",
+  "@zeppOsDebugLocalRuntimeStatus": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "zeppOsDebugWatchSession": "Watch session: {status}",
+  "@zeppOsDebugWatchSession": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "exists": "Available",
+  "notExists": "Unavailable",
+  "running": "Running",
+  "notRunning": "Not running",
+  "notOpen": "Not open",
+  "zeppOsDebugWatchSessionOpen": "Real session open",
+  "zeppOsDebugRealHeader": "Real header",
+  "zeppOsDebugLatestStartup": "Latest startup status: {status}",
+  "@zeppOsDebugLatestStartup": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "zeppOsDebugWatchInbound": "From watch",
+  "zeppOsDebugWatchOutbound": "To watch",
+  "zeppOsDebugLifecycle": "Lifecycle",
+  "zeppOsMirrorInterval": "Frame interval",
+  "zeppOsMirrorIntervalRange": "10–250",
+  "zeppOsOfflineMaps": "Offline maps",
+  "zeppOsOfflineMapsDescription": "Transfer existing map packages to the watch",
+  "zeppOsAppSettings": "App settings",
+  "zeppOsAppSettingsDescription": "Manage cached settings for Zepp OS apps",
+  "zeppOsAppDebug": "App debugging",
+  "zeppOsAppDebugDescription": "Debug app-side scripts and device communication",
+  "deviceMusicSync": "Music sync",
+  "deviceHealthTitle": "Health",
+  "deviceHealthDescription": "Sync activity and sleep data from the device",
+  "deviceHealthSyncCardTitle": "Health data",
+  "deviceHealthNeverSynced": "No health data has been synchronized yet",
+  "deviceHealthLastSynced": "Last synchronized {time}",
+  "@deviceHealthLastSynced": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceHealthSync": "Synchronize health data",
+  "deviceHealthSyncing": "Synchronizing",
+  "deviceHealthAutoSyncTitle": "Automatically sync health data",
+  "deviceHealthAutoSyncDescription": "Automatically synchronize health data when synchronizing device data",
+  "deviceHealthConnectFirst": "Connect the device to synchronize health data",
+  "deviceHealthPartialSync": "Some health data could not be synchronized",
+  "deviceHealthToday": "Today",
+  "deviceHealthSteps": "Steps",
+  "deviceHealthDistance": "Distance",
+  "deviceHealthCalories": "Calories",
+  "deviceHealthHeartRate": "Heart rate",
+  "deviceHealthAverageHeartRateLabel": "Average heart rate",
+  "deviceHealthRestingHeartRate": "Resting heart rate",
+  "deviceHealthAbnormalHeartRate": "Abnormal heart rate",
+  "deviceHealthHeartRateHigh": "High heart rate",
+  "deviceHealthHeartRateLow": "Low heart rate",
+  "deviceHealthHeartHealth": "Heart health",
+  "deviceHealthHeartHealthMonitoring": "Heart health monitoring",
+  "deviceHealthIrregularHeartbeat": "Irregular heartbeat",
+  "deviceHealthLowBloodOxygen": "Low blood oxygen",
+  "deviceHealthHighStress": "High stress",
+  "deviceHealthDetected": "Detected",
+  "deviceHealthSleep": "Recent sleep",
+  "deviceHealthSleepCard": "Sleep",
+  "deviceHealthAllDaySleep": "All-day sleep",
+  "deviceHealthLongSleep": "Long sleep",
+  "deviceHealthSleepStructure": "Sleep structure",
+  "deviceHealthSleepDetails": "Sleep details",
+  "deviceHealthSleepAverageHeartRate": "Average sleep heart rate",
+  "deviceHealthSleepAverageBloodOxygen": "Average sleep blood oxygen",
+  "deviceHealthAverageHeartRate": "Average heart rate {value} bpm",
+  "@deviceHealthAverageHeartRate": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceHealthNoData": "No data available",
+  "deviceHealthLoadFailed": "Unable to load health data",
+  "deviceMusicUpload": "Transfer music",
+  "deviceMusicSyncDescription": "Sync MP3 files to the device",
+  "deviceMusicChooseDialog": "Select an MP3 file to sync to the device",
+  "deviceMusicReadFailed": "Unable to read the selected MP3 file",
+  "deviceMusicSizeInvalid": "MP3 files must be larger than 0 bytes and no larger than {maxMb} MB",
+  "@deviceMusicSizeInvalid": {
+    "placeholders": {
+      "maxMb": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicUnknownArtist": "Unknown artist",
+  "deviceMusicTransferred": "Music transfer complete",
+  "deviceMusicLibrary": "Device music",
+  "deviceMusicLibraryDescription": "Manage songs and playlists on the device",
+  "deviceMusicSongs": "Songs",
+  "deviceMusicSongsTotal": "{count} total",
+  "@deviceMusicSongsTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicNoPlaylist": "Not in a playlist",
+  "deviceMusicPlaylists": "Playlists",
+  "deviceMusicEmpty": "No songs on the device",
+  "deviceMusicNoPlaylists": "No playlists yet",
+  "deviceMusicLoadFailed": "Failed to load device music: {error}",
+  "@deviceMusicLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceMusicPlaylistCreate": "New playlist",
+  "deviceMusicPlaylistRename": "Rename playlist",
+  "deviceMusicPlaylistName": "Playlist name",
+  "deviceMusicPlaylistLimit": "Up to {count} playlists",
+  "@deviceMusicPlaylistLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicSongCount": "{count} songs",
+  "@deviceMusicSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicDeleteSong": "Delete this song from the device?",
+  "deviceMusicDeletePlaylist": "Delete this playlist?",
+  "deviceMusicDeletePlaylistDescription": "Songs in the playlist will remain on the device.",
+  "deviceMusicManagePlaylists": "Manage playlists",
+  "deviceMusicPlaylistMembership": "Playlists",
+  "deviceMusicTransferSpeed": "{speed}/s",
+  "@deviceMusicTransferSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceMusicSelectedFiles": "{count} files selected",
+  "@deviceMusicSelectedFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicQueueProgress": "Transferring {current}/{total}: {name}",
+  "@deviceMusicQueueProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceRecordingsTitle": "Recording sync",
+  "deviceRecordingsDescription": "Sync and export recordings from the watch",
+  "deviceRecordingsHint": "Recordings are received and verified one by one. Export each original file after synchronization.",
+  "deviceRecordingsSync": "Sync recordings",
+  "deviceRecordingsReading": "Reading recording list",
+  "deviceRecordingsProgress": "Received {completed}/{total}: {name}",
+  "@deviceRecordingsProgress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceRecordingsProgressCount": "Received {completed}/{total}",
+  "@deviceRecordingsProgressCount": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceRecordingsEmpty": "Connect the watch and select Sync recordings",
+  "deviceRecordingsSave": "Export recording",
+  "deviceRecordingsNoneOnWatch": "No new recordings were found on the watch",
+  "deviceRecordingsSynced": "Synced {count} recordings",
+  "@deviceRecordingsSynced": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceRecordingsSaveFailed": "Could not export recording: {error}",
+  "@deviceRecordingsSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceMusicTransferTitle": "Transfer MP3 file",
+  "deviceMusicVelaDescription": "Sync MP3 files to the device. Each file must not exceed 100 MB.",
+  "deviceMusicZeppDescription": "MP3 files up to 50 MB are supported. Bluetooth Classic is recommended for faster transfers; BLE is also supported but takes longer.",
+  "deviceMusicChooseMp3": "Select MP3 file",
+  "deviceMusicSongTitle": "Track title",
+  "deviceMusicArtist": "Artist",
+  "deviceMusicFileSize": "File size: {size}",
+  "@deviceMusicFileSize": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "deviceMusicProgress": "Transfer progress: {progress}%",
+  "@deviceMusicProgress": {
+    "placeholders": {
+      "progress": {}
+    }
+  },
+  "deviceMusicTransferring": "Transferring",
+  "deviceMusicSend": "Start transfer",
+  "zeppOsFindDevice": "Find device",
+  "zeppOsFindDeviceDescription": "Make the device vibrate or ring continuously",
+  "deviceFeaturesDeviceInfo": "Device info",
+  "deviceFeaturesDeviceInfoDesc": "Firmware, storage and details",
+  "switchDeviceTitle": "Switch device",
+  "savedDevices": "Saved devices",
+  "deviceSwitchAddDevice": "Add device",
+  "scanAndAdd": "Scan and add",
+  "authkey": "Auth key",
+  "authkeyPrompt": "Enter device auth key",
+  "authkeyPlaceholder": "Auth key",
+  "connectFailed": "Connection failed",
+  "deviceConnectingTo": "Connecting to {deviceName}…",
+  "@deviceConnectingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceConnectionPreparing": "Preparing connection…",
+  "deviceConnectionEstablishing": "Establishing {transport} connection…",
+  "@deviceConnectionEstablishing": {
+    "placeholders": {
+      "transport": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceConnectionInitializing": "Initializing device protocol…",
+  "deviceConnectionAuthenticating": "Authenticating device…",
+  "deviceConnectionFetchingStatus": "Reading device information…",
+  "deviceTransportBle": "BLE",
+  "deviceEndpointUnavailable": "No {transport} endpoint is available. Pair the device in system Bluetooth settings, then scan again.",
+  "@deviceEndpointUnavailable": {
+    "placeholders": {
+      "transport": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceTransportSpp": "SPP",
+  "deviceCompatibilityUnknown": "Unrecognized device",
+  "webSerialTitle": "Web Serial",
+  "webSerialHint": "On the web, OronBox connects to devices via Web Serial. Saved devices stay in this browser.",
+  "webSerialConnectDialogTitle": "Connect via Web Serial",
+  "webSerialConnectDialogHint": "Enter the device auth key, then select the serial port in the browser prompt. The auth key is saved in this browser.",
+  "cancel": "Cancel",
+  "deviceActionsDelete": "Delete",
+  "deviceActionsDisconnect": "Disconnect",
+  "deviceActionsShareQR": "Share QR",
+  "deviceShareOronBoxCode": "Switch to OronBox code",
+  "deviceShareAstroBoxCompatibleCode": "Switch to AstroBox compatible code",
+  "installTapToSelectFile": "Tap to select file",
+  "deviceInfoTitle": "Device info",
+  "deviceInfoGroupDevice": "Device",
+  "deviceInfoGroupSystem": "System",
+  "deviceInfoGroupStatus": "Status",
+  "fieldName": "Name",
+  "fieldAddress": "Address",
+  "fieldAuthkey": "Auth key",
+  "fieldConnectionType": "Connection type",
+  "fieldCodename": "Codename",
+  "fieldModel": "Model",
+  "fieldImei": "IMEI",
+  "fieldFirmware": "Firmware",
+  "fieldSerial": "Serial",
+  "fieldBattery": "Battery",
+  "fieldChargeStatus": "Charge status",
+  "fieldStorage": "Storage",
+  "appManagementTitle": "App management",
+  "appManagementNone": "No installed apps",
+  "appManagementShowSystemApps": "Show system apps",
+  "watchfaceManagementTitle": "Watchface management",
+  "watchfaceManagementNone": "No installed watchfaces",
+  "open": "Open",
+  "externalLinkTitle": "Open external link",
+  "externalLinkDescription": "You are about to visit {url}\n\nThis website is operated by a third party, is not affiliated with OronBox, and its security is unknown. Please proceed with caution. Do you want to continue?",
+  "@externalLinkDescription": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "externalLinkAstroBoxResourceHint": "This appears to be an AstroBox resource. You can also view and install it within OronBox",
+  "continueToWebsite": "Continue",
+  "viewInOronBox": "View in OronBox",
+  "uninstall": "Uninstall",
+  "enable": "Enable",
+  "show": "Show",
+  "hide": "Hide",
+  "copy": "Copy",
+  "copied": "Copied",
+  "close": "Close",
+  "desktopTrayShow": "Show window",
+  "desktopTrayExit": "Exit OronBox",
+  "desktopCloseTitle": "Exit confirmation",
+  "desktopCloseMessage": "Would you like to exit OronBox?",
+  "desktopCloseRemember": "Do not ask again",
+  "desktopCloseToTray": "Minimize to tray",
+  "desktopCloseExit": "Exit OronBox",
+  "settingsDesktopCloseBehavior": "Window closing",
+  "settingsDesktopCloseBehaviorDesc": "Choose what happens when the main window is closed",
+  "settingsRemoveBondBeforeSpp": "Re-pair when connecting",
+  "settingsRemoveBondBeforeSppDesc": "Improves connection stability and prevents Xiaomi Fitness from taking the connection; turning it off may speed up connections",
+  "desktopCloseBehaviorAsk": "Ask every time",
+  "desktopCloseBehaviorExit": "Exit immediately",
+  "desktopCloseBehaviorTray": "Minimize to tray",
+  "quickApp": "Quickapp",
+  "miniprogram": "Miniprogram",
+  "miniprograms": "Miniprograms",
+  "watchface": "Watchface",
+  "firmwareTool": "Firmware / Tool",
+  "free": "Free",
+  "paid": "Paid",
+  "forcePaid": "Force Paid",
+  "version": "Version",
+  "noContent": "No content",
+  "preview": "Preview",
+  "productDeviceRequirements": "Device requirements",
+  "productOtherVersions": "Other versions",
+  "productInQueue": "In queue",
+  "settingsAccount": "Account",
+  "settingsGeneral": "General",
+  "settingsQueue": "Queue",
+  "settingsAbout": "About",
+  "settingsAccountLoginBBSDesc": "Sign in to access BandBBS resources",
+  "settingsAccountBandBbsSigningIn": "Signing in",
+  "settingsAccountBandBbsOpenedBrowser": "Browser opened. Complete BandBBS authorization there",
+  "settingsAccountBandBbsSignedIn": "BandBBS signed in",
+  "settingsAccountBandBbsLoginFailed": "BandBBS sign-in failed",
+  "settingsBandBbsAccountRequired": "Sign in to your BandBBS account in Settings first",
+  "settingsAccountBBSAccount": "BandBBS account",
+  "bandBbsAccountTitle": "BandBBS account",
+  "bandBbsResourceId": "Resource ID",
+  "bandBbsResourceIdHint": "Enter BandBBS resource ID",
+  "bandBbsQueryResource": "Query",
+  "bandBbsLogout": "Sign out",
+  "bandBbsLoggedOut": "Signed out",
+  "accountSignOutTitle": "Sign out of {accountName}?",
+  "@accountSignOutTitle": {
+    "placeholders": {
+      "accountName": {}
+    }
+  },
+  "accountSignOutMessage": "You will need to sign in again to use related features.",
+  "bandBbsLoadPreviews": "Load post previews",
+  "bandBbsLoadPreviewsDesc": "Automatically load attachment previews in the resource list",
+  "bandBbsShowAllCategories": "Show all categories",
+  "bandBbsShowAllCategoriesDesc": "Include categories for unsupported devices hidden by default",
+  "settingsMiAccount": "Xiaomi account",
+  "settingsMiAccountDesc": "Sign in and sync authkeys from bound devices",
+  "deviceSwitchMiAccountImport": "Sign in to Xiaomi account and sync bound devices",
+  "deviceSwitchWearableLogImport": "Import devices from Xiaomi Fitness logs",
+  "settingsMiAccountLoginTitle": "Xiaomi account login",
+  "settingsMiAccountUsername": "Account",
+  "settingsMiAccountPassword": "Password",
+  "settingsMiAccountRememberCredentials": "Remember account and password",
+  "settingsMiAccountLoginAndSync": "Sign in and sync",
+  "settingsMiAccountLogInvalid": "Unable to read this Xiaomi Fitness log",
+  "settingsMiAccountLogNoDevices": "No device with a complete MAC and authkey was found in the log",
+  "settingsWearableLogSync": "Read Xiaomi Fitness log",
+  "settingsWearableLogGuide": "Open Xiaomi Fitness\nGo to About at the bottom of the Profile page\nRepeatedly tap the orange ring logo\nTap Confirm in the dialog\nWait for the log has been... toast\nReturn here and tap Scan",
+  "settingsWearableLogFound": "Found {count} devices, tap one to import",
+  "@settingsWearableLogFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsWearableLogImportedDevice": "Imported {name}",
+  "@settingsWearableLogImportedDevice": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsMiAccountMissingCredentials": "Enter your Xiaomi account and password",
+  "settingsMiAccountTwoFactorPrompt": "Complete Xiaomi account two-factor verification in the verification page",
+  "settingsMiAccountLoginWindowClosed": "The login window was closed",
+  "settingsMiAccountSyncedDevices": "Synced {count} Mi devices",
+  "xiaomiAccountRequiredForEphemeris": "Sign in to your Xiaomi account before syncing ephemeris data",
+  "@settingsMiAccountSyncedDevices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsHuamiAccount": "Amazfit account",
+  "settingsHuamiAccountDesc": "Sign in and save credentials for Zepp store access",
+  "settingsHuamiAccountSigningIn": "Signing in",
+  "settingsHuamiAccountSignedIn": "Amazfit account signed in",
+  "settingsHuamiAccountLoginTitle": "Amazfit account login",
+  "settingsHuamiAccountUsername": "Account",
+  "settingsHuamiAccountPassword": "Password",
+  "settingsHuamiAccountRememberCredentials": "Remember password",
+  "settingsHuamiAccountLoginAndSave": "Sign in and save",
+  "settingsHuamiAccountMissingCredentials": "Enter your Amazfit account and password",
+  "settingsHuamiAccountRequired": "Sign in to your Amazfit account in Settings first",
+  "understood": "I understand",
+  "settingsGeneralLanguage": "Language",
+  "settingsGeneralLanguageDesc": "Change app display language",
+  "settingsWideNavigationPosition": "Navigation position",
+  "settingsWideNavigationPositionDesc": "Adjust side tab placement in the wide-screen state",
+  "settingsWideNavigationPositionBottom": "Bottom",
+  "settingsWideNavigationPositionCenter": "Center",
+  "settingsWideNavigationPositionSplit": "Split",
+  "settingsAutoReconnectTitle": "Auto reconnect",
+  "settingsAutoReconnectDesc": "Automatically reconnect to the last paired device on startup",
+  "settingsAutoReconnectOnDisconnectTitle": "Auto reconnect",
+  "settingsAutoReconnectOnDisconnectDesc": "Try to reconnect when the device is disconnected unexpectedly",
+  "deviceReconnectAttempting": "Device connection lost, trying to reconnect",
+  "deviceReconnectSucceeded": "Reconnected successfully",
+  "deviceReconnectFailedPrefix": "Reconnect failed. Check: ",
+  "settingsSourceOfficialCdn": "GitHub source CDN",
+  "settingsSourceOfficialCdnDesc": "CDN used to fetch the GitHub-hosted community index",
+  "settingsQueueAutoInstall": "Auto install",
+  "settingsQueueAutoInstallDesc": "Start installation automatically after download",
+  "settingsQueueDontClear": "Don't clear install queue",
+  "settingsQueueDontClearDesc": "Keep completed items in the install queue",
+  "settingsRealtimeActivityNotification": "Real-time activity notification",
+  "settingsRealtimeActivityNotificationDesc": "Use a real-time activity notification to show queue progress",
+  "settingsAboutWebsite": "Official website",
+  "settingsTapToSignIn": "Tap to sign in",
+  "settingsConnected": "Connected",
+  "settingsSystem": "System",
+  "settingsLight": "Light",
+  "settingsDark": "Dark",
+  "settingsOledDark": "OLED dark",
+  "settingsThemeMode": "Theme mode",
+  "settingsThemeModeDesc": "Change app theme appearance",
+  "settingsDynamicColor": "Dynamic color",
+  "settingsDynamicColorDesc": "Use system accent colors for the app theme",
+  "settingsColorScheme": "Color scheme",
+  "settingsColorSchemeDesc": "Choose the app accent color",
+  "settingsColorSchemePink": "Pink",
+  "settingsColorSchemePurple": "Purple",
+  "settingsColorSchemeTeal": "Teal",
+  "settingsColorSchemeGreen": "Green",
+  "settingsColorSchemeRed": "Red",
+  "settingsColorSchemeAmber": "Amber",
+  "settingsDesktopAccentSource": "Linux accent source",
+  "settingsDesktopAccentSourceDesc": "Choose whether to read accent colors from GTK or Qt",
+  "settingsDesktopAccentSourceSystem": "Auto",
+  "settingsDesktopAccentSourceGtk": "GTK",
+  "settingsDesktopAccentSourceQt": "Qt",
+  "settingsCancel": "Cancel",
+  "settingsTeamRoleMain": "Main Developer / Designer",
+  "settingsTeamRoleZeppOS": "ZeppOS implementation",
+  "settingsAboutSoftware": "About software",
+  "settingsAboutSoftwareDesc": "Version, changelog and development team",
+  "settingsAboutSoftwareTagline": "A pretty fast wearable management tool for VelaOS and ZeppOS, built with Flutter",
+  "settingsAboutSoftwareRepository": "Open GitHub repository",
+  "settingsAboutSoftwareTeam": "Development team",
+  "settingsAboutSoftwareBuildInfo": "Build info",
+  "settingsAboutSoftwareCopyright": "Copyright © 2026 OrPudding",
+  "acknowledgementsKazumi": "Reference for Material Design components and UI patterns.",
+  "acknowledgementsAstroBoxPublic": "Reference for UI structure, resource workflows, and interaction design.",
+  "acknowledgementsAstroBoxNgCore": "Reference for Xiaomi device protocols, install flows, and transfer behavior.",
+  "acknowledgementsAstroBoxNgBluetooth": "Reference for Bluetooth connection behavior.",
+  "acknowledgementsAstroBoxNgAccount": "Reference for Xiaomi account login, device sync, and authkey retrieval flows.",
+  "acknowledgementsAstroBoxNgProvider": "Reference for community resource indexes, CDN handling, and manifest parsing flows.",
+  "acknowledgementsAstroBoxNgAppWasm": "Reference for Web Serial and browser-side connection flows.",
+  "acknowledgementsGadgetbridge": "Reference for ZeppOS and wearable protocol research.",
+  "acknowledgementsBreezyWeather": "Reference for the China weather source implementation.",
+  "acknowledgementsOpenMeteo": "Weather forecasts, air quality, and geocoding data under CC BY 4.0",
+  "resourceHomeRecommended": "Recommended",
+  "resourceHomeFeatured": "Featured",
+  "resourceHomeUpdates": "Updates",
+  "blogTypeAnnouncement": "Announcement",
+  "blogTypeRecommendation": "Recommendation",
+  "blogTypeDocs": "Docs",
+  "resourceHomeEmptyTitle": "Nothing to recommend yet",
+  "resourceLibraryEndOfList": "You've reached the end — check out resources from other sources?",
+  "resourceHomeEmptySubtitle": "You can get resources from the library",
+  "openResourceLibrary": "Open resource library",
+  "downloadQueueTitle": "Download queue",
+  "installQueueTitle": "Install queue",
+  "queueClear": "Clear",
+  "queueStart": "Start",
+  "queuePause": "Pause",
+  "downloadQueueEmpty": "No download tasks",
+  "installQueueEmpty": "No install tasks",
+  "localAppInstall": "Local app install",
+  "localWatchfaceInstall": "Local watchface install",
+  "localFirmwareInstall": "Local firmware install",
+  "queueStatusPending": "Waiting",
+  "queueStatusDownloading": "Downloading {percent}%",
+  "@queueStatusDownloading": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "queueStatusInstalling": "Installing {percent}%",
+  "@queueStatusInstalling": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "queueStatusCompleted": "Completed",
+  "queueStatusFailed": "Failed",
+  "queueDragToInstall": "Release to install an app, watchface, or plugin",
+  "queueAddedFiles": "Added {count} files to install queue",
+  "@queueAddedFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "installQueueReadFailed": "Read failed",
+  "installQueueUnsupportedFile": "Unsupported file",
+  "timeTodayAt": "Today {time}",
+  "@timeTodayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "timeYesterdayAt": "Yesterday {time}",
+  "@timeYesterdayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "settingsAccountBandBbsAccount": "BandBBS account",
+  "settingsAccountGitHub": "GitHub account",
+  "settingsAccountGitHubDesc": "Connect to publish AstroBox resources as yourself",
+  "githubAccountNeedsBandBbs": "Sign in to BandBBS first",
+  "bandBbsPublishAuthTitle": "Publish authorization",
+  "bandBbsResourceQueryTitle": "Install purchased resources",
+  "settingsAboutLogs": "Runtime logs",
+  "settingsAboutLogsDescription": "View, export, and manage runtime logs from the app and connected devices",
+  "settingsAboutLogsSize": "Currently using {size}",
+  "@settingsAboutLogsSize": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "settingsAboutLogsExport": "Export",
+  "settingsAboutLogsExported": "Exported to {path}",
+  "@settingsAboutLogsExported": {
+    "placeholders": {
+      "path": {}
+    }
+  },
+  "settingsAboutLogsEmpty": "No log files",
+  "settingsAboutLogsClear": "Clear",
+  "settingsDeviceLogsPull": "Pull device logs",
+  "settingsDeviceLogsTip": "This pulls logs from the connected Xiaomi wearable and may take a while. Keep the app in the foreground and the device screen on until it finishes.",
+  "settingsDeviceLogsStart": "Start",
+  "settingsDeviceLogsPulling": "Pulling device logs",
+  "settingsDeviceLogsWaiting": "Waiting for the device to send logs",
+  "settingsDeviceLogsProgress": "Received {progress}%",
+  "@settingsDeviceLogsProgress": {
+    "placeholders": {
+      "progress": {}
+    }
+  },
+  "settingsDeviceLogsSaved": "Device logs saved as {name}",
+  "@settingsDeviceLogsSaved": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsDeviceLogsFailed": "Unable to pull device logs: {error}",
+  "@settingsDeviceLogsFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "settingsAboutLogsClearConfirm": "All log files except the current session will be deleted.",
+  "settingsAboutLogsOpen": "Open logs folder",
+  "settingsAboutLogsOpenFailed": "Unable to open the logs folder",
+  "settingsLogsFileList": "Log files",
+  "settingsAboutLogsWarningTitle": "Sensitive information warning",
+  "settingsAboutLogsWarningMessage": "Logs may contain BandBBS, Xiaomi, or Amazfit login credentials and other sensitive information. Do not share them with anyone other than official OronBox maintainers!",
+  "pluginPermissionRequestTitle": "Plugin permission request",
+  "pluginPermissionRequestMessage": "\"{plugin}\" wants to {operation}.",
+  "@pluginPermissionRequestMessage": {
+    "placeholders": {
+      "plugin": {},
+      "operation": {}
+    }
+  },
+  "pluginPermissionOnce": "Allow once",
+  "pluginPermissionSession": "Allow this run",
+  "pluginPermissionAlways": "Always allow",
+  "pluginPermissionDeny": "Deny",
+  "pluginPermissionOpenExternal": "open an external link",
+  "pluginPermissionPickFile": "access host files",
+  "pluginPermissionExportFile": "export a file to the host",
+  "pluginPermissionNetwork": "access the network",
+  "pluginPermissionInterconnect": "communicate with device applications",
+  "pluginPermissionProvider": "register a resource provider",
+  "pluginPermissionReadDevice": "read device information",
+  "pluginPermissionOperateDevice": "operate a device",
+  "pluginPermissionObserveProtocol": "read raw device protocol data",
+  "pluginPermissionSendProtocol": "send raw protocol data to a device",
+  "pluginPermissionReadAppSide": "read AppSide scripts and events",
+  "pluginPermissionOperateAppSide": "manage AppSide sessions",
+  "pluginErrorTitle": "Plugin corrupted",
+  "pluginErrorMessage": "\"{plugin}\" cannot run and may be corrupted.\n\nError: {error}\n\nUninstall this plugin?",
+  "@pluginErrorMessage": {
+    "placeholders": {
+      "plugin": {},
+      "error": {}
+    }
+  },
+  "pluginPackageCorruptedMessage": "The selected plugin package cannot be read and may be corrupted. Obtain it again and try importing it.",
+  "pluginErrorClearData": "Clear plugin data",
+  "pluginErrorUninstall": "Uninstall plugin",
+  "pluginErrorSafeMode": "Enter safe mode",
+  "pluginSafeModeTitle": "Plugin safe mode is enabled",
+  "pluginSafeModeDescription": "All plugins are stopped and will reload after safe mode is disabled.",
+  "pluginSafeModeExit": "Exit safe mode",
+  "devTools": "DevTools",
+  "devToolsDescriptionDesktop": "Open DevTools in a separate window",
+  "devToolsDescriptionEntry": "Show a DevTools entry button in app bars",
+  "devToolsOperationFailed": "Unable to change the DevTools state",
+  "resourceTypeErrorTitle": "Incorrect resource type",
+  "resourceTypeUnknownTitle": "Unrecognized resource type",
+  "resourceTypeUnknownNoType": "OronBox cannot identify the resource type of this file; it may be corrupted",
+  "resourceTypeUnknownCancel": "Cancel",
+  "resourceTypeMismatchMessage": "This appears to be a {detectedType} resource, but you selected {selectedType}. Choose how to install it",
+  "@resourceTypeMismatchMessage": {
+    "placeholders": {
+      "detectedType": {},
+      "selectedType": {}
+    }
+  },
+  "resourcePlatformMismatchMessage": "This appears to be a {resourceType} resource for a {resourcePlatform} device, but the connected device is {deviceName} ({devicePlatform}). It is not supported and forcing installation may cause unexpected problems",
+  "@resourcePlatformMismatchMessage": {
+    "placeholders": {
+      "resourcePlatform": {},
+      "resourceType": {},
+      "deviceName": {},
+      "devicePlatform": {}
+    }
+  },
+  "resourceTypeUnknownMessage": "OronBox cannot identify the actual resource type. Install it as {selectedType} anyway?",
+  "@resourceTypeUnknownMessage": {
+    "placeholders": {
+      "selectedType": {}
+    }
+  },
+  "resourceInstallCancel": "Cancel installation",
+  "resourceInstallAcknowledge": "I understand",
+  "resourceInstallForce": "Force install",
+  "resourceInstallForceCountdown": "Force install ({seconds}s)",
+  "@resourceInstallForceCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInstallAsSelected": "Continue as {type}",
+  "@resourceInstallAsSelected": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "resourceInstallAsSelectedCountdown": "Continue as {type} ({seconds}s)",
+  "@resourceInstallAsSelectedCountdown": {
+    "placeholders": {
+      "type": {},
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInstallAsDetected": "Install as {type}",
+  "@resourceInstallAsDetected": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "resourceTypeApp": "miniprogram",
+  "resourceTypeQuickApp": "quick app",
+  "resourceTypeWatchface": "watchface",
+  "resourceTypeFirmware": "firmware",
+  "resourceInstallConfirmTitle": "Install {type}",
+  "@resourceInstallConfirmTitle": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "resourceInstallConfirmMessage": "Install {fileName} ({fileSize})?",
+  "@resourceInstallConfirmMessage": {
+    "placeholders": {
+      "fileName": {},
+      "fileSize": {}
+    }
+  },
+  "resourceInstallConfirm": "Install",
+  "previewImages": "Preview images",
+  "add": "Add",
+  "submit": "Submit",
+  "creatorConfirmTitle": "Confirm commit",
+  "creatorConfirmOronBox": "Commit to OronBox",
+  "creatorConfirmBandBbs": "Sync to BandBBS: {category}",
+  "@creatorConfirmBandBbs": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "creatorConfirmAstroBox": "Sync to AstroBox: {owner}/{repository}",
+  "@creatorConfirmAstroBox": {
+    "placeholders": {
+      "owner": {},
+      "repository": {}
+    }
+  },
+  "creatorBandBbsDirectPublish": "Sync to BandBBS",
+  "creatorBandBbsBoundUpdate": "Linked · Sync to BandBBS",
+  "creatorBandBbsVersionTitle": "Version title",
+  "creatorBandBbsVersionMessage": "Update notes",
+  "creatorBandBbsVersionPairRequired": "Enter both a version title and update notes, or leave both empty",
+  "creatorLinkedSections": "{count} linked sections",
+  "@creatorLinkedSections": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorBandBbsBindingIds": "Section {categoryId} · Resource {resourceId}",
+  "@creatorBandBbsBindingIds": {
+    "placeholders": {
+      "categoryId": {},
+      "resourceId": {}
+    }
+  },
+  "creatorAstroBoxBoundSync": "Linked · Sync to AstroBox",
+  "creatorThisCommit": "This commit",
+  "creatorAstroBoxPrPublish": "Sync to AstroBox · {repository}",
+  "@creatorAstroBoxPrPublish": {
+    "placeholders": {
+      "repository": {}
+    }
+  },
+  "creatorOronBoxRequired": "Required. Resources are reviewed by OronBox",
+  "creatorOpenInOronBox": "View in OronBox",
+  "creatorAstroTagsHint": "Separate tags with English semicolons ;",
+  "retry": "Retry",
+  "reviewNote": "Review note",
+  "creatorReviewRejected": "Resource changes requested",
+  "creatorReviewState": "Review status: {state}",
+  "@creatorReviewState": {
+    "placeholders": {
+      "state": {}
+    }
+  },
+  "creatorOperationWorking": "Working",
+  "creatorProcessingImage": "Processing image",
+  "creatorOperationRefreshing": "Refreshing creator data",
+  "creatorOperationCreating": "Creating resource",
+  "creatorOperationCreatingCollection": "Creating collection",
+  "creatorOperationSaving": "Saving changes",
+  "creatorOperationDeleting": "Deleting",
+  "creatorOperationSubmitting": "Submitting for review",
+  "creatorOperationAuthorizing": "Waiting for authorization",
+  "creatorResolvingPublicationTarget": "Resolving publication category",
+  "creatorStateApproved": "Approved",
+  "creatorStateExternalReview": "External review",
+  "creatorStateFailed": "Publishing failed",
+  "creatorStateSuperseded": "Superseded by a newer revision",
+  "creatorStateCancelled": "Cancelled",
+  "creatorNoResources": "No resources created yet",
+  "creatorLoginRequiredTitle": "Sign in to use Creator Center",
+  "creatorLoginRequiredDescription": "Sign in to BandBBS and connect your OronBox account before creating, editing, or submitting resources",
+  "creatorLoginAction": "Sign in to BandBBS",
+  "creatorBandBbsWriteReady": "BandBBS publishing authorized",
+  "creatorBandBbsWriteMissing": "BandBBS publishing not authorized",
+  "creatorGitHubOwnPublishReady": "GitHub connected",
+  "creatorGitHubOwnPublishMissing": "GitHub not connected",
+  "creatorAuthorize": "Authorize",
+  "installQueueFixWatchfaceId": "Fix watchface ID",
+  "installQueueFixWatchfaceIdHint": "Enter up to 12 digits",
+  "authorize": "Authorize",
+  "creatorBandBbsAuthorized": "BandBBS resource publishing is authorized",
+  "creatorBandBbsAuthorizationRequired": "Authorize OronBox separately to publish BandBBS resources on your behalf",
+  "connect": "Connect",
+  "legalAndPrivacy": "Legal and privacy",
+  "termsTitle": "Terms and disclaimer",
+  "privacyTitle": "Privacy notice",
+  "resourcePublishingTitle": "Resource publishing agreement",
+  "reviewRulesTitle": "Resource review rules",
+  "joinQqGroup": "Join QQ Group",
+  "joinQqGroupDesc": "Chat with developers and other users for help",
+  "feedbackTitle": "Feedback",
+  "feedbackDesc": "Submit feedback and view responses",
+  "reportResource": "Report resource",
+  "reportComment": "Report comment",
+  "report": "Report",
+  "feedbackSubject": "Subject",
+  "feedbackMessage": "Feedback or issue",
+  "reportReason": "Reason for report",
+  "noFeedback": "No feedback yet",
+  "feedbackProcessing": "Processing",
+  "feedbackReplied": "Replied",
+  "feedbackOpen": "Open",
+  "feedbackResolved": "Resolved",
+  "feedbackDismissed": "Dismissed",
+  "feedbackClosed": "Closed",
+  "feedbackLoading": "Loading tickets",
+  "feedbackNewTicket": "New ticket",
+  "feedbackYou": "You",
+  "feedbackResolution": "Resolution",
+  "feedbackReplyHint": "Reply to this ticket",
+  "feedbackConversationClosed": "This ticket is closed and cannot be replied to",
+  "checkUpdates": "Check for updates",
+  "updateChecking": "Checking for updates…",
+  "updateCheckFailed": "Unable to check for updates",
+  "latestVersionInstalled": "You are using the latest version",
+  "newVersionAvailable": "Version {version} is available",
+  "@newVersionAvailable": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "oobeWelcomeSlogan": "A beautiful and fast VelaOS / ZeppOS wearable device manager, built with Flutter",
+  "oobeNext": "Next",
+  "oobeBack": "Back",
+  "oobeFeatureDevicesTitle": "Device connection",
+  "oobeFeatureDevicesBody": "Connect and manage VelaOS and ZeppOS wearable devices",
+  "oobeFeatureResourcesTitle": "Resource center",
+  "oobeFeatureResourcesBody": "Supports the official OronBox source, AstroBox-Repo, BandBBS, and the Amazfit App Store",
+  "oobeFeaturePluginsTitle": "JavaScript plugins",
+  "oobeFeaturePluginsBody": "A high-performance, highly extensible JavaScript plugin system with device interaction",
+  "oobeFeaturePlatformsTitle": "Multi-platform",
+  "oobeFeaturePlatformsBody": "Available on Android, Windows, macOS, Linux, and Web",
+  "oobeOpenSourceTitle": "Fully open source",
+  "oobeOpenSourceBody": "The OronBox client and server both follow GNU AGPL-3.0 with their complete source code available",
+  "oobeAgreementHint": "Please read and scroll to the bottom",
+  "oobeAgreeCheckbox": "I have read and agree",
+  "oobeDeclineExit": "Exit",
+  "oobeDeclineWebHint": "You must accept the agreements to continue; please close this page",
+  "oobeLoginTitle": "Connect your accounts",
+  "oobeLoginBandBbsDesc": "Sign in with your BandBBS account to access BandBBS resources and prepare creator services",
+  "oobeLoginLocalNote": "Xiaomi and Amazfit sign-in run entirely on this device; related data is never sent to any third party other than Xiaomi/Amazfit",
+  "oobeLoginXiaomiDesc": "Sign in with your Xiaomi account to sync your bound Xiaomi devices",
+  "oobeLoginHuamiDesc": "Sign in with your Amazfit account to access Amazfit app store resources",
+  "oobeCdnTesting": "Testing…",
+  "oobeCdnSelected": "Best CDN selected",
+  "oobeCdnTitle": "GitHub CDN Speed Test",
+  "oobeDoneTitle": "All set",
+  "oobeDoneBody": "Start exploring OronBox",
+  "oobeFinish": "Finish",
+  "settingsReplayOobe": "Restart guide",
+  "settingsReplayOobeDesc": "View the welcome guide and initial setup again",
+  "creatorConnect": "Connect",
+  "comments": "Comments",
+  "commentEmpty": "No comments yet",
+  "commentHint": "Write a comment",
+  "commentLoginRequired": "Sign in with BandBBS to comment",
+  "commentPending": "Pending review",
+  "commentBlocked": "This comment did not meet the community guidelines",
+  "commentModerationUnavailable": "Comment moderation is temporarily unavailable",
+  "commentRateLimited": "You are commenting too quickly",
+  "commentReplying": "Reply to comment",
+  "loadMore": "Load more",
+  "more": "More",
+  "reply": "Reply",
+  "inbox": "Inbox",
+  "inboxLoading": "Loading messages",
+  "inboxEmpty": "No messages",
+  "inboxClear": "Clear messages",
+  "inboxClearFailed": "Could not clear messages. Try again later.",
+  "messageUnknownTitle": "Notification",
+  "messageUnknownBody": "The notification data is unavailable.",
+  "messageCommentRepliedTitle": "New comment reply",
+  "messageCommentHiddenTitle": "Comment hidden",
+  "messageCommentHiddenAutomatedBody": "Your comment did not pass automated moderation and is currently hidden. You can submit an appeal from the message.",
+  "messageCommentHiddenReviewedBody": "Your comment was hidden after manual review.",
+  "messageReviewApprovedTitle": "Resource approved",
+  "messageReviewRejectedTitle": "Resource needs changes",
+  "messageResourceSuspendedTitle": "Resource delisted",
+  "messageResourceFrozenTitle": "Resource frozen",
+  "messageResourceDeletedTitle": "Resource deleted",
+  "messageResourceRestoredTitle": "Resource restored",
+  "messageReportUpdatedTitle": "Report updated",
+  "messagePluginApprovedTitle": "Plugin approved",
+  "messagePluginRelistedTitle": "Plugin relisted",
+  "messagePluginRejectedTitle": "Plugin needs changes",
+  "messagePluginDelistedTitle": "Plugin delisted",
+  "messageCollectionApprovedTitle": "Collection approved",
+  "messageCollectionRejectedTitle": "Collection needs changes",
+  "messageCoinAddedTitle": "Coins added",
+  "messageCoinDeductedTitle": "Coins deducted",
+  "messageCoinReversedTitle": "Coin transaction reversed",
+  "messageCoinVoteRevokedTitle": "Coin contribution revoked",
+  "messageAppealOverturnedTitle": "Appeal accepted",
+  "messageAppealUpheldTitle": "Original decision upheld",
+  "messageAppealDismissedTitle": "Appeal dismissed",
+  "messageAccountBannedTitle": "Account suspended",
+  "messageAccountUnbannedTitle": "Account suspension lifted",
+  "messageCreatorFrozenTitle": "Creator access frozen",
+  "messageCreatorUnfrozenTitle": "Creator access restored",
+  "messageRoleChangedTitle": "Account role changed",
+  "messageRoleUser": "user",
+  "messageRoleReviewer": "reviewer",
+  "messageRoleAdministrator": "administrator",
+  "messageApprovedBody": "Your submission passed review.",
+  "messageNeedsChangesBody": "Review found issues that require changes.",
+  "messageReasonBody": "Reason: {reason}",
+  "@messageReasonBody": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "messageReviewNoteBody": "Review note: {note}",
+  "@messageReviewNoteBody": {
+    "placeholders": {
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "messageStatusChangedBody": "The status of this item has changed.",
+  "messageReportStatusBody": "Report status: {status}",
+  "@messageReportStatusBody": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCoinAddedBody": "{amount} coins were added to your account.",
+  "@messageCoinAddedBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCoinDeductedBody": "{amount} coins were deducted from your account.",
+  "@messageCoinDeductedBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "messageCoinVoteRevokedBody": "Your contribution of {amount} coins to this resource was revoked.",
+  "@messageCoinVoteRevokedBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "messageAppealOverturnedBody": "The administrator reversed the original decision.",
+  "messageAppealUpheldBody": "The original decision remains unchanged after review.",
+  "messageAppealDismissedBody": "The appeal was not accepted.",
+  "messageRoleChangedBody": "Your account role is now {role}.",
+  "@messageRoleChangedBody": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "cleanMode": "Feature switches",
+  "cleanModeDescription": "Manage main navigation, community features, and resource sources",
+  "cleanPluginsEntry": "Plugins entry",
+  "cleanSourceHuamiAppStore": "Amazfit App Store",
+  "announcementAcknowledge": "Got it",
+  "cleanHomeFeed": "Home feed",
+  "cleanExplore": "Resource library",
+  "cleanInbox": "Inbox",
+  "cleanAnnouncements": "Announcement popups",
+  "cleanComments": "Comments",
+  "cleanCreator": "Creator center",
+  "cleanBandBbsLogin": "BandBBS sign-in",
+  "cleanGitHubLogin": "GitHub sign-in",
+  "cleanSourceOronBox": "OronBox source",
+  "cleanSourceBandBbs": "BandBBS source",
+  "cleanSourceAstroBox": "AstroBox source",
+  "cleanExploreEntry": "Explore entry",
+  "cleanNavigationGroup": "Main navigation",
+  "cleanExploreContentGroup": "Explore content",
+  "cleanHomeSectionsGroup": "Home sections",
+  "cleanHomeBanner": "Banner carousel",
+  "cleanHomeEditorSections": "Editor sections",
+  "cleanResourceSourcesGroup": "Resource sources",
+  "cleanCommunityGroup": "Community features",
+  "settingsCategoryAccounts": "Accounts and authorization",
+  "settingsCategoryAppearance": "Appearance and navigation",
+  "settingsCategoryConnection": "Connections and downloads",
+  "settingsCategorySupport": "Support and information",
+  "settingsCategoryAdvanced": "Advanced settings",
+  "settingsAdvancedDescription": "View logs and developer tools",
+  "debugServerTitle": "Debug service",
+  "debugServerDescription": "Expose a local API for trusted development tools",
+  "debugServerEnable": "Enable debug service",
+  "debugServerEnableDescription": "Allow approved clients on the local network to inspect and control OronBox",
+  "debugServerEndpoint": "Endpoint",
+  "debugServerFingerprint": "Server fingerprint",
+  "debugServerPendingClients": "Pending approvals",
+  "debugServerAuthorizedClients": "Approved clients",
+  "debugServerApprove": "Approve",
+  "debugServerReject": "Reject",
+  "debugServerRevoke": "Revoke access",
+  "debugServerNoPendingClients": "No clients are waiting for approval",
+  "debugServerNoAuthorizedClients": "No approved clients",
+  "debugServerSecurityNotice": "Only enable this service on a trusted network",
+  "debugServerStartFailed": "Could not start the debug service",
+  "debugServerStopFailed": "Could not stop the debug service",
+  "xmsDeveloperMode": "XMS developer mode",
+  "xmsDeveloperModeDescription": "Allow Android app signatures to differ",
+  "oronBoxCoinsTitle": "Resource coins",
+  "oronBoxCoinsBalance": "Coin balance: {balance}",
+  "@oronBoxCoinsBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "oronBoxCoinsCheckin": "Check in",
+  "oronBoxCoinsCheckedIn": "Checked in",
+  "oronBoxCoinsCheckinReward": "Received {count} coins",
+  "@oronBoxCoinsCheckinReward": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "oronBoxCoinsDescription": "Check in daily for 1–5 coins and use them to support creators",
+  "resourceFromCollection": "From collection {name}",
+  "@resourceFromCollection": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "resourceCoin": "Coin",
+  "resourceCoinNotSignedIn": "Not signed in",
+  "resourceCoinDialogTitle": "Coin this resource",
+  "resourceCoinDialogMessage": "Coin this resource?\nThis action cannot be undone\n\nCoins help the resource receive more exposure\nThe creator receives 10% of the contributed amount\nCheck in at Settings - BandBBS account to earn coins",
+  "resourceCoinOne": "Give 1 coin",
+  "resourceCoinTwo": "Give 2 coins",
+  "resourceCoinCount": "{count} coins",
+  "@resourceCoinCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceCoinSuccess": "Coin sent",
+  "resourceCoinVoted": "Coined",
+  "resourceFeatured": "Featured",
+  "resourceCollection": "Collection",
+  "resourceCollectionType": "{type} Collection",
+  "@resourceCollectionType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "creatorCollections": "Resource collections",
+  "creatorCollectionTag": "Collection",
+  "creatorNewCollection": "New collection",
+  "creatorMoveToCollection": "Move to collection",
+  "creatorMoveToCollectionConfirm": "Move the {count} selected resources into this collection?",
+  "@creatorMoveToCollectionConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorDissolveCollection": "Dissolve collection",
+  "creatorResourceList": "Resources",
+  "creatorAdditionalLinks": "Additional links",
+  "creatorAddLink": "Add link",
+  "creatorLinkTitle": "Link name",
+  "creatorLinkUrl": "Link URL",
+  "creatorCollectionName": "Collection name",
+  "creatorCollectionSummary": "Collection summary",
+  "creatorCollectionRepresentative": "Representative resource",
+  "creatorCollectionDeleteConfirm": "Delete this collection? Its resources will only be unlinked.",
+  "creatorContentAttributes": "Content attributes",
+  "creatorConfirm": "Confirm",
+  "creatorCollectionAddResource": "Add to collection",
+  "creatorCollectionResourceCount": "{count} resources",
+  "@creatorCollectionResourceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "communityImportSelected": "{count} selected",
+  "@communityImportSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "communityImportResultCreated": "Draft created",
+  "communityImportResultFailed": "Failed",
+  "communityImportUnsupported": "This type cannot be imported yet",
+  "communityImportDuplicate": "Already exists in the creator center",
+  "communityImportNoArtifacts": "No importable resource files",
+  "creatorImportExternal": "Import existing resources from other platforms",
+  "creatorNewResourceDescription": "Create and maintain a resource from OronBox",
+  "creatorNewCollectionDescription": "Create a collection for related resources",
+  "creatorImportExternalDescription": "Experimental: import your existing resources from BandBBS or AstroBox-Repo",
+  "creatorImportAlreadyImported": "Imported and linked",
+  "creatorImportReviewNotice": "Imported content may be incomplete or misidentified. Review and adjust every field before submitting.",
+  "creatorImportLogTitle": "Processing log",
+  "communityImportPickerEmpty": "No resources",
+  "creatorWizardChooseAction": "Create",
+  "creatorImportSelectTitle": "Select resources",
+  "creatorImportProgressTitle": "Importing",
+  "creatorImportResultTitle": "Import result",
+  "creatorImportGitHubHint": "Connect GitHub to list your AstroBox resources",
+  "creatorImportGitHubConnect": "Connect GitHub",
+  "creatorImportStageDetails": "Fetching details",
+  "creatorImportStageDownloading": "Downloading files",
+  "creatorImportStageMedia": "Processing images",
+  "creatorImportStageUploading": "Creating draft",
+  "creatorImportContinue": "Import another",
+  "creatorImportPartialFailureTitle": "Some resources could not be read",
+  "creatorImportPartialFailureMessage": "{count} resource(s) could not be read\nYou can retry the failed items or continue with the resources that were read successfully",
+  "@creatorImportPartialFailureMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorImportRetryFailed": "Retry failed items",
+  "creatorImportContinuePartial": "Continue anyway",
+  "creatorImportWarnings": "{count} warnings",
+  "@creatorImportWarnings": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorDeleteExternalBandbbs": "Also delete the BandBBS resources",
+  "creatorDeleteExternalAstrobox": "Also submit a deletion PR to AstroBox-Repo",
+  "creatorDeleteExternalWarning": "External deletions cannot be undone",
+  "creatorDeletePrSubmitted": "Deletion PR submitted",
+  "githubCdnFallback": "GitHub request failed, retrying via {cdn}",
+  "@githubCdnFallback": {
+    "placeholders": {
+      "cdn": {}
+    }
+  },
+  "deviceConnectBle": "Connect via BLE",
+  "deviceConnectBtClassic": "Connect via BT Classic",
+  "bandBbsIdLabel": "BandBBS ID {id}",
+  "@bandBbsIdLabel": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "oobeCdnTestFailed": "Failed",
+  "settingsGithubCdnAuto": "Auto",
+  "updateDownloading": "Downloading update",
+  "updateInstalling": "Installing update",
+  "updateFailed": "Update failed",
+  "updateNoApkForAbi": "No APK is available for ABI {abi}",
+  "@updateNoApkForAbi": {
+    "placeholders": {
+      "abi": {
+        "type": "String"
+      }
+    }
+  },
+  "cleanUpdateGroup": "Updates",
+  "cleanCheckUpdates": "Check for updates on launch",
+  "updateLater": "Later",
+  "updateNow": "Update now",
+  "updateGoToPage": "Go to download page",
+  "updateDownloadFromCloud": "Download from cloud drive",
+  "updateDownloadFromOfficial": "Download from official website",
+  "creatorImportNoticeTitle": "Import existing resources",
+  "creatorImportNoticeMessage": "Resources supporting multiple devices may be published to multiple BandBBS sections\nYou can select multiple BandBBS entries when importing, but select entries from the same resource\nClick Import to merge the selected entries into one resource\nIf the import fails, open the corresponding draft and delete it\nDeleting a draft will not delete resources linked on other platforms",
+  "creatorImportNoticeConfirm": "Continue import",
+  "creatorImportSameResourceHint": "Select only one resource for each import",
+  "creatorFullVersionExternalPurchase": "Requires external purchase",
+  "creatorExternalPurchaseDescription": "OronBox and AstroBox will publish the resource files as a trial version with a purchase button, while BandBBS publishes it as a \"Third-party purchase\" resource. You are responsible for handling payment-related matters yourself",
+  "creatorExternalPurchaseLink": "Purchase link",
+  "creatorExternalPurchaseAmount": "Amount (CNY)",
+  "creatorExternalPurchaseLinkRequired": "Enter a valid external purchase link",
+  "creatorExternalPurchaseAmountRequired": "Enter a valid CNY amount",
+  "resourcePurchaseFullVersion": "External purchase",
+  "creatorBandBbsOverwritePrevious": "Overwrite previous submission",
+  "creatorBandBbsOverwritePreviousDescription": "Create the new version first, then delete the previous BandBBS submission",
+  "deviceAboutTitle": "About device",
+  "deviceValueUnavailable": "Not provided",
+  "deviceHealthActivityOverview": "Activity overview",
+  "deviceHealthActiveCalories": "Active calories",
+  "deviceHealthStanding": "Standing",
+  "deviceHealthBloodOxygen": "Blood oxygen",
+  "deviceHealthStress": "Stress",
+  "deviceHealthVitality": "Vitality",
+  "deviceHealthWorkout": "Workouts",
+  "deviceHealthTodayTotal": "Today's total",
+  "deviceHealthRecordCount": "records",
+  "deviceHealthNoDetailedRange": "No detailed range",
+  "deviceHealthActivityTrend": "Activity trend",
+  "deviceHealthTrend": "Trend",
+  "deviceHealthDayView": "Day",
+  "deviceHealthWeekView": "Week",
+  "deviceHealthMonthView": "Month",
+  "deviceHealthLatest": "Latest",
+  "deviceHealthAverage": "Average",
+  "deviceHealthRange": "Range",
+  "deviceHealthNoSamples": "No detailed samples",
+  "deviceHealthCurrentVitality": "Current vitality",
+  "deviceHealthLightIntensity": "Light intensity",
+  "deviceHealthModerateHighIntensity": "Moderate to high intensity",
+  "deviceHealthNoSleep": "No sleep data",
+  "deviceHealthNoWorkouts": "No workout records",
+  "deviceHealthSleepStages": "Sleep stages",
+  "deviceHealthSleepHrv": "Sleep HRV",
+  "deviceHealthSleepAwake": "Awake",
+  "deviceHealthSleepLight": "Light",
+  "deviceHealthSleepDeep": "Deep",
+  "deviceHealthSleepRem": "REM",
+  "deviceHealthSleepNoStages": "No sleep stage data",
+  "deviceHealthStepValue": "{value} steps",
+  "@deviceHealthStepValue": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "deviceHealthFeatureDescription": "View activity, heart rate, blood oxygen, stress, and sleep data",
+  "weatherSyncTitle": "Weather sync",
+  "weatherSyncDescription": "Select a city and sync current weather and forecasts",
+  "weatherAutoSyncTitle": "Automatically sync weather data",
+  "weatherAutoSyncDescription": "Automatically synchronize weather data when synchronizing device data",
+  "alarmManagementTitle": "Alarm management",
+  "alarmManagementDescription": "Add, edit, enable, or delete device alarms",
+  "findDeviceDescription": "Make the device vibrate or ring continuously",
+  "appOrderTitle": "App order",
+  "appOrderDescription": "Drag to reorder apps in the device launcher",
+  "appOrderSaved": "App order saved",
+  "appOrderReload": "Reload",
+  "appOrderUndo": "Undo changes",
+  "appOrderSaving": "Saving…",
+  "appOrderSave": "Save changes",
+  "appOrderEmpty": "The device returned no reorderable apps",
+  "appLayoutTitle": "App layout",
+  "appLayoutDescription": "Choose how the device app list is displayed",
+  "appLayoutLoadFailed": "Unable to load app layout",
+  "appLayoutList": "List",
+  "appLayoutGrid": "Grid",
+  "appLayoutTextGrid": "Grid with labels",
+  "firmwareUpdateDescription": "Check for updates or install local firmware",
+  "deviceAboutDescription": "View model, system version, storage, and device identifiers",
+  "alarmAdd": "Add alarm",
+  "alarmEdit": "Edit alarm",
+  "alarmHour": "Hour",
+  "alarmMinute": "Minute",
+  "alarmRepeat": "Repeat",
+  "alarmOnce": "Once",
+  "alarmEveryDay": "Every day",
+  "alarmWorkdays": "Workdays",
+  "alarmHolidays": "Holidays",
+  "alarmCustom": "Custom",
+  "alarmLabel": "Label",
+  "alarmDeleteTitle": "Delete alarm?",
+  "alarmWeekly": "Weekly",
+  "alarmMonthly": "Monthly",
+  "alarmYearly": "Yearly",
+  "alarmNoRepeat": "Does not repeat",
+  "alarmCustomDays": "Week {days}",
+  "@alarmCustomDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "weekdayMonShort": "M",
+  "weekdayTueShort": "T",
+  "weekdayWedShort": "W",
+  "weekdayThuShort": "T",
+  "weekdayFriShort": "F",
+  "weekdaySatShort": "S",
+  "weekdaySunShort": "S",
+  "weatherCityLabel": "Sync city",
+  "weatherCityHint": "Enter a city name",
+  "weatherSyncAction": "Sync weather",
+  "weatherSyncing": "Syncing…",
+  "weatherHumidity": "Humidity",
+  "weatherWind": "Wind",
+  "weatherAirQuality": "Air quality",
+  "weatherAqiGood": "Good",
+  "weatherAqiModerate": "Moderate",
+  "weatherAqiSensitive": "Unhealthy for sensitive groups",
+  "weatherAqiUnhealthy": "Unhealthy",
+  "weatherAqiVeryUnhealthy": "Very unhealthy",
+  "weatherAqiHazardous": "Hazardous",
+  "weatherUv": "UV index",
+  "weatherPressure": "Pressure",
+  "weatherNext24Hours": "Next 24 hours",
+  "weatherNext7Days": "Next 7 days",
+  "weatherDataSource": "Data source: {source}",
+  "@weatherDataSource": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "weatherLevelDirection": "Level {level} · {direction}",
+  "@weatherLevelDirection": {
+    "placeholders": {
+      "level": {},
+      "direction": {}
+    }
+  },
+  "weatherLevelDirectionCompact": "Level {level} {direction}",
+  "@weatherLevelDirectionCompact": {
+    "placeholders": {
+      "level": {},
+      "direction": {}
+    }
+  },
+  "weatherForecastSummary": "{condition} · Sunrise {sunrise} · Sunset {sunset}",
+  "@weatherForecastSummary": {
+    "placeholders": {
+      "condition": {},
+      "sunrise": {},
+      "sunset": {}
+    }
+  },
+  "weatherClear": "Clear",
+  "weatherPartlyCloudy": "Partly cloudy",
+  "weatherCloudy": "Cloudy",
+  "weatherLightRain": "Light rain",
+  "weatherHeavyRain": "Heavy rain",
+  "weatherThunderstorm": "Thunderstorm",
+  "weatherSnow": "Snow",
+  "weatherFog": "Fog",
+  "weatherUnknown": "Unknown",
+  "weatherUnknownDate": "Unknown date",
+  "weatherUpdatedAt": "Updated {time}",
+  "@weatherUpdatedAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "windNorth": "N",
+  "windNorthEast": "NE",
+  "windEast": "E",
+  "windSouthEast": "SE",
+  "windSouth": "S",
+  "windSouthWest": "SW",
+  "windWest": "W",
+  "windNorthWest": "NW",
+  "xiaomiScreenshotTitle": "Device screenshot",
+  "xiaomiScreenshotDescription": "Use the wearable's key combination to take a screenshot; it will sync here automatically",
+  "xiaomiScreenshotAction": "Capture screenshot",
+  "xiaomiScreenshotLoading": "Capturing screenshot…",
+  "xiaomiScreenshotEmpty": "No screenshot yet",
+  "xiaomiScreenshotFailed": "Screenshot failed",
+  "xiaomiScreenshotSaved": "Watch screenshot saved to: {path}",
+  "@xiaomiScreenshotSaved": {
+    "placeholders": {
+      "path": {}
+    }
+  },
+  "deviceHealthRecoveryTime": "Recovery",
+  "deviceHealthTodayLoad": "Today load",
+  "deviceHealthSevenDayLoad": "7-day load",
+  "deviceHealthLoadLevel": "Load level",
+  "deviceHealthFitnessBalance": "Fitness balance",
+  "deviceHealthFitnessLevel": "Fitness",
+  "deviceHealthFatigueLevel": "Fatigue",
+  "deviceHealthTrainingStress": "Training stress",
+  "deviceHealthTrainingStatus": "Training status",
+  "deviceHealthSevenDayVitality": "7-day vitality",
+  "deviceHealthEarnedToday": "Earned on this day",
+  "deviceHealthEarnedInPeriod": "Earned in this period",
+  "deviceHealthModerateIntensity": "Moderate",
+  "deviceHealthHighIntensity": "High",
+  "deviceHealthNap": "Naps",
+  "deviceHealthNapSingular": "Nap",
+  "deviceHealthWorkoutOverview": "Workout overview",
+  "deviceHealthWorkoutHistory": "History",
+  "deviceHealthWorkoutDuration": "Duration",
+  "deviceHealthWorkoutRoute": "Route",
+  "deviceHealthWorkoutDetails": "Details",
+  "deviceHealthSwimmingSections": "Swimming sections",
+  "deviceHealthWorkoutCharts": "Workout charts",
+  "deviceHealthActiveDuration": "Active duration",
+  "deviceHealthAveragePace": "Average pace",
+  "deviceHealthBestPace": "Best pace",
+  "deviceHealthHeartRateRange": "Heart-rate range",
+  "deviceHealthBloodOxygenRange": "Blood oxygen range",
+  "deviceHealthMainStroke": "Main stroke",
+  "deviceHealthHeartRateZones": "Heart-rate zones",
+  "deviceHealthZoneLabel": "Zone {zone}",
+  "@deviceHealthZoneLabel": {
+    "placeholders": {
+      "zone": {}
+    }
+  },
+  "deviceHealthZoneWarmup": "Warm-up",
+  "deviceHealthZoneFatBurning": "Fat burning",
+  "deviceHealthZoneAerobic": "Aerobic",
+  "deviceHealthZoneAnaerobic": "Anaerobic",
+  "deviceHealthZoneExtreme": "Extreme",
+  "deviceHealthRecoveryAfterWorkout": "Heart-rate recovery",
+  "deviceHealthRecoveredHeartRate": "Recovered HR",
+  "deviceHealthRecoveryRate": "Recovery rate",
+  "deviceHealthSamples": "Samples",
+  "deviceHealthAverageSpeed": "Average speed",
+  "deviceHealthTopSpeed": "Top speed",
+  "deviceHealthAverageStride": "Average stride",
+  "deviceHealthAverageCadence": "Average cadence",
+  "deviceHealthMaximumCadence": "Maximum cadence",
+  "deviceHealthAverageBloodOxygenDetail": "Average blood oxygen",
+  "deviceHealthTotalAscent": "Total ascent",
+  "deviceHealthTotalDescent": "Total descent",
+  "deviceHealthAverageAltitude": "Average altitude",
+  "deviceHealthAerobicEffect": "Aerobic effect",
+  "deviceHealthAnaerobicEffect": "Anaerobic effect",
+  "deviceHealthPeakEffect": "Peak effect",
+  "deviceHealthVo2Max": "VO₂ max",
+  "deviceHealthBodyEnergyUsed": "Body energy used",
+  "deviceHealthExpectedRecovery": "Recovery",
+  "deviceHealthTrainingLoad": "Training load",
+  "deviceHealthVitalityEarned": "Vitality earned",
+  "deviceHealthAveragePower": "Average power",
+  "deviceHealthMaximumPower": "Maximum power",
+  "deviceHealthArmPulls": "Arm pulls",
+  "deviceHealthAverageStrokeRate": "Average stroke rate",
+  "deviceHealthMaximumStrokeRate": "Maximum stroke rate",
+  "deviceHealthTurns": "Turns",
+  "deviceHealthAverageSwolf": "Average SWOLF",
+  "deviceHealthBestSwolf": "Best SWOLF",
+  "deviceHealthPoolLength": "Pool length",
+  "deviceHealthJumps": "Jumps",
+  "deviceHealthAverageJumpRate": "Average jump rate",
+  "deviceHealthBestJumpRate": "Best jump rate",
+  "deviceHealthTrips": "Trips",
+  "deviceHealthSets": "Sets",
+  "deviceHealthTotalStrokes": "Total strokes",
+  "deviceHealthAverageRowingRate": "Average rowing rate",
+  "deviceHealthBestRowingRate": "Best rowing rate",
+  "deviceHealthChartHeartRate": "Heart rate",
+  "deviceHealthChartCadence": "Cadence",
+  "deviceHealthChartPace": "Pace",
+  "deviceHealthChartSpeed": "Speed",
+  "deviceHealthChartPower": "Power",
+  "deviceHealthChartStrokeRate": "Stroke rate",
+  "deviceHealthChartJumpRate": "Jump rate",
+  "deviceHealthChartBloodOxygen": "Blood oxygen",
+  "deviceHealthChartStress": "Stress",
+  "deviceHealthWorkoutOutdoorRunning": "Outdoor running",
+  "deviceHealthWorkoutOutdoorWalking": "Outdoor walking",
+  "deviceHealthWorkoutIndoorRunning": "Indoor running",
+  "deviceHealthWorkoutMountaineering": "Mountaineering",
+  "deviceHealthWorkoutTrailRunning": "Trail running",
+  "deviceHealthWorkoutOutdoorCycling": "Outdoor cycling",
+  "deviceHealthWorkoutIndoorCycling": "Indoor cycling",
+  "deviceHealthWorkoutFreeTraining": "Free training",
+  "deviceHealthWorkoutSwimming": "Swimming",
+  "deviceHealthWorkoutElliptical": "Elliptical",
+  "deviceHealthWorkoutRowing": "Rowing",
+  "deviceHealthWorkoutJumpRope": "Jump rope",
+  "deviceHealthWorkoutHiking": "Hiking",
+  "deviceHealthWorkoutGeneric": "Workout",
+  "deviceHealthStrokeMedley": "Medley",
+  "deviceHealthStrokeBreaststroke": "Breaststroke",
+  "deviceHealthStrokeFreestyle": "Freestyle",
+  "deviceHealthStrokeBackstroke": "Backstroke",
+  "deviceHealthStrokeButterfly": "Butterfly",
+  "deviceHealthSectionLabel": "Section",
+  "deviceHealthVitalityRunSuggestion": "Run for {minutes} minutes toward the next target",
+  "@deviceHealthVitalityRunSuggestion": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "deviceHealthVitalityActiveMinutes": "{minutes} active minutes to the next target",
+  "@deviceHealthVitalityActiveMinutes": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "deviceHealthLatestHeartRate": "Latest heart rate",
+  "deviceHealthLatestBloodOxygen": "Latest blood oxygen",
+  "deviceHealthLatestStress": "Latest stress",
+  "deviceHealthDebugModeTitle": "Health development mode",
+  "deviceHealthDebugModeDescription": "Enable health data snapshots and reload",
+  "deviceHealthDebugSnapshots": "Snapshots",
+  "deviceHealthDebugSnapshotList": "Snapshot list",
+  "deviceHealthDebugSnapshotsDescription": "Captured raw activity files that can be replayed without the watch",
+  "deviceHealthDebugRefresh": "Refresh",
+  "deviceHealthDebugRefreshDescription": "Reload the saved snapshot list",
+  "deviceHealthDebugClearAll": "Clear all",
+  "deviceHealthDebugClearAllDescription": "Delete every saved health snapshot",
+  "deviceHealthDebugNoSnapshots": "No snapshots yet",
+  "deviceHealthDebugReload": "Replay",
+  "deviceHealthDebugReloaded": "Snapshot replayed",
+  "deviceHealthDebugFiles": "{count} files",
+  "@deviceHealthDebugFiles": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "creatorAccounts": "Accounts",
+  "creatorPendingItems": "Pending",
+  "creatorResourceStatus": "Resource status",
+  "creatorOverview": "Overview",
+  "creatorManage": "Manage",
+  "creatorManageUnavailable": "Management is unavailable",
+  "creatorReviewTab": "Reviews",
+  "creatorReviewQueue": "Review queue",
+  "creatorReviewStatus": "Review status",
+  "creatorReviewActive": "Active",
+  "creatorReviewChangesRequested": "Changes requested",
+  "creatorReviewDeclined": "Rejected",
+  "creatorReviewClosed": "Closed",
+  "creatorReviewFixedPending": "Fixed, awaiting review",
+  "creatorNoPendingReviews": "No pending reviews",
+  "creatorNoReviews": "No reviews",
+  "creatorNeedsChanges": "Needs changes",
+  "creatorConnected": "Connected",
+  "creatorNotConnected": "Not connected",
+  "creatorCenterExitTitle": "Leave creator center",
+  "creatorCenterExitMessage": "Are you sure you want to leave the creator center",
+  "creatorEditComment": "Edit comment",
+  "creatorReply": "Reply",
+  "creatorReplyingTo": "Replying to #{id}",
+  "@creatorReplyingTo": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "creatorReplyPrefix": "Reply #{id}: ",
+  "@creatorReplyPrefix": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "creatorSupplement": "Additional note",
+  "creatorModifyResource": "Modify resource",
+  "creatorAstroBoxReview": "AstroBox review",
+  "creatorGithubPr": "GitHub repository and PR",
+  "creatorApplyChanges": "Apply changes",
+  "creatorUpdatedAt": "Updated at",
+  "creatorSubmittedAt": "Submitted at",
+  "creatorPublicationStatus": "Publication status",
+  "creatorStageInfo": "Edit info",
+  "creatorStageFiles": "Bind files",
+  "creatorStagePublish": "Publish config",
+  "creatorNextStep": "Next step",
+  "creatorWatchfaceMissingId": "Watchface identification failed or all-zero: the watchface has no ID and cannot be uploaded",
+  "creatorWatchfaceZeroIdTitle": "All-zero watchface ID detected, please modify it before uploading",
+  "creatorWatchfacePayloadTooShort": "This watchface file is too small to contain an ID field",
+  "creatorQuickAppMissingPackage": "Quick app identification failed: the quick app has no package name and cannot be uploaded",
+  "creatorVelajsDefaultPackage": "Detected the quick app package name com.application.watch.demo, which is the VelaJS project default; please change it before uploading",
+  "creatorFilteredSupport": "Filtered support",
+  "creatorSkippedPublication": "Skipped publication",
+  "creatorAstroBoxUnsupportedDevicesNotice": "Some selected supported devices do not support publishing to AstroBox yet; their support declarations will be filtered out",
+  "creatorBandBbsUnsupportedDevicesNotice": "Some selected supported devices do not support publishing to BandBBS yet; their publication will be skipped",
+  "errorSppBondRemovalFailed": "On Android below 11 the system does not support removeBond. If the device disconnects frequently, switch to another device in Xiaomi Fitness or turn off its Nearby devices permission",
+  "viewAllResources": "View all",
+  "deviceHealthMinimum": "Minimum",
+  "deviceHealthMaximum": "Maximum",
+  "deviceHealthResting": "Resting",
+  "deviceHealthDebugExport": "Export snapshot",
+  "deviceHealthDebugExportTooltip": "Export raw activity files",
+  "deviceHealthDebugExported": "Exported to {path}",
+  "deviceHealthDebugExportFailed": "Could not export snapshot: {error}",
+  "@deviceHealthDebugExport": {
+    "description": "Export button label for a raw Xiaomi health debug snapshot"
+  },
+  "@deviceHealthDebugExportTooltip": {
+    "description": "Tooltip for the debug snapshot export button"
+  },
+  "@deviceHealthDebugExported": {
+    "description": "Shown after a debug snapshot is exported",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@deviceHealthDebugExportFailed": {
+    "description": "Shown when exporting a debug snapshot fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceHealthDebugImport": "Import",
+  "deviceHealthDebugImportDescription": "Import a previously exported snapshot file",
+  "deviceHealthDebugImported": "Imported {deviceCode} ({files} files)",
+  "deviceHealthDebugImportFailed": "Could not import snapshot: {error}",
+  "@deviceHealthDebugImport": {
+    "description": "Import button label on the Xiaomi health debug page"
+  },
+  "@deviceHealthDebugImportDescription": {
+    "description": "Description for the debug snapshot import button"
+  },
+  "@deviceHealthDebugImported": {
+    "description": "Shown after a debug snapshot is imported",
+    "placeholders": {
+      "deviceCode": {
+        "type": "String"
+      },
+      "files": {
+        "type": "int"
+      }
+    }
+  },
+  "@deviceHealthDebugImportFailed": {
+    "description": "Shown when importing a debug snapshot fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}

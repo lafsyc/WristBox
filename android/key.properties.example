@@ -1,0 +1,6 @@
+# Copy to key.properties and configure YOUR OWN signing key.
+# Do not commit key.properties or your keystore.
+storeFile=/absolute/path/to/your-release-key.jks
+storePassword=replace-with-your-keystore-password
+keyAlias=your-key-alias
+keyPassword=replace-with-your-key-password

@@ -1,0 +1,824 @@
+import 'dart:async';
+
+import 'package:material_ui/material_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:segmented_list/segmented_list.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:oronbox/src/app/generated/app_localizations.dart';
+import 'package:oronbox/src/app/widgets/sys_app_bar.dart';
+import 'package:oronbox/src/app/widgets/stable_fab.dart';
+import 'package:oronbox/src/app/widgets/markdown_style_sheet.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:oronbox/src/core/services/shared_prefs_service.dart';
+import 'package:oronbox/src/core/constants/style_constants.dart';
+import 'package:oronbox/src/features/accounts/application/host_accounts.dart';
+import 'package:oronbox/src/features/resources/application/creator/creator_workspace_controller.dart';
+import 'package:oronbox/src/features/resources/pages/creator/creator_resource_list.dart';
+import 'package:oronbox/src/features/resources/pages/creator/creator_review_list_page.dart';
+import 'package:oronbox/src/features/resources/pages/creator/creator_shared.dart';
+import 'package:oronbox/src/features/settings/pages/legal_documents_page.dart';
+
+class CreatorCenterPage extends ConsumerStatefulWidget {
+  const CreatorCenterPage({
+    super.key,
+    this.initialTab = 0,
+    this.initialReviewFilter,
+  });
+  final int initialTab;
+  final String? initialReviewFilter;
+
+  @override
+  ConsumerState<CreatorCenterPage> createState() => _CreatorCenterPageState();
+}
+
+class _CreatorCenterPageState extends ConsumerState<CreatorCenterPage> {
+  int get _tab => widget.initialTab;
+  Set<String> _selectedResourceIds = const {};
+  var _authorizingBandBbs = false;
+  var _authorizingGitHub = false;
+
+  Future<void> _refresh(CreatorWorkspaceController controller) async {
+    await Future.wait([
+      controller.refresh(),
+      ref.read(hostAccountsProvider.notifier).refresh(),
+    ]);
+  }
+
+  Future<void> _confirmExit() async {
+    final l10n = AppLocalizations.of(context)!;
+    final leave = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.creatorCenterExitTitle),
+        content: Text(l10n.creatorCenterExitMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.creatorConfirm),
+          ),
+        ],
+      ),
+    );
+    if (leave == true && mounted) context.pop();
+  }
+
+  void _handleBack() {
+    if (widget.initialTab == 0) {
+      unawaited(_confirmExit());
+    } else {
+      context.replace('/resources/creator');
+    }
+  }
+
+  void _switchTab(int index, {String? reviewFilter}) {
+    if (index == _tab && reviewFilter == null) return;
+    final location = switch (index) {
+      1 => '/resources/creator/resources',
+      2 =>
+        '/resources/creator/reviews'
+            '${reviewFilter == null ? '' : '?filter=${Uri.encodeComponent(reviewFilter)}'}',
+      3 => '/resources/creator/manage',
+      _ => '/resources/creator',
+    };
+    context.replace(location);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(creatorWorkspaceProvider);
+    final controller = ref.read(creatorWorkspaceProvider.notifier);
+    final bandBbs = ref.watch(hostAccountsProvider).bandbbs;
+    final roleState = ref.watch(currentUserRoleProvider);
+    final isAdmin = roleState.value == 'admin';
+    final l10n = AppLocalizations.of(context)!;
+    if (widget.initialTab == 3 && !roleState.hasValue) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (widget.initialTab == 3 && !isAdmin) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) context.replace('/resources/creator');
+      });
+      return const SizedBox.shrink();
+    }
+    ref.listen(
+      hostAccountsProvider.select((value) => value.bandbbs.isSignedIn),
+      (previous, current) {
+        if (previous != current && current) {
+          unawaited(_refresh(controller));
+        }
+      },
+    );
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) _handleBack();
+      },
+      child: Scaffold(
+        appBar: SysAppBar(
+          secondary: true,
+          leading: BackButton(onPressed: _handleBack),
+          title: Text(l10n.creatorCenter),
+          actions: [
+            IconButton(
+              tooltip: l10n.refresh,
+              icon: const Icon(Icons.refresh),
+              onPressed: state.loading
+                  ? null
+                  : () => unawaited(_refresh(controller)),
+            ),
+            IconButton(
+              tooltip: l10n.notifications,
+              icon: const Icon(Icons.notifications_none_outlined),
+              onPressed: () => context.push('/inbox'),
+            ),
+          ],
+        ),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: _tab,
+          onDestinationSelected: _switchTab,
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.grid_view_outlined),
+              selectedIcon: const Icon(Icons.grid_view),
+              label: l10n.creatorOverview,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.apps_outlined),
+              selectedIcon: const Icon(Icons.apps),
+              label: l10n.resources,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.edit_outlined),
+              selectedIcon: const Icon(Icons.edit),
+              label: l10n.creatorReviewTab,
+            ),
+            if (isAdmin)
+              NavigationDestination(
+                icon: const Icon(Icons.person_outline),
+                selectedIcon: const Icon(Icons.person),
+                label: l10n.creatorManage,
+              ),
+          ],
+        ),
+        body: state.governance != null
+            ? _CreatorGovernanceGate(code: state.governance!)
+            : _tab == 3 && isAdmin
+            ? const _CreatorManagePage()
+            : _tab == 2
+            ? CreatorReviewListPage(
+                embedded: true,
+                initialFilter: widget.initialReviewFilter,
+              )
+            : _tab == 0
+            ? _CreatorOverviewPage(
+                state: state,
+                bandBbs: bandBbs,
+                onRefresh: () => _refresh(controller),
+                onAuthorizeBandBbs: () => _authorizeBandBbs(controller),
+                onConnectGitHub: () => _authorizeGitHub(controller),
+                bandBbsBusy: _authorizingBandBbs,
+                githubBusy: _authorizingGitHub,
+                onOpenReviews: (filter) => _switchTab(2, reviewFilter: filter),
+                onOpenResources: () => _switchTab(1),
+              )
+            : _CreatorTermsGate(
+                loading: state.loading,
+                onCreate: () => _openCreateWizard(context, controller),
+                selectionActive: _selectedResourceIds.isNotEmpty,
+                onMoveSelection: () => _moveSelection(state, controller),
+                floatingAccess: null,
+                child: CreatorResourceList(
+                  state: state,
+                  controller: controller,
+                  collections: state.collections,
+                  collectionsLoading: false,
+                  onRefresh: () => _refresh(controller),
+                  onOpenCollection: (item) => context.push(
+                    '/resources/creator/collection/${item['id']}',
+                    extra: item,
+                  ),
+                  onOpen: (workspace) {
+                    controller.select(workspace);
+                    context.push(
+                      '/resources/creator/resources/${workspace.resource.id}',
+                    );
+                  },
+                  selectedResourceIds: _selectedResourceIds,
+                  onSelectionChanged: (value) =>
+                      setState(() => _selectedResourceIds = value),
+                  onDissolveCollection: (item) =>
+                      _dissolveCollection(item, controller),
+                  bottomPadding: 96,
+                ),
+              ),
+      ),
+    );
+  }
+
+  Future<void> _authorizeBandBbs(CreatorWorkspaceController controller) async {
+    if (_authorizingBandBbs) return;
+    setState(() => _authorizingBandBbs = true);
+    try {
+      final account = ref.read(hostAccountsProvider).bandbbs;
+      if (!account.isSignedIn) {
+        await ref.read(hostAccountsProvider.notifier).startBandBbsLogin();
+      } else {
+        await ref
+            .read(hostAccountsProvider.notifier)
+            .startBandBbsPublishingAuthorization();
+      }
+      await controller.refresh();
+    } catch (error) {
+      if (mounted) showCreatorFailure(context, error);
+    } finally {
+      if (mounted) setState(() => _authorizingBandBbs = false);
+    }
+  }
+
+  Future<void> _authorizeGitHub(CreatorWorkspaceController controller) async {
+    if (_authorizingGitHub) return;
+    setState(() => _authorizingGitHub = true);
+    try {
+      final started = await controller.startGitHubAuthorization();
+      final flowId = started['flow_id']?.toString() ?? '';
+      final uri = Uri.tryParse(started['authorization_url']?.toString() ?? '');
+      if (flowId.isEmpty || uri == null || !await launchUrl(uri)) {
+        throw StateError('githubAuthorizationFailed');
+      }
+      for (var attempt = 0; attempt < 60 && mounted; attempt++) {
+        await Future<void>.delayed(const Duration(seconds: 2));
+        if (await controller.pollGitHubAuthorization(flowId)) return;
+      }
+      throw StateError('githubAuthorizationTimedOut');
+    } catch (error) {
+      controller.finishAuthorization();
+      if (mounted) showCreatorFailure(context, error);
+    } finally {
+      if (mounted) setState(() => _authorizingGitHub = false);
+    }
+  }
+
+  Future<void> _moveSelection(
+    CreatorWorkspaceState state,
+    CreatorWorkspaceController controller,
+  ) async {
+    final selected = state.resources
+        .where((item) => _selectedResourceIds.contains(item.resource.id))
+        .toList();
+    if (selected.isEmpty) return;
+    final kind = selected.first.resource.kind.name;
+    final choices = state.collections
+        .where((item) => item['kind']?.toString() == kind)
+        .toList();
+    final target = await showDialog<Map<String, Object?>>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(AppLocalizations.of(context)!.creatorCollectionAddResource),
+        children: [
+          for (final item in choices)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, item),
+              child: Text(
+                ((item['pending_revision'] ?? item['current_revision'])
+                            as Map?)?['name']
+                        ?.toString() ??
+                    '',
+              ),
+            ),
+        ],
+      ),
+    );
+    if (target == null || !mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.creatorCollectionAddResource),
+        content: Text(l10n.creatorMoveToCollectionConfirm(selected.length)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.creatorConfirm),
+          ),
+        ],
+      ),
+    );
+    if (accepted != true) return;
+    final collectionId = target['id']!.toString();
+    final existing = state.resources
+        .where((item) => item.resource.collectionId == collectionId)
+        .map((item) => item.resource.id);
+    try {
+      await controller.setCollectionResources(
+        collectionId: collectionId,
+        resourceIds: {...existing, ..._selectedResourceIds}.toList(),
+        representativeResourceId:
+            target['representative_resource_id']?.toString() ?? '',
+      );
+      setState(() => _selectedResourceIds = const {});
+      await _refresh(controller);
+    } catch (error) {
+      if (mounted) showCreatorFailure(context, error);
+    }
+  }
+
+  Future<void> _dissolveCollection(
+    Map<String, Object?> item,
+    CreatorWorkspaceController controller,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.creatorDissolveCollection),
+        content: Text(l10n.creatorCollectionDeleteConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.creatorDissolveCollection),
+          ),
+        ],
+      ),
+    );
+    if (accepted != true) return;
+    try {
+      await controller.deleteCollection(item['id']!.toString());
+    } catch (error) {
+      if (mounted) showCreatorFailure(context, error);
+    }
+  }
+
+  Future<void> _openCreateWizard(
+    BuildContext context,
+    CreatorWorkspaceController controller,
+  ) async {
+    await context.push('/resources/creator/resources/create');
+    if (context.mounted) await _refresh(controller);
+  }
+}
+
+class _CreatorManagePage extends StatelessWidget {
+  const _CreatorManagePage();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(child: Text(l10n.creatorManageUnavailable));
+  }
+}
+
+class _CreatorOverviewPage extends StatelessWidget {
+  const _CreatorOverviewPage({
+    required this.state,
+    required this.bandBbs,
+    required this.onRefresh,
+    required this.onAuthorizeBandBbs,
+    required this.onConnectGitHub,
+    required this.bandBbsBusy,
+    required this.githubBusy,
+    required this.onOpenReviews,
+    required this.onOpenResources,
+  });
+
+  final CreatorWorkspaceState state;
+  final HostAccount bandBbs;
+  final Future<void> Function() onRefresh;
+  final VoidCallback onAuthorizeBandBbs;
+  final VoidCallback onConnectGitHub;
+  final bool bandBbsBusy;
+  final bool githubBusy;
+  final ValueChanged<String?> onOpenReviews;
+  final VoidCallback onOpenResources;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final github = state.grants['github_login']?.toString() ?? '';
+    final states = <String, int>{};
+    for (final workspace in state.resources) {
+      final value = creatorWorkspaceState(workspace);
+      states[value] = (states[value] ?? 0) + 1;
+    }
+    final needsChanges = state.resources.where((item) {
+      final review = item.review?['state']?.toString();
+      return review == 'needs_changes' || review == 'changes_requested';
+    }).length;
+    final waiting = state.resources.where((item) {
+      final review = item.review?['state']?.toString();
+      return review == 'pending' ||
+          review == 'reviewing' ||
+          review == 'fixed_pending_review';
+    }).length;
+    final failed = states['failed'] ?? 0;
+    final accountTiles = <AbstractSegmentedTile>[
+      SegmentedTile.navigation(
+        leading: const CreatorBrandLogo(
+          asset: 'assets/images/brands/github.svg',
+          label: 'GitHub',
+        ),
+        title: const Text('GitHub'),
+        description: Text(github.isEmpty ? l10n.creatorNotConnected : github),
+        value: githubBusy
+            ? const SizedBox.square(
+                dimension: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : Text(
+                github.isEmpty
+                    ? l10n.creatorNotConnected
+                    : l10n.creatorConnected,
+              ),
+        onPressed: githubBusy ? null : (_) => onConnectGitHub(),
+        enabled: !githubBusy,
+      ),
+      SegmentedTile.navigation(
+        leading: const CreatorBrandLogo(
+          asset: 'assets/images/brands/bandbbs.svg',
+          label: 'BandBBS',
+        ),
+        title: Text(l10n.bandbbs),
+        description: Text(
+          bandBbs.isSignedIn
+              ? (bandBbs.username ?? l10n.creatorConnected)
+              : l10n.creatorNotConnected,
+        ),
+        value: bandBbsBusy
+            ? const SizedBox.square(
+                dimension: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : Text(
+                bandBbs.isSignedIn
+                    ? l10n.creatorConnected
+                    : l10n.creatorNotConnected,
+              ),
+        onPressed: bandBbsBusy ? null : (_) => onAuthorizeBandBbs(),
+        enabled: !bandBbsBusy,
+      ),
+    ];
+    final pendingTiles = <AbstractSegmentedTile>[
+      if (needsChanges > 0)
+        _countTile(
+          icon: Icons.edit_outlined,
+          label: l10n.creatorNeedsChanges,
+          count: needsChanges,
+          onTap: () => onOpenReviews('needs_changes'),
+        ),
+      if (waiting > 0)
+        _countTile(
+          icon: Icons.hourglass_empty,
+          label: l10n.pendingReview,
+          count: waiting,
+          onTap: () => onOpenReviews('pending'),
+        ),
+      if (failed > 0)
+        _countTile(
+          icon: Icons.error_outline,
+          label: l10n.creatorStateFailed,
+          count: failed,
+          onTap: onOpenResources,
+        ),
+    ];
+    final statusTiles = <AbstractSegmentedTile>[
+      for (final status in const [
+        'draft',
+        'pending',
+        'approved',
+        'rejected',
+        'failed',
+        'published',
+      ])
+        if ((states[status] ?? 0) > 0)
+          _countTile(
+            label: creatorStateLabel(l10n, status),
+            count: states[status] ?? 0,
+            onTap: onOpenResources,
+          ),
+    ];
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: SegmentedList(
+        maxWidth: StyleConstants.pageMaxWidth,
+        physics: const AlwaysScrollableScrollPhysics(),
+        contentPadding: const EdgeInsets.only(top: 8, bottom: 32),
+        sections: [
+          SegmentedSection(
+            title: Text(l10n.creatorAccounts),
+            tiles: accountTiles,
+          ),
+          if (pendingTiles.isNotEmpty)
+            SegmentedSection(
+              title: Text(l10n.creatorPendingItems),
+              tiles: pendingTiles,
+            ),
+          if (statusTiles.isNotEmpty)
+            SegmentedSection(
+              title: Text(l10n.creatorResourceStatus),
+              tiles: statusTiles,
+            ),
+        ],
+      ),
+    );
+  }
+
+  AbstractSegmentedTile _countTile({
+    IconData? icon,
+    required String label,
+    required int count,
+    required VoidCallback onTap,
+  }) => SegmentedTile.navigation(
+    leading: icon == null ? null : Icon(icon),
+    title: Text(label),
+    value: Text('$count'),
+    enabled: count > 0,
+    onPressed: count > 0 ? (_) => onTap() : null,
+  );
+}
+
+class _CreatorGovernanceGate extends StatelessWidget {
+  const _CreatorGovernanceGate({required this.code});
+  final String code;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colors = Theme.of(context).colorScheme;
+    final banned = code == 'banned';
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 520),
+        child: Card(
+          color: colors.surfaceContainerHigh,
+          margin: const EdgeInsets.all(24),
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  banned ? Icons.block : Icons.lock_outline,
+                  size: 56,
+                  color: colors.error,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  banned ? l10n.creatorBannedTitle : l10n.creatorFrozenTitle,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  banned
+                      ? l10n.creatorBannedDescription
+                      : l10n.creatorFrozenDescription,
+                  style: Theme.of(context).textTheme.bodyLarge
+                      ?.copyWith(color: colors.onSurfaceVariant),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CreatorTermsGate extends ConsumerStatefulWidget {
+  const _CreatorTermsGate({
+    required this.child,
+    required this.loading,
+    required this.onCreate,
+    required this.selectionActive,
+    required this.onMoveSelection,
+    required this.floatingAccess,
+  });
+
+  final Widget child;
+  final bool loading;
+  final VoidCallback onCreate;
+  final bool selectionActive;
+  final VoidCallback onMoveSelection;
+  final Widget? floatingAccess;
+
+  @override
+  ConsumerState<_CreatorTermsGate> createState() => _CreatorTermsGateState();
+}
+
+class _CreatorTermsGateState extends ConsumerState<_CreatorTermsGate> {
+  static const keyAccepted = 'creator.terms.accepted';
+  bool _accepted = false;
+  bool _checked = false;
+  bool _bottomReached = false;
+  final _termsScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _accepted = SharedPrefsService.instance.getBool(keyAccepted) ?? false;
+    _termsScrollController.addListener(_markBottomReached);
+  }
+
+  @override
+  void dispose() {
+    _termsScrollController.dispose();
+    super.dispose();
+  }
+
+  void _markBottomReached() {
+    if (_bottomReached || !_termsScrollController.hasClients) return;
+    final position = _termsScrollController.position;
+    if (position.maxScrollExtent - position.pixels <= 1) {
+      setState(() => _bottomReached = true);
+    }
+  }
+
+  Future<void> _continue() async {
+    await SharedPrefsService.instance.setBool(keyAccepted, true);
+    if (mounted) setState(() => _accepted = true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    if (_accepted) {
+      return Stack(
+        children: [
+          widget.child,
+          if (widget.floatingAccess != null)
+            Positioned(
+              left: 16,
+              right: 196,
+              bottom: 16,
+              child: Align(
+                alignment: AlignmentDirectional.bottomStart,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: widget.floatingAccess,
+                ),
+              ),
+            ),
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: StableFabSwitcher(
+              child: widget.selectionActive
+                  ? StableExtendedFab(
+                      key: const ValueKey('creator-move-selection'),
+                      heroTag: 'creator-move-selection',
+                      onPressed: widget.loading ? null : widget.onMoveSelection,
+                      icon: const Icon(Icons.drive_file_move_outline),
+                      label: Text(l10n.creatorMoveToCollection),
+                    )
+                  : StableExtendedFab(
+                      key: const ValueKey('creator-new-resource'),
+                      heroTag: 'creator-new-resource',
+                      onPressed: widget.loading ? null : widget.onCreate,
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.creatorNewResource),
+                    ),
+            ),
+          ),
+        ],
+      );
+    }
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final language = Localizations.localeOf(context).languageCode == 'en'
+        ? 'en'
+        : 'zh';
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 840),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: colors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: FutureBuilder<String>(
+                            future: loadLegalDocument(
+                              ref,
+                              'resource-publishing',
+                              language,
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                (_) => _markBottomReached(),
+                              );
+                              return Markdown(
+                                data: snapshot.data!,
+                                controller: _termsScrollController,
+                                selectable: true,
+                                padding: const EdgeInsets.fromLTRB(
+                                  20,
+                                  12,
+                                  20,
+                                  16,
+                                ),
+                                styleSheet: markdownStyleSheetFromTheme(theme)
+                                    .copyWith(
+                                      p: theme.textTheme.bodyMedium?.copyWith(
+                                        height: 1.5,
+                                      ),
+                                      pPadding: const EdgeInsets.only(
+                                        bottom: 12,
+                                      ),
+                                      h1: theme.textTheme.headlineSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                      h1Padding: const EdgeInsets.only(
+                                        top: 16,
+                                        bottom: 8,
+                                      ),
+                                      h2: theme.textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      h2Padding: const EdgeInsets.only(
+                                        top: 12,
+                                        bottom: 6,
+                                      ),
+                                    ),
+                                onTapLink: (_, href, _) {
+                                  final uri = Uri.tryParse(href ?? '');
+                                  if (uri != null && uri.hasScheme) {
+                                    launchUrl(uri);
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        CreatorBottomBar(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: _bottomReached
+                    ? () => setState(() => _checked = !_checked)
+                    : null,
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: _checked,
+                      onChanged: _bottomReached
+                          ? (value) => setState(() => _checked = value == true)
+                          : null,
+                    ),
+                    Flexible(
+                      child: Text(
+                        _bottomReached
+                            ? l10n.creatorTermsAccept
+                            : l10n.oobeAgreementHint,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            FilledButton(
+              onPressed: _checked ? _continue : null,
+              child: Text(l10n.creatorTermsContinue),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

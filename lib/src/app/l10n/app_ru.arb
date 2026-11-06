@@ -1,0 +1,1987 @@
+{
+  "@@locale": "ru",
+  "homeTab": "Главная",
+  "exploreTab": "Обзор",
+  "devicesTab": "Устройства",
+  "pluginsTab": "Плагины",
+  "pluginImport": "Импортировать плагин",
+  "pluginInstalled": "Установленные",
+  "pluginMarket": "Магазин плагинов",
+  "pluginMarketUnavailable": "Магазин плагинов пока недоступен",
+  "pluginEmpty": "Нет установленных плагинов",
+  "pluginSelectHint": "Выберите плагин, чтобы увидеть его функции",
+  "pluginFeatures": "Функции",
+  "pluginDetails": "Подробности",
+  "pluginNoFeatures": "Нет доступных функций",
+  "pluginAuthor": "Автор",
+  "pluginVersion": "Версия",
+  "pluginApiLevel": "Уровень API",
+  "pluginWebsite": "Веб-сайт",
+  "pluginPermissions": "Разрешения",
+  "pluginInstallConfirmTitle": "Подтвердите установку плагина",
+  "pluginUpdateConfirmTitle": "Подтвердите обновление плагина",
+  "pluginDeclaredPermissions": "Плагин запрашивает следующие разрешения:",
+  "pluginNoPermissions": "Разрешения не заявлены",
+  "pluginUpToDate": "Установлена последняя версия",
+  "pluginUninstallTitle": "Удалить плагин",
+  "pluginUninstallMessage": "Данные плагина также будут удалены",
+  "pluginUpload": "Загрузить плагин",
+  "pluginPublishTitle": "Опубликовать плагин",
+  "pluginPublishNew": "Опубликовать как новый плагин",
+  "pluginPublishUpdate": "Обновить опубликованный плагин с тем же ID",
+  "pluginTakedown": "Снять с публикации",
+  "pluginTakedownConfirm": "Плагин будет навсегда удалён из магазина",
+  "pluginLoginRequired": "Войдите, чтобы загружать плагины",
+  "pluginSubmittedForReview": "Отправлено на проверку. После одобрения плагин появится в списке",
+  "pluginStatePending": "На проверке",
+  "pluginStateRejected": "Отклонён",
+  "pluginStateDelisted": "Снят с публикации",
+  "pluginLegacyWarningTitle": "Устаревший плагин",
+  "pluginLegacyWarningMessage": "Это плагин AstroBox v1. OronBox попробует запустить его в режиме совместимости, но возможны ошибки.\\nПроверьте наличие нативного плагина OronBox или попросите автора адаптировать плагин",
+  "settingsTab": "Настройки",
+  "search": "Поиск",
+  "resourceListView": "Список",
+  "resourceGridView": "Карточки",
+  "refresh": "Обновить",
+  "refreshing": "Обновление",
+  "notifications": "Уведомления",
+  "newlyPublished": "Новые публикации",
+  "resourceLibrary": "Библиотека ресурсов",
+  "resourceDetails": "Сведения о ресурсе",
+  "resourceCollectionDetails": "Сведения о коллекции",
+  "resourceArticleDetails": "Сведения о статье",
+  "creatorCenter": "Центр автора",
+  "creatorNewResource": "Новый ресурс",
+  "creatorResourceName": "Название ресурса",
+  "creatorResourceSummary": "Описание ресурса",
+  "creatorResourceMetadataRequired": "Название и описание ресурса обязательны",
+  "creatorSubmitValidationFailed": "Перед отправкой исправьте следующие пункты",
+  "creatorPaidType": "Тип оплаты",
+  "creatorSaveDraft": "Сохранить черновик",
+  "creatorAddArtifact": "Добавить файл ресурса",
+  "creatorBindDevices": "Привязать устройства",
+  "creatorDeleteResource": "Удалить",
+  "creatorIconCover": "Иконка и обложка",
+  "creatorInvalidImage": "Не удалось прочитать изображение. Используйте PNG/JPEG/WebP",
+  "creatorInvalidPackage": "Это не быстрое приложение Vela и не циферблат",
+  "creatorPublishPreparing": "Обработка файла {done}/{total}",
+  "@creatorPublishPreparing": {
+    "placeholders": {
+      "done": {},
+      "total": {}
+    }
+  },
+  "creatorPublishUploading": "Загрузка {percent}%",
+  "@creatorPublishUploading": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "creatorPublishServer": "Обработка на сервере…",
+  "creatorAstroBoxItemId": "ID элемента",
+  "creatorAstroBoxRepository": "Название репозитория",
+  "creatorAstroBoxTags": "Теги (через запятую)",
+  "creatorAstroBoxAuthor": "Автор (должен совпадать с именем пользователя AstroBox)",
+  "creatorAstroBoxBindAccount": "Подключить аккаунт AstroBox",
+  "replace": "Заменить",
+  "delete": "Удалить",
+  "creatorSubmitReview": "Отправить",
+  "creatorArchiveAction": "Снять с публикации",
+  "creatorArchiveConfirm": "Снятие с публикации скрывает ресурс в магазине. Его можно восстановить в любое время",
+  "creatorRestoreAction": "Опубликовать снова",
+  "creatorDeleteConfirm": "Этот черновик ресурса будет удалён навсегда",
+  "creatorDeletePublishedConfirm": "Ресурс OronBox и связанные ресурсы BandBBS будут удалены навсегда. Отменить это действие нельзя. Опубликованный в AstroBox контент не изменится; для его снятия обратитесь к сопровождающим AstroBox-Repo",
+  "creatorArtifactCount": "Пакетов: {count}",
+  "@creatorArtifactCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "creatorKindMismatchMessage": "Файл похож на ресурс типа {detected}, но выбран тип {expected}. Его можно оставить, однако перед отправкой на проверку подтвердите выбор",
+  "@creatorKindMismatchMessage": {
+    "placeholders": {
+      "detected": {},
+      "expected": {}
+    }
+  },
+  "creatorDeviceMoveBlocked": "Для «{name}» привязано только это устройство, поэтому перемещение невозможно",
+  "@creatorDeviceMoveBlocked": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "creatorSelectDevices": "Выберите поддерживаемые устройства",
+  "creatorSelectedDeviceCount": "Выбрано устройств: {count}",
+  "creatorNoDevicesSelected": "Устройства не выбраны",
+  "creatorDeviceSelectionDone": "Готово",
+  "creatorAtLeastOneDevice": "Для каждого файла ресурса нужно выбрать хотя бы одно устройство",
+  "resourceAstroBoxEncryptedTitle": "OronBox не может обработать этот ресурс AstroBox",
+  "resourceAstroBoxEncryptedMessage": "Этот ресурс использует закрытую зашифрованную загрузку AstroBox Creator Console. OronBox не может расшифровать, скачать или установить его. Откройте его в AstroBox",
+  "resourceAstroBoxEncryptedAction": "Понятно",
+  "filter": "Фильтр",
+  "resourceTypeFilter": "Тип ресурса",
+  "resourceCompatibleDevicesFilter": "Совместимые устройства",
+  "currentDevice": "Текущее устройство",
+  "currentWatchface": "Текущий циферблат",
+  "all": "Все",
+  "watchfaces": "Циферблаты",
+  "module": "Модуль",
+  "quickApps": "Быстрые приложения",
+  "firmwareTools": "Прошивка / инструменты",
+  "oronBox": "OronBox",
+  "bandbbs": "BandBBS",
+  "astroBox": "AstroBox",
+  "local": "Локальные",
+  "install": "Установить",
+  "update": "Обновить",
+  "description": "Описание",
+  "supportedDevices": "Поддерживаемые устройства",
+  "downloads": "Загрузки",
+  "downloadTimes": "Загрузок: {count}",
+  "@downloadTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "changelog": "Список изменений",
+  "changelogUnavailable": "Список изменений пока отсутствует",
+  "notFound": "Не найдено",
+  "downloadStarted": "Загрузка начата",
+  "compatible": "Совместимо с",
+  "incompatible": "Несовместимо с",
+  "incompatibleSuffix": "",
+  "myResources": "Мои ресурсы",
+  "drafts": "Черновики",
+  "pendingReview": "На проверке",
+  "published": "Опубликовано",
+  "creatorStateSuspended": "Снято с публикации",
+  "creatorStateFrozen": "Заморожено",
+  "creatorSuspendedByOwnerNotice": "Ресурс снят с публикации. Продолжите редактирование и отправьте его на проверку или восстановите напрямую",
+  "creatorSuspendedByAdminNotice": "Администратор снял ресурс с публикации. Отредактируйте его и отправьте на проверку; после одобрения публикация восстановится",
+  "creatorFrozenNotice": "Администратор заморозил ресурс. Редактирование запрещено, снять заморозку может только администратор",
+  "creatorModerationReason": "Причина: {reason}",
+  "@creatorModerationReason": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
+  "creatorBannedTitle": "Аккаунт заблокирован",
+  "creatorBannedDescription": "Администратор заблокировал ваш аккаунт, поэтому центр автора недоступен. Если это ошибка, обратитесь в поддержку",
+  "creatorFrozenTitle": "Возможности автора заморожены",
+  "creatorFrozenDescription": "Администратор заморозил возможности автора, поэтому сейчас нельзя отправлять и управлять ресурсами. Остальные функции аккаунта не затронуты",
+  "creatorBandBbsNoDevices": "Сначала выберите поддерживаемые устройства для файла ресурса",
+  "creatorBandBbsUnmappedDevices": "Не удалось определить категорию BandBBS для: {devices}",
+  "@creatorBandBbsUnmappedDevices": {
+    "placeholders": {
+      "devices": {}
+    }
+  },
+  "creatorBandBbsSharedCategory": "Устройства одной категории BandBBS привязаны к нескольким пакетам. Привяжите к каждой категории один пакет",
+  "creatorBandBbsUnresolved": "Не удалось определить категорию BandBBS",
+  "creatorOptionalIcon": "Иконка (необязательно, 1:1)",
+  "creatorOptionalCover": "Обложка (необязательно, 3:2)",
+  "creatorRequiredIcon": "Иконка (обязательна для AstroBox, 1:1)",
+  "creatorRequiredCover": "Обложка (обязательна для AstroBox, 3:2)",
+  "creatorIconShapeHint": "Иконка не квадратная и может выглядеть неправильно в AstroBox",
+  "creatorCoverShapeHint": "Обложка не имеет соотношение 3:2 и может выглядеть неправильно в AstroBox",
+  "creatorTermsBandBbs": "Условия и правила сообщества BandBBS",
+  "creatorTermsAstroBox": "Правила отправки в AstroBox-Repo",
+  "creatorTermsAccept": "Я прочитал и принимаю указанные соглашения о публикации",
+  "creatorTermsContinue": "Перейти в центр автора",
+  "agree": "Согласен",
+  "creatorRulesAccept": "Я прочитал и принимаю указанные правила проверки",
+  "creatorBandBbsTermsNotice": "После проверки OronBox ресурс будет опубликован непосредственно в соответствующих категориях BandBBS. Удаление ресурса OronBox также удалит связанные ресурсы BandBBS",
+  "creatorBandBbsLimitsNotice": "Публикация в BandBBS одним нажатием имеет ограничения, которые нужно исправить вручную после публикации:\n1. BandBBS не предоставляет API для загрузки иконки ресурса, поэтому на BandBBS иконка будет пустой; обновите её вручную на сайте BandBBS\n2. BandBBS не предоставляет API для тегов раздела обсуждений, поэтому атрибуты раздела не будут установлены, и ресурс могут удалить; укажите правильный раздел вручную на сайте BandBBS",
+  "creatorAstroBoxTermsNotice": "После проверки OronBox будет создан репозиторий ресурса и отправлен PR в официальный репозиторий AstroBox. PR независимо проверяют сопровождающие AstroBox. Чтобы снять опубликованный ресурс с публикации, обратитесь к сопровождающим AstroBox-Repo",
+  "creatorAstroBoxReviewNotice": "Ресурсы, публикуемые в AstroBox, должны соответствовать требованиям проверки:\n1. Ресурс не должен содержать непристойных, политически чувствительных или иных незаконных материалов\n2. Качество ресурса не должно быть слишком низким: например, циферблатом, где просто заменён шаблон, или чрезмерно простым быстрым приложением\n3. Обложка должна быть привлекательной и эстетичной, с соотношением 3:2 (рекомендуется 1200×800); для иконки рекомендуется 192×192\n4. Ресурс должен корректно выполнять основные функции на поддерживаемых устройствах\n5. Запрещено загружать чужие ресурсы без разрешения\n6. При использовании известных IP-материалов в предпросмотре должно быть изображение с уведомлением об авторских правах (с указанием, что материалы не связаны с AstroBox и Xiaomi)",
+  "failed": "Ошибка / требуется действие",
+  "basicInfo": "Основная информация",
+  "packageFiles": "Файлы ресурса",
+  "publishTargets": "Цели публикации",
+  "scan": "Сканировать",
+  "logs": "Журналы",
+  "pairedDevices": "Сопряжённые устройства",
+  "apps": "Приложения",
+  "deviceAppCount": "Количество приложений",
+  "deviceWatchfaceCount": "Количество циферблатов",
+  "connection": "Подключение",
+  "protocol": "Протокол",
+  "error": "Ошибка",
+  "errorBluetoothUnavailable": "Bluetooth недоступен. Убедитесь, что он включён и OronBox разрешено его использовать",
+  "errorBluetoothConnectFailed": "Не удалось подключиться по Bluetooth. Проверьте разрешение Bluetooth, держите устройство рядом и свободным, включите на нём «Подключить новый телефон» и повторите попытку",
+  "errorBluetoothDisconnected": "Bluetooth отключён. Подключите устройство снова",
+  "errorOperationTimeout": "Время операции истекло. Убедитесь, что устройство рядом, и повторите попытку",
+  "errorDeviceNotReady": "Устройство не готово. Сначала подключите и авторизуйте его",
+  "errorBleCharacteristicsMissing": "Не найдены необходимые характеристики BLE. Подключите устройство снова или проверьте поддержку этой функции",
+  "errorWebSerialUnavailable": "Этот браузер не поддерживает Web Serial. Используйте Chrome, Edge или другой совместимый браузер",
+  "errorAccountPasswordIncorrect": "Неверное имя пользователя или пароль аккаунта Xiaomi",
+  "errorAccountTwoFactorIncomplete": "Двухфакторная проверка аккаунта Xiaomi не завершена. Войдите снова",
+  "errorXiaomiAccountSessionExpired": "Сеанс аккаунта Xiaomi истёк. Войдите снова",
+  "errorOronBoxSessionExpired": "Сеанс OronBox истёк. Войдите в BandBBS снова",
+  "errorNetworkUnavailable": "Не удалось связаться с сервисом. Проверьте сеть и повторите попытку",
+  "errorServiceUnavailable": "Сервис временно недоступен. Повторите попытку позже",
+  "errorPermissionDenied": "У вас нет разрешения на выполнение этой операции",
+  "errorContentNotFound": "Запрошенный материал больше не существует или недоступен",
+  "errorRequestConflict": "Материал изменился. Обновите его и повторите попытку",
+  "errorCoinBalanceInsufficient": "Недостаточно монет",
+  "errorCoinResourceLimit": "Этому ресурсу можно отправить не более 2 монет",
+  "errorCoinOwnResource": "Нельзя отправлять монеты собственному ресурсу",
+  "errorCoinVotingFrozen": "Голосование монетами временно заморожено",
+  "errorCoinAccountTooNew": "Для отправки монет аккаунту должно быть не менее 24 часов",
+  "errorCoinOperationFailed": "Не удалось отправить монету. Повторите попытку",
+  "errorCoinStatusUnavailable": "Состояние монет недоступно. Нажмите, чтобы повторить",
+  "errorOperationFailed": "Операция не выполнена. Повторите попытку",
+  "errorUnknown": "Что-то пошло не так. Повторите попытку",
+  "errorDownloadQuotaExceeded": "Достигнут дневной лимит загрузок",
+  "errorGitHubNotConfigured": "GitHub не настроен",
+  "errorRateLimited": "Слишком много запросов. Подождите немного и повторите",
+  "errorFileTooLarge": "Выбранный файл слишком большой",
+  "errorInvalidRequest": "Некоторые отправленные данные недействительны. Проверьте их и повторите",
+  "errorOperationCancelled": "Операция отменена",
+  "errorUnsupportedFileType": "Неподдерживаемый или неизвестный тип файла",
+  "errorCertificateVerificationFailed": "Проверка сертификата не пройдена. При использовании прокси отключите перехват HTTPS или убедитесь, что сертификат доверенный",
+  "errorUnknownWithDetail": "Операция не выполнена: {detail}",
+  "@errorUnknownWithDetail": {
+    "placeholders": {
+      "detail": {}
+    }
+  },
+  "appearance": "Внешний вид",
+  "resources": "Ресурсы",
+  "communitySourceAstroBoxRepo": "AstroBox",
+  "communitySourceBandBbs": "Сообщество BandBBS",
+  "communitySourceHuamiAppStore": "Магазин приложений Amazfit",
+  "devices": "Устройства",
+  "creatorCompatibleDeviceCount": "Устройств: {count}",
+  "@creatorCompatibleDeviceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "categories": "Категории",
+  "advanced": "Дополнительно",
+  "openSourceLicenses": "Лицензии открытого кода",
+  "acknowledgements": "Особые благодарности",
+  "deviceNotConnected": "Не подключено",
+  "deviceConnected": "Подключено",
+  "deviceDisconnected": "Отключено",
+  "deviceReconnect": "Переподключить",
+  "deviceConnect": "Подключить",
+  "deviceSwitch": "Переключить",
+  "deviceSyncTime": "Синхронизировать",
+  "deviceCharging": "Заряжается",
+  "deviceLastChargedNow": "Заряжено только что",
+  "deviceLastChargedMinutes": "Заряжено {count} мин назад",
+  "@deviceLastChargedMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceLastChargedHours": "Заряжено {count} ч назад",
+  "@deviceLastChargedHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceLastChargedDays": "Заряжено {count} дн. назад",
+  "@deviceLastChargedDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceFeaturesInstallApp": "Установить приложение",
+  "deviceFeaturesInstallWatchface": "Установить циферблат",
+  "deviceFeaturesInstallFirmware": "Обновить прошивку",
+  "deviceFeaturesInstallFirmwareDesc": "Проверить обновления устройства или установить прошивку из файла",
+  "firmwareCheckingUpdates": "Проверка обновлений прошивки",
+  "firmwareNoUpdatesFound": "Новая прошивка для этого устройства не найдена",
+  "firmwareSourceUnavailable": "Онлайн-источник прошивок для этого типа устройства пока недоступен",
+  "firmwareVersionUnknown": "Текущая версия прошивки недоступна",
+  "firmwareCurrentVersion": "Текущая версия",
+  "firmwareLatestRelease": "Последняя прошивка",
+  "firmwareHistoricalReleases": "Предыдущие версии прошивки",
+  "firmwareUpToDate": "Прошивка обновлена до последней версии",
+  "firmwareUpdateAvailable": "Доступно обновление",
+  "firmwareDownloadLatestFull": "Скачать последний полный пакет",
+  "firmwareUpdateNow": "Обновить",
+  "firmwareReleaseNotes": "Примечания к выпуску",
+  "firmwareReleaseNotesUnavailable": "Примечания к выпуску недоступны",
+  "download": "Скачать",
+  "downloadTaskAdded": "Добавлено в очередь загрузки",
+  "zeppOsMoreFeatures": "Специальные функции",
+  "zeppOsMoreFeaturesDescription": "Управление дополнительными функциями устройств Zepp OS",
+  "zeppOsDeviceFeaturesSection": "Функции устройства",
+  "zeppOsAppsAndDevelopmentSection": "Приложения и разработка",
+  "zeppOsAssistant": "Голосовая лаборатория",
+  "zeppOsAssistantDescription": "Захват, наблюдение и ответы в сеансах голосового помощника часов",
+  "zeppOsScreenMirror": "Зеркальное отображение экрана",
+  "zeppOsScreenMirrorDescription": "Просмотр экрана часов на этом устройстве",
+  "zeppOsScreenMirrorSemantics": "Зеркальное отображение экрана часов Zepp OS",
+  "zeppOsScreenMirrorUnsupported": "Невозможно показать этот формат экрана: {error}",
+  "@zeppOsScreenMirrorUnsupported": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "expand": "Разворачивание",
+  "collapse": "Сворачивание",
+  "voiceLabTitle": "Голосовая лаборатория",
+  "voiceLabXiaoAi": "XiaoAI",
+  "voiceLabReceivingAudio": "Получение аудио с часов",
+  "voiceLabWaiting": "Ожидание голосового сеанса",
+  "voiceLabContinuousCapture": "Непрерывный захват",
+  "voiceLabContinuousCaptureDescription": "Запрашивать следующую запись после завершения текущей",
+  "voiceLabDisableMonitoring": "Отключить наблюдение в реальном времени",
+  "voiceLabEnableMonitoring": "Включить наблюдение в реальном времени",
+  "voiceLabReplyLabel": "Ответ отправлен на часы",
+  "voiceLabReplyHint": "Введите ответ",
+  "voiceLabReplyQueued": "Ответ будет отправлен после завершения текущей записи",
+  "voiceLabReplySent": "Ответ отправлен на часы",
+  "voiceLabCapturedData": "Захваченные данные",
+  "voiceLabDecoder": "Декодер",
+  "voiceLabOpusFrames": "Кадры Opus",
+  "voiceLabDataSize": "Размер данных",
+  "voiceLabPcmSamples": "Сэмплы PCM",
+  "voiceLabExportOpus": "Экспортировать Opus",
+  "voiceLabExportWav": "Экспортировать WAV",
+  "voiceLabClearCapture": "Очистить захваченные данные",
+  "voiceLabSaveRecording": "Сохранить голосовую запись",
+  "voiceLabSaveOpus": "Сохранить аудио Opus",
+  "voiceLabAudioProcessingFailedPrefix": "Ошибка обработки аудио",
+  "voiceLabAudioProcessingFailed": "Ошибка обработки аудио: {error}",
+  "@voiceLabAudioProcessingFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabContinuousCaptureFailed": "Не удалось настроить непрерывный захват: {error}",
+  "@voiceLabContinuousCaptureFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabAssistantSwitchFailed": "Не удалось сменить голосового помощника: {error}",
+  "@voiceLabAssistantSwitchFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabExportWavFailed": "Не удалось экспортировать WAV: {error}",
+  "@voiceLabExportWavFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "voiceLabExportOpusFailed": "Не удалось экспортировать Opus: {error}",
+  "@voiceLabExportOpusFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "send": "Отправить",
+  "sendFailed": "Не удалось отправить: {error}",
+  "@sendFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "ready": "Готово",
+  "initializing": "Инициализация",
+  "zeppOsMapSelectPackage": "Выберите пакет карты Zepp OS",
+  "zeppOsMapReadFailed": "Не удалось прочитать пакет карты",
+  "zeppOsMapTransferTitle": "Передача офлайн-карты",
+  "zeppOsMapGarminDetected": "{fileName}\\nОбнаружена карта Garmin IMG в одном файле: {mapName}",
+  "@zeppOsMapGarminDetected": {
+    "placeholders": {
+      "fileName": {},
+      "mapName": {}
+    }
+  },
+  "zeppOsMapGarminNoPreview": "В этой карте нет дерева тайлов Zepp OS 11/x/y. Исходный IMG будет передан одним пакетом, поэтому предпросмотр покрытия недоступен",
+  "zeppOsMapTileSummary": "{fileName} · {count} тайлов\\nПредпросмотр показывает покрытие пакета, а не отрисовку Garmin IMG на часах",
+  "@zeppOsMapTileSummary": {
+    "placeholders": {
+      "fileName": {},
+      "count": {}
+    }
+  },
+  "zeppOsMapStartTransfer": "Начать передачу",
+  "zeppOsMapTransferringBluetooth": "Передача по Bluetooth",
+  "zeppOsMapTransferComplete": "Передача офлайн-карты завершена",
+  "zeppOsMapConversionFailed": "Не удалось безопасно преобразовать карту",
+  "zeppOsMapBtClassicHint": "Идёт массовая передача по BT Classic. После начала передачи подтвердите установку на часах",
+  "zeppOsMapBleHint": "BLE поддерживает пакеты карт до 2 МБ. Перед передачей большего пакета переключитесь на BT Classic и подтвердите установку на часах",
+  "zeppOsMapPreviewTooLarge": "Область карты слишком велика для полного предпросмотра",
+  "zeppOsSettingPageLoadFailed": "Не удалось загрузить страницу настроек: {error}",
+  "@zeppOsSettingPageLoadFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "zeppOsAppCompatibilitySaved": "Файлы совместимости сохранены для {appId}",
+  "@zeppOsAppCompatibilitySaved": {
+    "placeholders": {
+      "appId": {}
+    }
+  },
+  "zeppOsAppStorageSaved": "settingsStorage сохранён для {appId}",
+  "@zeppOsAppStorageSaved": {
+    "placeholders": {
+      "appId": {}
+    }
+  },
+  "zeppOsAppSupplementFiles": "Добавить файлы AppSide или настроек",
+  "zeppOsAppSupplementCompatibility": "Добавить файлы совместимости мини-приложения",
+  "zeppOsAppReplaceCompatibility": "Добавить или заменить файлы совместимости",
+  "zeppOsAppSideAvailable": "AppSide ✓",
+  "zeppOsAppSideMissing": "AppSide отсутствует",
+  "zeppOsSettingAvailable": "Настройка ✓",
+  "zeppOsSettingMissing": "Настройка отсутствует",
+  "zeppOsAppEditStorage": "Изменить settingsStorage",
+  "zeppOsStorageKeyRequired": "Ключ обязателен",
+  "zeppOsStorageDuplicateKey": "Дублирующийся ключ: {key}",
+  "@zeppOsStorageDuplicateKey": {
+    "placeholders": {
+      "key": {}
+    }
+  },
+  "zeppOsStorageDescription": "Эти данные используются страницей настроек и AppSide и хранятся в виде строк согласно спецификации Zepp OS",
+  "zeppOsStorageEmpty": "Сохранённых записей нет",
+  "zeppOsStorageKey": "Ключ",
+  "zeppOsStorageValue": "Значение",
+  "clear": "Очистить",
+  "save": "Сохранить",
+  "selectedFileReadFailed": "Не удалось прочитать выбранный файл",
+  "zeppOsAppInvalidHexId": "Введите корректный шестнадцатеричный ID приложения",
+  "zeppOsAppSelectCompatibilityFile": "Выберите хотя бы один файл app-side.js или setting.js",
+  "zeppOsAppHexId": "ID приложения (шестнадцатеричный)",
+  "optionalDisplayName": "Отображаемое имя (необязательно)",
+  "zeppOsAppSideUnchanged": "Оставить текущий AppSide",
+  "zeppOsSettingUnchanged": "Оставить текущую настройку",
+  "selectFile": "Выбрать файл",
+  "zeppOsAppCompatibilityOverwriteHint": "Сохранение заменяет файлы совместимости с теми же именами для этого ID приложения, но не изменяет мини-приложение на часах",
+  "zeppOsDebugRefreshFailed": "Не удалось автоматически обновить данные: {error}",
+  "@zeppOsDebugRefreshFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "zeppOsDebugInvalidHex": "HEX должен содержать полные байты, разделённые пробелами, переносами строк, 0x, запятыми или похожими разделителями",
+  "zeppOsDebugClearEventsTitle": "Очистить события текущего приложения?",
+  "zeppOsDebugClearEventsDescription": "Все отладочные события для {appId} будут очищены",
+  "@zeppOsDebugClearEventsDescription": {
+    "placeholders": {
+      "appId": {}
+    }
+  },
+  "zeppOsDebugClearEvents": "Очистить события",
+  "zeppOsDebugRefresh": "Обновить состояние и события",
+  "zeppOsDebugAppList": "Список AppSide",
+  "zeppOsDebugNoApps": "Кэшированные скрипты и сеансы AppSide часов не обнаружены",
+  "zeppOsDebugCached": "В кэше",
+  "zeppOsDebugNotCached": "Нет в кэше",
+  "zeppOsDebugRuntimeRunning": "Среда выполнения запущена",
+  "zeppOsDebugRuntimeStopped": "Среда выполнения остановлена",
+  "zeppOsDebugLocalRuntime": "Локальная среда выполнения",
+  "zeppOsDebugCannotStart": "Для этого ID приложения нет кэшированного скрипта, запуск локально невозможен",
+  "zeppOsDebugCanStart": "Кэшированный скрипт можно запустить вручную без поддельных параметров сеанса часов",
+  "zeppOsDebugScriptRunning": "Скрипт выполняется в локальном QuickJS",
+  "zeppOsDebugStartQuickJs": "Запустить QuickJS",
+  "stop": "Остановить",
+  "zeppOsDebugMessageEditor": "Редактор сообщений",
+  "zeppOsDebugUtf8Text": "Текст UTF-8",
+  "zeppOsDebugJsonCompact": "JSON (сжатый перед отправкой)",
+  "zeppOsDebugHexBytes": "Байты HEX",
+  "zeppOsDebugEncodingFailed": "Текущее содержимое нельзя закодировать в выбранном режиме",
+  "zeppOsDebugByteCountUnavailable": "Байты: —",
+  "zeppOsDebugBytePreview": "Байты: {count}\\nHEX: {hex}",
+  "@zeppOsDebugBytePreview": {
+    "placeholders": {
+      "count": {},
+      "hex": {}
+    }
+  },
+  "zeppOsDebugInjectLocal": "Вставить входящее сообщение в локальную среду",
+  "zeppOsDebugSendToWatch": "Отправить на часы",
+  "zeppOsDebugWaitingForWatch": "Отправить на часы (ожидание реального сеанса)",
+  "zeppOsDebugEvents": "Отладочные события",
+  "zeppOsDebugClearCurrentApp": "Очистить текущее приложение",
+  "zeppOsDebugSearch": "Поиск по типу, сообщению, HEX или читаемому тексту",
+  "zeppOsDebugWatchOnly": "Только реальные сообщения часов",
+  "zeppOsDebugNoEvents": "Нет событий, соответствующих фильтрам",
+  "zeppOsDebugMessageActions": "Действия с сообщением",
+  "zeppOsDebugLoadEditor": "Загрузить в редактор",
+  "zeppOsDebugCopyHex": "Копировать HEX",
+  "zeppOsDebugCopyText": "Копировать текст",
+  "zeppOsDebugSessionStatus": "Состояние среды и сеанса",
+  "zeppOsDebugCachedScript": "Кэшированный скрипт: {status}",
+  "@zeppOsDebugCachedScript": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "zeppOsDebugLocalRuntimeStatus": "Локальная среда: {status}",
+  "@zeppOsDebugLocalRuntimeStatus": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "zeppOsDebugWatchSession": "Сеанс часов: {status}",
+  "@zeppOsDebugWatchSession": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "exists": "Доступно",
+  "notExists": "Недоступно",
+  "running": "Запущено",
+  "notRunning": "Не запущено",
+  "notOpen": "Не открыто",
+  "zeppOsDebugWatchSessionOpen": "Реальный сеанс открыт",
+  "zeppOsDebugRealHeader": "Заголовок реального сеанса",
+  "zeppOsDebugLatestStartup": "Последнее состояние запуска: {status}",
+  "@zeppOsDebugLatestStartup": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "zeppOsDebugWatchInbound": "От часов",
+  "zeppOsDebugWatchOutbound": "На часы",
+  "zeppOsDebugLifecycle": "Жизненный цикл",
+  "zeppOsMirrorInterval": "Интервал зеркального отображения",
+  "zeppOsMirrorIntervalRange": "Диапазон интервала зеркального отображения",
+  "zeppOsOfflineMaps": "Офлайн-карты",
+  "zeppOsOfflineMapsDescription": "Передача готовых пакетов карт на часы",
+  "zeppOsAppSettings": "Настройки приложения Zepp OS",
+  "zeppOsAppSettingsDescription": "Изменение настроек приложения Zepp OS",
+  "zeppOsAppDebug": "Отладка приложения Zepp OS",
+  "zeppOsAppDebugDescription": "Просмотр событий и запуск локального скрипта приложения",
+  "deviceMusicSync": "Синхронизация музыки",
+  "deviceHealthTitle": "Здоровье",
+  "deviceHealthDescription": "Синхронизация активности и сна с устройством",
+  "deviceHealthSyncCardTitle": "Данные о здоровье",
+  "deviceHealthNeverSynced": "Данные о здоровье ещё не синхронизировались",
+  "deviceHealthLastSynced": "Последняя синхронизация: {time}",
+  "@deviceHealthLastSynced": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceHealthSync": "Синхронизировать данные о здоровье",
+  "deviceHealthSyncing": "Синхронизация",
+  "deviceHealthConnectFirst": "Подключите устройство, чтобы синхронизировать данные о здоровье",
+  "deviceHealthPartialSync": "Не удалось синхронизировать часть данных о здоровье",
+  "deviceHealthToday": "Сегодня",
+  "deviceHealthSteps": "Шаги",
+  "deviceHealthDistance": "Расстояние",
+  "deviceHealthCalories": "Калории",
+  "deviceHealthHeartRate": "Пульс",
+  "deviceHealthAverageHeartRateLabel": "Средний пульс",
+  "deviceHealthRestingHeartRate": "Пульс в покое",
+  "deviceHealthAbnormalHeartRate": "Аномальный пульс",
+  "deviceHealthHeartRateHigh": "Высокий пульс",
+  "deviceHealthHeartRateLow": "Низкий пульс",
+  "deviceHealthHeartHealth": "Здоровье сердца",
+  "deviceHealthHeartHealthMonitoring": "Мониторинг здоровья сердца",
+  "deviceHealthIrregularHeartbeat": "Нерегулярное сердцебиение",
+  "deviceHealthLowBloodOxygen": "Низкий уровень кислорода",
+  "deviceHealthHighStress": "Высокий стресс",
+  "deviceHealthDetected": "Обнаружено",
+  "deviceHealthSleep": "Последний сон",
+  "deviceHealthSleepCard": "Сон",
+  "deviceHealthAllDaySleep": "Сон за весь день",
+  "deviceHealthLongSleep": "Длительный сон",
+  "deviceHealthSleepStructure": "Структура сна",
+  "deviceHealthSleepDetails": "Детали сна",
+  "deviceHealthSleepAverageHeartRate": "Средняя частота пульса во сне",
+  "deviceHealthSleepAverageBloodOxygen": "Средний уровень кислорода во сне",
+  "deviceHealthAverageHeartRate": "Средний пульс: {value} уд/мин",
+  "@deviceHealthAverageHeartRate": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceHealthNoData": "Нет данных",
+  "deviceHealthLoadFailed": "Не удалось загрузить данные о здоровье",
+  "deviceHealthSleepStages": "Фазы сна",
+  "deviceHealthSleepHrv": "HRV сна",
+  "deviceHealthSleepAwake": "Бодрствование",
+  "deviceHealthSleepLight": "Лёгкий сон",
+  "deviceHealthSleepDeep": "Глубокий сон",
+  "deviceHealthSleepRem": "REM",
+  "deviceHealthSleepNoStages": "Нет данных о фазах сна",
+  "deviceHealthDayView": "День",
+  "deviceHealthWeekView": "Неделя",
+  "deviceHealthMonthView": "Месяц",
+  "deviceMusicUpload": "Загрузка музыки на устройство",
+  "deviceMusicSyncDescription": "Синхронизация MP3-файлов с устройством",
+  "deviceMusicChooseDialog": "Выберите MP3-файлы для синхронизации с устройством",
+  "deviceMusicReadFailed": "Не удалось прочитать выбранный MP3-файл",
+  "deviceMusicSizeInvalid": "Недопустимый размер файла (максимум {maxMb} МБ)",
+  "@deviceMusicSizeInvalid": {
+    "placeholders": {
+      "maxMb": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicUnknownArtist": "Неизвестный исполнитель",
+  "deviceMusicTransferred": "Передано",
+  "deviceMusicLibrary": "Музыкальная библиотека",
+  "deviceMusicLibraryDescription": "Управление песнями и плейлистами на устройстве",
+  "deviceMusicSongs": "Песни",
+  "deviceMusicSongsTotal": "Всего песен: {count}",
+  "@deviceMusicSongsTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicNoPlaylist": "Не входит в плейлист",
+  "deviceMusicPlaylists": "Плейлисты",
+  "deviceMusicEmpty": "На устройстве нет песен",
+  "deviceMusicNoPlaylists": "Плейлистов нет",
+  "deviceMusicLoadFailed": "Не удалось загрузить музыку: {error}",
+  "@deviceMusicLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceMusicPlaylistCreate": "Создать плейлист",
+  "deviceMusicPlaylistRename": "Переименовать плейлист",
+  "deviceMusicPlaylistName": "Название плейлиста",
+  "deviceMusicPlaylistLimit": "Максимум плейлистов: {count}",
+  "@deviceMusicPlaylistLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicSongCount": "Песен: {count}",
+  "@deviceMusicSongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicDeleteSong": "Удалить эту песню с устройства?",
+  "deviceMusicDeletePlaylist": "Удалить этот плейлист?",
+  "deviceMusicDeletePlaylistDescription": "Песни останутся на устройстве",
+  "deviceMusicManagePlaylists": "Управление плейлистами",
+  "deviceMusicPlaylistMembership": "Состав плейлиста",
+  "deviceMusicTransferSpeed": "Скорость передачи: {speed}",
+  "@deviceMusicTransferSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceMusicSelectedFiles": "Выбрано файлов: {count}",
+  "@deviceMusicSelectedFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceMusicQueueProgress": "{current}/{total}: {name}",
+  "@deviceMusicQueueProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceRecordingsTitle": "Записи с устройства",
+  "deviceRecordingsDescription": "Синхронизация и экспорт записей с часов",
+  "deviceRecordingsHint": "Записи принимаются и проверяются по одной. После синхронизации экспортируйте каждый исходный файл",
+  "deviceRecordingsSync": "Синхронизировать записи",
+  "deviceRecordingsReading": "Чтение записей",
+  "deviceRecordingsProgress": "{completed}/{total}: {name}",
+  "@deviceRecordingsProgress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceRecordingsProgressCount": "Обработано записей: {completed}/{total}",
+  "@deviceRecordingsProgressCount": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceRecordingsEmpty": "Подключите часы и выберите «Синхронизировать записи»",
+  "deviceRecordingsSave": "Сохранить записи",
+  "deviceRecordingsNoneOnWatch": "На часах новые записи не найдены",
+  "deviceRecordingsSynced": "Синхронизировано записей: {count}",
+  "@deviceRecordingsSynced": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deviceRecordingsSaveFailed": "Не удалось сохранить запись: {error}",
+  "@deviceRecordingsSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceMusicTransferTitle": "Передача музыки",
+  "deviceMusicVelaDescription": "Синхронизация MP3-файлов с устройством. Размер одного файла не должен превышать 100 МБ",
+  "deviceMusicZeppDescription": "Поддерживаются MP3-файлы до 50 МБ. Для быстрой передачи рекомендуется Bluetooth Classic; BLE также поддерживается, но работает медленнее",
+  "deviceMusicChooseMp3": "Выберите MP3-файлы",
+  "deviceMusicSongTitle": "Название песни",
+  "deviceMusicArtist": "Исполнитель",
+  "deviceMusicFileSize": "Размер файла: {size}",
+  "@deviceMusicFileSize": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "deviceMusicProgress": "Прогресс: {progress}",
+  "@deviceMusicProgress": {
+    "placeholders": {
+      "progress": {}
+    }
+  },
+  "deviceMusicTransferring": "Передача",
+  "deviceMusicSend": "Отправить на устройство",
+  "zeppOsFindDevice": "Найти устройство",
+  "zeppOsFindDeviceDescription": "Заставить устройство непрерывно вибрировать или звонить",
+  "deviceFeaturesDeviceInfo": "Информация об устройстве",
+  "deviceFeaturesDeviceInfoDesc": "Просмотр сведений об устройстве",
+  "switchDeviceTitle": "Переключить устройство",
+  "savedDevices": "Сохранённые устройства",
+  "deviceSwitchAddDevice": "Добавить устройство",
+  "scanAndAdd": "Сканировать и добавить",
+  "authkey": "Ключ авторизации",
+  "authkeyPrompt": "Введите ключ авторизации устройства",
+  "authkeyPlaceholder": "Ключ authkey",
+  "connectFailed": "Не удалось подключиться",
+  "deviceConnectingTo": "Подключение к устройству {deviceName}",
+  "@deviceConnectingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceConnectionPreparing": "Подготовка подключения",
+  "deviceConnectionEstablishing": "Установка подключения ({transport})",
+  "@deviceConnectionEstablishing": {
+    "placeholders": {
+      "transport": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceConnectionInitializing": "Инициализация подключения",
+  "deviceConnectionAuthenticating": "Авторизация устройства",
+  "deviceConnectionFetchingStatus": "Получение состояния устройства",
+  "deviceTransportBle": "BLE",
+  "deviceEndpointUnavailable": "Конечная точка {transport} недоступна. Сопрягите устройство в системных настройках Bluetooth и просканируйте снова",
+  "@deviceEndpointUnavailable": {
+    "placeholders": {
+      "transport": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceTransportSpp": "SPP",
+  "deviceCompatibilityUnknown": "Совместимость устройства неизвестна",
+  "webSerialTitle": "Web Serial",
+  "webSerialHint": "В веб-версии OronBox подключается к устройствам через Web Serial. Сохранённые устройства остаются в этом браузере",
+  "webSerialConnectDialogTitle": "Подключение через Web Serial",
+  "webSerialConnectDialogHint": "Введите authkey устройства и выберите последовательный порт в запросе браузера. Authkey сохраняется в этом браузере",
+  "cancel": "Отмена",
+  "deviceActionsDelete": "Удалить устройство",
+  "deviceActionsDisconnect": "Отключить устройство",
+  "deviceActionsShareQR": "Поделиться QR-кодом",
+  "deviceShareOronBoxCode": "Код OronBox",
+  "deviceShareAstroBoxCompatibleCode": "Совместимый код AstroBox",
+  "installTapToSelectFile": "Нажмите, чтобы выбрать файл",
+  "deviceInfoTitle": "Информация об устройстве",
+  "deviceInfoGroupDevice": "Устройство",
+  "deviceInfoGroupSystem": "Система",
+  "deviceInfoGroupStatus": "Состояние",
+  "fieldName": "Имя",
+  "fieldAddress": "Адрес",
+  "fieldAuthkey": "Authkey",
+  "fieldConnectionType": "Тип подключения",
+  "fieldCodename": "Кодовое имя",
+  "fieldModel": "Модель",
+  "fieldImei": "IMEI",
+  "fieldFirmware": "Прошивка",
+  "fieldSerial": "Серийный номер",
+  "fieldBattery": "Батарея",
+  "fieldChargeStatus": "Состояние зарядки",
+  "fieldStorage": "Хранилище",
+  "appManagementTitle": "Управление приложениями",
+  "appManagementNone": "Приложений нет",
+  "appManagementShowSystemApps": "Показывать системные приложения",
+  "watchfaceManagementTitle": "Управление циферблатами",
+  "watchfaceManagementNone": "Циферблатов нет",
+  "open": "Открытие",
+  "externalLinkTitle": "Внешняя ссылка",
+  "externalLinkDescription": "Вы собираетесь открыть {url}\\n\\nСайт принадлежит третьей стороне, не связан с OronBox, а его безопасность неизвестна. Будьте осторожны. Продолжить?",
+  "@externalLinkDescription": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "externalLinkAstroBoxResourceHint": "Похоже, это ресурс AstroBox. Его также можно открыть и установить в OronBox",
+  "continueToWebsite": "Перейти на сайт",
+  "viewInOronBox": "Открыть в OronBox",
+  "uninstall": "Удалить",
+  "enable": "Включить",
+  "show": "Показать",
+  "hide": "Скрыть",
+  "copy": "Копировать",
+  "copied": "Скопировано",
+  "close": "Закрыть",
+  "desktopTrayShow": "Показать OronBox",
+  "desktopTrayExit": "Выйти из OronBox",
+  "desktopCloseTitle": "Закрытие приложения",
+  "desktopCloseMessage": "Выйти из OronBox?",
+  "desktopCloseRemember": "Запомнить выбор",
+  "desktopCloseToTray": "Свернуть в область уведомлений",
+  "desktopCloseExit": "Выйти",
+  "settingsDesktopCloseBehavior": "Закрытие окна",
+  "settingsDesktopCloseBehaviorDesc": "Выберите действие при закрытии главного окна",
+  "settingsRemoveBondBeforeSpp": "Повторное сопряжение при подключении",
+  "settingsRemoveBondBeforeSppDesc": "Повышает стабильность соединения и не позволяет Xiaomi Fitness занять подключение; отключение может ускорить соединение",
+  "desktopCloseBehaviorAsk": "Спрашивать",
+  "desktopCloseBehaviorExit": "Выход",
+  "desktopCloseBehaviorTray": "Свернуть в область уведомлений",
+  "quickApp": "Быстрое приложение",
+  "miniprogram": "Мини-программа",
+  "miniprograms": "Мини-программы",
+  "watchface": "Циферблат",
+  "firmwareTool": "Прошивка / инструмент",
+  "free": "Бесплатно",
+  "paid": "Платные",
+  "forcePaid": "Принудительно платный",
+  "version": "Версия",
+  "noContent": "Нет содержимого",
+  "preview": "Предпросмотр",
+  "productDeviceRequirements": "Требования к устройству",
+  "productOtherVersions": "Другие версии",
+  "productInQueue": "В очереди",
+  "settingsAccount": "Аккаунты",
+  "settingsGeneral": "Общие",
+  "settingsQueue": "Очередь",
+  "settingsAbout": "О программе",
+  "settingsAccountLoginBBSDesc": "Войдите в аккаунт BandBBS, чтобы пользоваться ресурсами сообщества",
+  "settingsAccountBandBbsSigningIn": "Выполняется вход в BandBBS",
+  "settingsAccountBandBbsOpenedBrowser": "Страница входа BandBBS открыта в браузере",
+  "settingsAccountBandBbsSignedIn": "Вход в BandBBS выполнен",
+  "settingsAccountBandBbsLoginFailed": "Не удалось войти в BandBBS",
+  "settingsBandBbsAccountRequired": "Сначала войдите в аккаунт BandBBS в настройках",
+  "settingsAccountBBSAccount": "Аккаунт BandBBS",
+  "bandBbsAccountTitle": "Аккаунт BandBBS",
+  "bandBbsResourceId": "ID ресурса BandBBS",
+  "bandBbsResourceIdHint": "Введите ID ресурса BandBBS",
+  "bandBbsQueryResource": "Найти ресурс BandBBS",
+  "bandBbsLogout": "Выйти из BandBBS",
+  "bandBbsLoggedOut": "Выход из BandBBS выполнен",
+  "accountSignOutTitle": "Выйти из аккаунта {accountName}?",
+  "@accountSignOutTitle": {
+    "placeholders": {
+      "accountName": {}
+    }
+  },
+  "accountSignOutMessage": "Сохранённые данные этого аккаунта будут удалены",
+  "bandBbsLoadPreviews": "Загружать предпросмотры BandBBS",
+  "bandBbsLoadPreviewsDesc": "Автоматически загружать предпросмотры вложений в списке ресурсов",
+  "bandBbsShowAllCategories": "Показывать все категории BandBBS",
+  "bandBbsShowAllCategoriesDesc": "Показывать категории без ресурсов",
+  "settingsMiAccount": "Аккаунт Xiaomi",
+  "settingsMiAccountDesc": "Войти в аккаунт Xiaomi и синхронизировать привязанные устройства",
+  "deviceSwitchMiAccountImport": "Импортировать устройства из аккаунта Xiaomi",
+  "deviceSwitchWearableLogImport": "Импортировать устройства из журнала Xiaomi Fitness",
+  "settingsMiAccountLoginTitle": "Вход в аккаунт Xiaomi",
+  "settingsMiAccountUsername": "Имя пользователя Xiaomi",
+  "settingsMiAccountPassword": "Пароль Xiaomi",
+  "settingsMiAccountRememberCredentials": "Запомнить данные входа",
+  "settingsMiAccountLoginAndSync": "Войти и синхронизировать",
+  "settingsMiAccountLogInvalid": "Не удалось прочитать журнал Xiaomi Fitness",
+  "settingsMiAccountLogNoDevices": "В журнале не найдено устройств с полным MAC-адресом и authkey",
+  "settingsWearableLogSync": "Синхронизация из журнала Xiaomi Fitness",
+  "settingsWearableLogGuide": "Откройте Xiaomi Fitness\\nПерейдите в раздел «Профиль» → «О приложении»\\nНесколько раз нажмите оранжевый логотип-кольцо\\nВ появившемся окне нажмите «Подтвердить»\\nДождитесь уведомления «log has been...»\\nВернитесь сюда и нажмите «Сканировать»",
+  "settingsWearableLogFound": "Найдено устройств: {count}",
+  "@settingsWearableLogFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsWearableLogImportedDevice": "Импортировано устройство: {name}",
+  "@settingsWearableLogImportedDevice": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsMiAccountMissingCredentials": "Введите имя пользователя и пароль Xiaomi",
+  "settingsMiAccountTwoFactorPrompt": "Завершите двухфакторную проверку Xiaomi на странице проверки",
+  "settingsMiAccountLoginWindowClosed": "Окно входа Xiaomi закрыто",
+  "settingsMiAccountSyncedDevices": "Синхронизировано устройств: {count}",
+  "xiaomiAccountRequiredForEphemeris": "Войдите в аккаунт Xiaomi перед синхронизацией эфемеридных данных",
+  "@settingsMiAccountSyncedDevices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsHuamiAccount": "Аккаунт Amazfit",
+  "settingsHuamiAccountDesc": "Войти и сохранить данные для доступа к магазину Zepp",
+  "settingsHuamiAccountSigningIn": "Выполняется вход в Amazfit",
+  "settingsHuamiAccountSignedIn": "Вход в Amazfit выполнен",
+  "settingsHuamiAccountLoginTitle": "Вход в аккаунт Amazfit",
+  "settingsHuamiAccountUsername": "Имя пользователя Amazfit",
+  "settingsHuamiAccountPassword": "Пароль Amazfit",
+  "settingsHuamiAccountRememberCredentials": "Запомнить данные входа",
+  "settingsHuamiAccountLoginAndSave": "Войти и сохранить",
+  "settingsHuamiAccountMissingCredentials": "Введите имя пользователя и пароль Amazfit",
+  "settingsHuamiAccountRequired": "Сначала войдите в аккаунт Amazfit в настройках",
+  "understood": "Понятно",
+  "settingsGeneralLanguage": "Язык",
+  "settingsGeneralLanguageDesc": "Выберите язык приложения",
+  "settingsWideNavigationPosition": "Положение боковой навигации",
+  "settingsWideNavigationPositionDesc": "Настройте положение вкладок в широком режиме",
+  "settingsWideNavigationPositionBottom": "Снизу",
+  "settingsWideNavigationPositionCenter": "По центру",
+  "settingsWideNavigationPositionSplit": "Раздельно",
+  "settingsAutoReconnectTitle": "Автоподключение",
+  "settingsAutoReconnectDesc": "Автоматически подключаться к последнему сопряжённому устройству при запуске",
+  "settingsAutoReconnectOnDisconnectTitle": "Автоподключение",
+  "settingsAutoReconnectOnDisconnectDesc": "Пытаться повторно подключиться при неожиданном отключении устройства",
+  "deviceReconnectAttempting": "Соединение с устройством потеряно, выполняется переподключение",
+  "deviceReconnectSucceeded": "Подключение восстановлено",
+  "deviceReconnectFailedPrefix": "Не удалось переподключиться. Проверьте: ",
+  "settingsSourceOfficialCdn": "Официальный CDN",
+  "settingsSourceOfficialCdnDesc": "CDN для загрузки индекса сообщества из GitHub",
+  "settingsQueueAutoInstall": "Автоустановка",
+  "settingsQueueAutoInstallDesc": "Начинать установку автоматически после загрузки",
+  "settingsQueueDontClear": "Не очищать очередь установки",
+  "settingsQueueDontClearDesc": "Сохранять завершённые элементы в очереди установки",
+  "settingsRealtimeActivityNotification": "Уведомление о ходе выполнения",
+  "settingsRealtimeActivityNotificationDesc": "Показывать ход очереди в уведомлении в реальном времени",
+  "settingsAboutWebsite": "Официальный сайт",
+  "settingsTapToSignIn": "Нажмите для входа",
+  "settingsConnected": "Подключено",
+  "settingsSystem": "Системная",
+  "settingsLight": "Светлая",
+  "settingsDark": "Тёмная",
+  "settingsOledDark": "Тёмная OLED",
+  "settingsThemeMode": "Тема",
+  "settingsThemeModeDesc": "Изменить оформление приложения",
+  "settingsDynamicColor": "Динамический цвет",
+  "settingsDynamicColorDesc": "Использовать системный акцентный цвет",
+  "settingsColorScheme": "Цветовая схема",
+  "settingsColorSchemeDesc": "Выберите акцентный цвет приложения",
+  "settingsColorSchemePink": "Розовая",
+  "settingsColorSchemePurple": "Фиолетовая",
+  "settingsColorSchemeTeal": "Бирюзовая",
+  "settingsColorSchemeGreen": "Зелёная",
+  "settingsColorSchemeRed": "Красная",
+  "settingsColorSchemeAmber": "Янтарная",
+  "settingsDesktopAccentSource": "Источник акцентного цвета Linux",
+  "settingsDesktopAccentSourceDesc": "Выберите источник акцентного цвета: GTK или Qt",
+  "settingsDesktopAccentSourceSystem": "Автоматически",
+  "settingsDesktopAccentSourceGtk": "GTK",
+  "settingsDesktopAccentSourceQt": "Qt",
+  "settingsCancel": "Отмена",
+  "settingsTeamRoleMain": "Основной разработчик / дизайнер",
+  "settingsTeamRoleZeppOS": "Разработка ZeppOS",
+  "settingsAboutSoftware": "О программе",
+  "settingsAboutSoftwareDesc": "Версия, список изменений и команда разработки",
+  "settingsAboutSoftwareTagline": "Быстрый менеджер носимых устройств VelaOS и ZeppOS на Flutter",
+  "settingsAboutSoftwareRepository": "Открыть репозиторий GitHub",
+  "settingsAboutSoftwareTeam": "Команда разработки",
+  "settingsAboutSoftwareBuildInfo": "Сведения о сборке",
+  "settingsAboutSoftwareCopyright": "Copyright © 2026 OrPudding",
+  "acknowledgementsKazumi": "Благодарности Kazumi",
+  "acknowledgementsAstroBoxPublic": "Благодарности AstroBox публичный",
+  "acknowledgementsAstroBoxNgCore": "Ссылки на исходный код ядра AstroBox NG",
+  "acknowledgementsAstroBoxNgBluetooth": "Ссылки на реализацию Bluetooth в AstroBox NG",
+  "acknowledgementsAstroBoxNgAccount": "Ссылки на работу с аккаунтами в AstroBox NG",
+  "acknowledgementsAstroBoxNgProvider": "Ссылки на провайдер ресурсов AstroBox NG",
+  "acknowledgementsAstroBoxNgAppWasm": "Ссылки на WebAssembly-приложение AstroBox NG",
+  "acknowledgementsGadgetbridge": "Благодарности Gadgetbridge",
+  "acknowledgementsBreezyWeather": "参考 реализации китайского источника погоды",
+  "acknowledgementsOpenMeteo": "Данные о погоде, качестве воздуха и геокодировании по CC BY 4.0",
+  "resourceHomeRecommended": "Рекомендуемые",
+  "resourceHomeFeatured": "Избранные",
+  "resourceHomeUpdates": "Обновления",
+  "blogTypeAnnouncement": "блог тип объявление",
+  "blogTypeRecommendation": "блог тип рекомендация",
+  "blogTypeDocs": "блог тип документация",
+  "resourceHomeEmptyTitle": "Пока нечего рекомендовать",
+  "resourceLibraryEndOfList": "Вы достигли конца списка — посмотреть ресурсы из других источников?",
+  "resourceHomeEmptySubtitle": "Ресурсы можно найти в библиотеке",
+  "openResourceLibrary": "Открыть библиотеку ресурсов",
+  "downloadQueueTitle": "Очередь загрузки",
+  "installQueueTitle": "Очередь установки",
+  "queueClear": "Очистить",
+  "queueStart": "Запустить",
+  "queuePause": "Приостановить",
+  "downloadQueueEmpty": "Нет задач загрузки",
+  "installQueueEmpty": "Нет задач установки",
+  "localAppInstall": "Установка локального приложения",
+  "localWatchfaceInstall": "Установка локального циферблата",
+  "localFirmwareInstall": "Установка локальной прошивки",
+  "queueStatusPending": "Ожидание",
+  "queueStatusDownloading": "Загрузка: {percent}%",
+  "@queueStatusDownloading": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "queueStatusInstalling": "Установка: {percent}%",
+  "@queueStatusInstalling": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "queueStatusCompleted": "Завершено",
+  "queueStatusFailed": "Ошибка",
+  "queueDragToInstall": "Отпустите, чтобы установить приложение, циферблат или плагин",
+  "queueAddedFiles": "Добавлено файлов в очередь: {count}",
+  "@queueAddedFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "installQueueReadFailed": "Не удалось прочитать",
+  "installQueueUnsupportedFile": "Неподдерживаемый файл",
+  "timeTodayAt": "Сегодня в {time}",
+  "@timeTodayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "timeYesterdayAt": "Вчера в {time}",
+  "@timeYesterdayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "settingsAccountBandBbsAccount": "Аккаунт BandBBS",
+  "settingsAccountGitHub": "Аккаунт GitHub",
+  "settingsAccountGitHubDesc": "Подключите аккаунт, чтобы публиковать ресурсы AstroBox от своего имени",
+  "githubAccountNeedsBandBbs": "Сначала войдите в BandBBS",
+  "bandBbsPublishAuthTitle": "Авторизация публикации",
+  "bandBbsResourceQueryTitle": "Установка купленных ресурсов",
+  "settingsAboutLogs": "Журналы работы",
+  "settingsAboutLogsDescription": "Просмотр, экспорт и управление журналами приложения и подключённых устройств",
+  "settingsAboutLogsSize": "Используется: {size}",
+  "@settingsAboutLogsSize": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "settingsAboutLogsExport": "Экспортировать",
+  "settingsAboutLogsExported": "Экспортировано в {path}",
+  "@settingsAboutLogsExported": {
+    "placeholders": {
+      "path": {}
+    }
+  },
+  "settingsAboutLogsEmpty": "Файлов журналов нет",
+  "settingsAboutLogsClear": "Очистить",
+  "settingsDeviceLogsPull": "Получить журналы устройства",
+  "settingsDeviceLogsTip": "Получение журналов подключённых часов Xiaomi может занять время. Держите приложение на переднем плане, а экран устройства включённым до завершения",
+  "settingsDeviceLogsStart": "Начать",
+  "settingsDeviceLogsPulling": "Получение журналов устройства",
+  "settingsDeviceLogsWaiting": "Ожидание передачи с устройства",
+  "settingsDeviceLogsProgress": "Получено: {progress}%",
+  "@settingsDeviceLogsProgress": {
+    "placeholders": {
+      "progress": {}
+    }
+  },
+  "settingsDeviceLogsSaved": "Журналы сохранены как {name}",
+  "@settingsDeviceLogsSaved": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsDeviceLogsFailed": "Не удалось получить журналы устройства: {error}",
+  "@settingsDeviceLogsFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "settingsAboutLogsClearConfirm": "Будут удалены все журналы, кроме текущего сеанса",
+  "settingsAboutLogsOpen": "Открыть папку журналов",
+  "settingsAboutLogsOpenFailed": "Не удалось открыть папку журналов",
+  "settingsLogsFileList": "Файлы журналов",
+  "settingsAboutLogsWarningTitle": "Предупреждение о конфиденциальных данных",
+  "settingsAboutLogsWarningMessage": "Журналы могут содержать данные входа BandBBS, Xiaomi или Amazfit и другую конфиденциальную информацию. Не передавайте их никому, кроме официальных сопровождающих OronBox",
+  "pluginPermissionRequestTitle": "Запрос разрешения плагина",
+  "pluginPermissionRequestMessage": "Плагин «{plugin}» хочет выполнить действие: {operation}",
+  "@pluginPermissionRequestMessage": {
+    "placeholders": {
+      "plugin": {},
+      "operation": {}
+    }
+  },
+  "pluginPermissionOnce": "Разрешить один раз",
+  "pluginPermissionSession": "Разрешить на время запуска",
+  "pluginPermissionAlways": "Разрешать всегда",
+  "pluginPermissionDeny": "Запретить",
+  "pluginPermissionOpenExternal": "открывать внешние ссылки",
+  "pluginPermissionPickFile": "получать доступ к файлам компьютера",
+  "pluginPermissionExportFile": "экспортировать файл на компьютер",
+  "pluginPermissionNetwork": "получать доступ к сети",
+  "pluginPermissionInterconnect": "обмениваться данными с приложениями устройства",
+  "pluginPermissionProvider": "регистрировать поставщик ресурсов",
+  "pluginPermissionReadDevice": "читать сведения об устройстве",
+  "pluginPermissionOperateDevice": "управлять устройством",
+  "pluginPermissionObserveProtocol": "читать необработанные данные протокола",
+  "pluginPermissionSendProtocol": "отправлять необработанные данные протокола на устройство",
+  "pluginPermissionReadAppSide": "читать скрипты и события AppSide",
+  "pluginPermissionOperateAppSide": "управлять сеансами AppSide",
+  "pluginErrorTitle": "Плагин повреждён",
+  "pluginErrorMessage": "Плагин «{plugin}» не удаётся запустить. Возможно, он повреждён.\\n\\nОшибка: {error}\\n\\nУдалить этот плагин?",
+  "pluginPackageCorruptedMessage": "Не удалось прочитать выбранный пакет плагина. Возможно, он повреждён. Получите пакет заново и повторите импорт.",
+  "@pluginErrorMessage": {
+    "placeholders": {
+      "plugin": {},
+      "error": {}
+    }
+  },
+  "pluginErrorClearData": "Очистить данные плагина",
+  "pluginErrorUninstall": "Удалить плагин",
+  "pluginErrorSafeMode": "Включить безопасный режим",
+  "pluginSafeModeTitle": "Безопасный режим плагинов включён",
+  "pluginSafeModeDescription": "Все плагины остановлены и перезапустятся после отключения безопасного режима",
+  "pluginSafeModeExit": "Выйти из безопасного режима",
+  "devTools": "Инструменты разработчика",
+  "devToolsDescriptionDesktop": "Открыть инструменты разработчика в отдельном окне",
+  "devToolsDescriptionEntry": "Показывать кнопку инструментов разработчика в панелях приложения",
+  "devToolsOperationFailed": "Не удалось изменить состояние инструментов разработчика",
+  "resourceTypeErrorTitle": "Неверный тип ресурса",
+  "resourceTypeUnknownTitle": "Неизвестный тип ресурса",
+  "resourceTypeUnknownNoType": "OronBox не может определить тип этого файла; возможно, файл повреждён",
+  "resourceTypeUnknownCancel": "Отмена",
+  "resourceTypeMismatchMessage": "Похоже, это ресурс типа {detectedType}, но выбран тип {selectedType}. Выберите способ установки",
+  "@resourceTypeMismatchMessage": {
+    "placeholders": {
+      "detectedType": {},
+      "selectedType": {}
+    }
+  },
+  "resourcePlatformMismatchMessage": "Похоже, это ресурс {resourceType} для устройств {resourcePlatform}, но подключено устройство {deviceName} ({devicePlatform}). Ресурс не поддерживается, принудительная установка может вызвать проблемы",
+  "@resourcePlatformMismatchMessage": {
+    "placeholders": {
+      "resourcePlatform": {},
+      "resourceType": {},
+      "deviceName": {},
+      "devicePlatform": {}
+    }
+  },
+  "resourceTypeUnknownMessage": "OronBox не может определить фактический тип ресурса. Всё равно установить его как {selectedType}?",
+  "@resourceTypeUnknownMessage": {
+    "placeholders": {
+      "selectedType": {}
+    }
+  },
+  "resourceInstallCancel": "Отменить установку",
+  "resourceInstallAcknowledge": "Я понимаю",
+  "resourceInstallForce": "Установить принудительно",
+  "resourceInstallForceCountdown": "Установить принудительно ({seconds} с)",
+  "@resourceInstallForceCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInstallAsSelected": "Продолжить как {type}",
+  "@resourceInstallAsSelected": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "resourceInstallAsSelectedCountdown": "Продолжить как {type} ({seconds} с)",
+  "@resourceInstallAsSelectedCountdown": {
+    "placeholders": {
+      "type": {},
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceInstallAsDetected": "Установить как {type}",
+  "@resourceInstallAsDetected": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "resourceTypeApp": "мини-программа",
+  "resourceTypeQuickApp": "быстрое приложение",
+  "resourceTypeWatchface": "циферблат",
+  "resourceTypeFirmware": "прошивка",
+  "resourceInstallConfirmTitle": "Установить: {type}",
+  "@resourceInstallConfirmTitle": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "resourceInstallConfirmMessage": "Установить {fileName} ({fileSize})?",
+  "@resourceInstallConfirmMessage": {
+    "placeholders": {
+      "fileName": {},
+      "fileSize": {}
+    }
+  },
+  "resourceInstallConfirm": "Установить",
+  "previewImages": "Предпросмотр изображений",
+  "add": "Добавить",
+  "submit": "Отправить",
+  "creatorConfirmTitle": "Подтвердить публикацию",
+  "creatorConfirmOronBox": "Опубликовать в OronBox",
+  "creatorConfirmBandBbs": "Синхронизировать с BandBBS: {category}",
+  "@creatorConfirmBandBbs": {
+    "placeholders": {
+      "category": {}
+    }
+  },
+  "creatorConfirmAstroBox": "Синхронизировать с AstroBox: {owner}/{repository}",
+  "@creatorConfirmAstroBox": {
+    "placeholders": {
+      "owner": {},
+      "repository": {}
+    }
+  },
+  "creatorBandBbsDirectPublish": "Синхронизировать с BandBBS",
+  "creatorBandBbsBoundUpdate": "Связано · синхронизировать с BandBBS",
+  "creatorBandBbsVersionTitle": "Название версии",
+  "creatorBandBbsVersionMessage": "Описание обновления",
+  "creatorBandBbsVersionPairRequired": "Укажите и название версии, и описание обновления или оставьте оба поля пустыми",
+  "creatorLinkedSections": "Связанных разделов: {count}",
+  "@creatorLinkedSections": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorBandBbsBindingIds": "Раздел {categoryId} · ресурс {resourceId}",
+  "@creatorBandBbsBindingIds": {
+    "placeholders": {
+      "categoryId": {},
+      "resourceId": {}
+    }
+  },
+  "creatorAstroBoxBoundSync": "Связано · синхронизировать с AstroBox",
+  "creatorThisCommit": "Этот коммит",
+  "creatorAstroBoxPrPublish": "Синхронизировать с AstroBox · {repository}",
+  "@creatorAstroBoxPrPublish": {
+    "placeholders": {
+      "repository": {}
+    }
+  },
+  "creatorOronBoxRequired": "Обязательно. Ресурсы проверяются OronBox",
+  "creatorOpenInOronBox": "Открыть в OronBox",
+  "creatorAstroTagsHint": "Разделяйте теги английской точкой с запятой ;",
+  "retry": "Повторить",
+  "reviewNote": "Примечание проверки",
+  "creatorReviewRejected": "Запрошены изменения ресурса",
+  "creatorReviewState": "Состояние проверки: {state}",
+  "@creatorReviewState": {
+    "placeholders": {
+      "state": {}
+    }
+  },
+  "creatorOperationWorking": "Выполняется",
+  "creatorProcessingImage": "Обработка изображения",
+  "creatorOperationRefreshing": "Обновление данных автора",
+  "creatorOperationCreating": "Создание ресурса",
+  "creatorOperationCreatingCollection": "Создание подборки",
+  "creatorOperationSaving": "Сохранение изменений",
+  "creatorOperationDeleting": "Удаление",
+  "creatorOperationSubmitting": "Отправка на проверку",
+  "creatorOperationAuthorizing": "Ожидание авторизации",
+  "creatorResolvingPublicationTarget": "Определение категории публикации",
+  "creatorStateApproved": "Одобрено",
+  "creatorStateExternalReview": "Внешняя проверка",
+  "creatorStateFailed": "Публикация не выполнена",
+  "creatorStateSuperseded": "Заменено новой редакцией",
+  "creatorStateCancelled": "Отменено",
+  "creatorNoResources": "Ресурсы ещё не созданы",
+  "creatorLoginRequiredTitle": "Войдите, чтобы использовать центр автора",
+  "creatorLoginRequiredDescription": "Войдите в BandBBS и подключите аккаунт OronBox перед созданием, редактированием и отправкой ресурсов",
+  "creatorLoginAction": "Войти в BandBBS",
+  "creatorBandBbsWriteReady": "Публикация в BandBBS разрешена",
+  "creatorBandBbsWriteMissing": "Публикация в BandBBS не авторизована",
+  "creatorGitHubOwnPublishReady": "GitHub подключён",
+  "creatorGitHubOwnPublishMissing": "GitHub не подключён",
+  "creatorAuthorize": "Авторизовать",
+  "installQueueFixWatchfaceId": "Исправить ID циферблата",
+  "installQueueFixWatchfaceIdHint": "Введите не более 12 цифр",
+  "authorize": "Авторизовать",
+  "creatorBandBbsAuthorized": "Публикация ресурсов BandBBS авторизована",
+  "creatorBandBbsAuthorizationRequired": "Отдельно авторизуйте OronBox для публикации ресурсов BandBBS от вашего имени",
+  "connect": "Подключить",
+  "legalAndPrivacy": "Правовые вопросы и конфиденциальность",
+  "termsTitle": "Условия и отказ от ответственности",
+  "privacyTitle": "Уведомление о конфиденциальности",
+  "resourcePublishingTitle": "Соглашение о публикации ресурсов",
+  "reviewRulesTitle": "Правила проверки ресурсов",
+  "joinQqGroup": "Вступить в группу QQ",
+  "joinQqGroupDesc": "Общайтесь с разработчиками и пользователями и получайте помощь",
+  "feedbackTitle": "Обратная связь",
+  "feedbackDesc": "Отправить отзыв и посмотреть ответы",
+  "reportResource": "Пожаловаться на ресурс",
+  "reportComment": "Пожаловаться на комментарий",
+  "report": "Пожаловаться",
+  "feedbackSubject": "Тема",
+  "feedbackMessage": "Отзыв или описание проблемы",
+  "reportReason": "Причина жалобы",
+  "noFeedback": "Обращений пока нет",
+  "feedbackProcessing": "Обработка",
+  "feedbackReplied": "Есть ответ",
+  "feedbackOpen": "Открыто",
+  "feedbackResolved": "Решено",
+  "feedbackDismissed": "Отклонено",
+  "feedbackClosed": "Закрыто",
+  "feedbackLoading": "Загрузка обращений",
+  "feedbackNewTicket": "Новое обращение",
+  "feedbackYou": "Вы",
+  "feedbackResolution": "Решение",
+  "feedbackReplyHint": "Ответить на обращение",
+  "feedbackConversationClosed": "Это обращение закрыто, ответить нельзя",
+  "checkUpdates": "Проверить обновления",
+  "updateChecking": "Проверка обновлений…",
+  "updateCheckFailed": "Не удалось проверить обновления",
+  "latestVersionInstalled": "Установлена последняя версия",
+  "newVersionAvailable": "Доступна версия {version}",
+  "@newVersionAvailable": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "oobeWelcomeSlogan": "Красивый и быстрый менеджер носимых устройств VelaOS и ZeppOS на Flutter",
+  "oobeNext": "Далее",
+  "oobeBack": "Назад",
+  "oobeFeatureDevicesTitle": "Подключение устройств",
+  "oobeFeatureDevicesBody": "Подключайте и управляйте устройствами VelaOS и ZeppOS",
+  "oobeFeatureResourcesTitle": "Центр ресурсов",
+  "oobeFeatureResourcesBody": "Поддерживаются источники OronBox, AstroBox-Repo, BandBBS и магазин приложений Amazfit",
+  "oobeFeaturePluginsTitle": "Плагины JavaScript",
+  "oobeFeaturePluginsBody": "Быстрая и расширяемая система плагинов JavaScript с управлением устройствами",
+  "oobeFeaturePlatformsTitle": "Несколько платформ",
+  "oobeFeaturePlatformsBody": "Доступно на Android, Windows, macOS, Linux и в веб-версии",
+  "oobeOpenSourceTitle": "Полностью открытый код",
+  "oobeOpenSourceBody": "Клиент и сервер OronBox распространяются по GNU AGPL-3.0 с полностью открытым исходным кодом",
+  "oobeAgreementHint": "Прочитайте текст и прокрутите его до конца",
+  "oobeAgreeCheckbox": "Я прочитал и согласен",
+  "oobeDeclineExit": "Выйти",
+  "oobeDeclineWebHint": "Для продолжения примите соглашения и закройте эту страницу",
+  "oobeLoginTitle": "Подключите аккаунты",
+  "oobeLoginBandBbsDesc": "Войдите в BandBBS, чтобы пользоваться ресурсами сообщества и функциями автора",
+  "oobeLoginLocalNote": "Вход в Xiaomi и Amazfit выполняется только на этом устройстве; соответствующие данные не передаются третьим сторонам, кроме Xiaomi/Amazfit",
+  "oobeLoginXiaomiDesc": "Войдите в Xiaomi, чтобы синхронизировать привязанные устройства",
+  "oobeLoginHuamiDesc": "Войдите в Amazfit, чтобы пользоваться ресурсами магазина приложений Amazfit",
+  "oobeCdnTesting": "Проверка…",
+  "oobeCdnSelected": "Выбран лучший CDN",
+  "oobeCdnTitle": "Тест скорости GitHub CDN",
+  "oobeDoneTitle": "Всё готово",
+  "oobeDoneBody": "Начните знакомство с OronBox",
+  "oobeFinish": "Готово",
+  "settingsReplayOobe": "Повторить знакомство",
+  "settingsReplayOobeDesc": "Снова открыть приветственное руководство и первоначальную настройку",
+  "creatorConnect": "Подключить",
+  "comments": "Комментарии",
+  "commentEmpty": "Комментариев пока нет",
+  "commentHint": "Напишите комментарий",
+  "commentLoginRequired": "Войдите в BandBBS, чтобы комментировать",
+  "commentPending": "На проверке",
+  "commentBlocked": "Комментарий не соответствует правилам сообщества",
+  "commentModerationUnavailable": "Проверка комментариев временно недоступна",
+  "commentRateLimited": "Вы комментируете слишком часто",
+  "commentReplying": "Ответить на комментарий",
+  "loadMore": "Загрузить ещё",
+  "more": "Ещё",
+  "reply": "Ответить",
+  "inbox": "Входящие",
+  "inboxLoading": "Загрузка сообщений",
+  "inboxEmpty": "Сообщений нет",
+  "inboxClear": "Очистить сообщения",
+  "inboxClearFailed": "Не удалось очистить сообщения. Повторите позже",
+  "messageUnknownTitle": "Уведомление",
+  "messageUnknownBody": "Данные уведомления недоступны.",
+  "messageCommentRepliedTitle": "Новый ответ на комментарий",
+  "messageCommentHiddenTitle": "Комментарий скрыт",
+  "messageCommentHiddenAutomatedBody": "Комментарий не прошёл автоматическую проверку и сейчас скрыт. Вы можете подать апелляцию из сообщения.",
+  "messageCommentHiddenReviewedBody": "Комментарий был скрыт после ручной проверки.",
+  "messageReviewApprovedTitle": "Ресурс одобрен",
+  "messageReviewRejectedTitle": "Ресурс требует изменений",
+  "messageResourceSuspendedTitle": "Ресурс снят с публикации",
+  "messageResourceFrozenTitle": "Ресурс заморожен",
+  "messageResourceDeletedTitle": "Ресурс удалён",
+  "messageResourceRestoredTitle": "Ресурс восстановлен",
+  "messageReportUpdatedTitle": "Статус жалобы обновлён",
+  "messagePluginApprovedTitle": "Плагин одобрен",
+  "messagePluginRelistedTitle": "Плагин снова опубликован",
+  "messagePluginRejectedTitle": "Плагин требует изменений",
+  "messagePluginDelistedTitle": "Плагин снят с публикации",
+  "messageCollectionApprovedTitle": "Коллекция одобрена",
+  "messageCollectionRejectedTitle": "Коллекция требует изменений",
+  "messageCoinAddedTitle": "Монеты начислены",
+  "messageCoinDeductedTitle": "Монеты списаны",
+  "messageCoinReversedTitle": "Операция с монетами отменена",
+  "messageCoinVoteRevokedTitle": "Поддержка монетами отменена",
+  "messageAppealOverturnedTitle": "Апелляция удовлетворена",
+  "messageAppealUpheldTitle": "Исходное решение оставлено в силе",
+  "messageAppealDismissedTitle": "Апелляция отклонена",
+  "messageAccountBannedTitle": "Аккаунт заблокирован",
+  "messageAccountUnbannedTitle": "Блокировка аккаунта снята",
+  "messageCreatorFrozenTitle": "Доступ автора заморожен",
+  "messageCreatorUnfrozenTitle": "Доступ автора восстановлен",
+  "messageRoleChangedTitle": "Роль аккаунта изменена",
+  "messageRoleUser": "пользователь",
+  "messageRoleReviewer": "рецензент",
+  "messageRoleAdministrator": "администратор",
+  "messageApprovedBody": "Ваша заявка прошла проверку.",
+  "messageNeedsChangesBody": "При проверке обнаружены проблемы, требующие исправления.",
+  "messageReasonBody": "Причина: {reason}",
+  "messageReviewNoteBody": "Комментарий проверки: {note}",
+  "messageStatusChangedBody": "Статус этого объекта изменился.",
+  "messageReportStatusBody": "Статус жалобы: {status}",
+  "messageCoinAddedBody": "На ваш аккаунт начислено {amount} монет.",
+  "messageCoinDeductedBody": "С вашего аккаунта списано {amount} монет.",
+  "messageCoinVoteRevokedBody": "Поддержка этого ресурса на {amount} монет была отменена.",
+  "messageAppealOverturnedBody": "Администратор отменил исходное решение.",
+  "messageAppealUpheldBody": "После пересмотра исходное решение оставлено в силе.",
+  "messageAppealDismissedBody": "Апелляция не была принята.",
+  "messageRoleChangedBody": "Новая роль вашего аккаунта: {role}.",
+  "cleanMode": "Переключатели функций",
+  "cleanModeDescription": "Управление навигацией, функциями сообщества и источниками ресурсов",
+  "cleanPluginsEntry": "Раздел плагинов",
+  "cleanSourceHuamiAppStore": "Магазин приложений Amazfit",
+  "announcementAcknowledge": "Понятно",
+  "cleanHomeFeed": "Лента главной",
+  "cleanExplore": "Библиотека ресурсов",
+  "cleanInbox": "Входящие",
+  "cleanAnnouncements": "Всплывающие объявления",
+  "cleanComments": "Комментарии",
+  "cleanCreator": "Центр автора",
+  "cleanBandBbsLogin": "Вход BandBBS",
+  "cleanGitHubLogin": "Вход GitHub",
+  "cleanSourceOronBox": "Источник OronBox",
+  "cleanSourceBandBbs": "Источник BandBBS",
+  "cleanSourceAstroBox": "Источник AstroBox",
+  "cleanExploreEntry": "Раздел библиотеки",
+  "cleanNavigationGroup": "Основная навигация",
+  "cleanExploreContentGroup": "Содержимое библиотеки",
+  "cleanHomeSectionsGroup": "Разделы главной",
+  "cleanHomeBanner": "Баннеры",
+  "cleanHomeEditorSections": "Редакторские разделы",
+  "cleanResourceSourcesGroup": "Источники ресурсов",
+  "cleanCommunityGroup": "Функции сообщества",
+  "settingsCategoryAccounts": "Аккаунты и авторизация",
+  "settingsCategoryAppearance": "Внешний вид и навигация",
+  "settingsCategoryConnection": "Подключения и загрузки",
+  "settingsCategorySupport": "Поддержка и информация",
+  "settingsCategoryAdvanced": "Расширенные настройки",
+  "settingsAdvancedDescription": "Журналы и инструменты разработчика",
+  "debugServerTitle": "Сервис отладки",
+  "debugServerDescription": "Локальный API для доверенных инструментов разработки",
+  "debugServerEnable": "Включить сервис отладки",
+  "debugServerEnableDescription": "Разрешить одобренным клиентам в локальной сети просматривать и управлять OronBox",
+  "debugServerEndpoint": "Адрес",
+  "debugServerFingerprint": "Отпечаток сервера",
+  "debugServerPendingClients": "Ожидают одобрения",
+  "debugServerAuthorizedClients": "Одобренные клиенты",
+  "debugServerApprove": "Одобрить",
+  "debugServerReject": "Отклонить",
+  "debugServerRevoke": "Отозвать доступ",
+  "debugServerNoPendingClients": "Нет клиентов, ожидающих одобрения",
+  "debugServerNoAuthorizedClients": "Нет одобренных клиентов",
+  "debugServerSecurityNotice": "Включайте сервис только в доверенной сети",
+  "debugServerStartFailed": "Не удалось запустить сервис отладки",
+  "debugServerStopFailed": "Не удалось остановить сервис отладки",
+  "xmsDeveloperMode": "Режим разработчика XMS",
+  "xmsDeveloperModeDescription": "Разрешить Android-подписям приложений отличаться",
+  "oronBoxCoinsTitle": "Монеты ресурсов",
+  "oronBoxCoinsBalance": "Баланс монет: {balance}",
+  "@oronBoxCoinsBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "oronBoxCoinsCheckin": "Отметиться",
+  "oronBoxCoinsCheckedIn": "Отметка выполнена",
+  "oronBoxCoinsCheckinReward": "Получено монет: {count}",
+  "@oronBoxCoinsCheckinReward": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "oronBoxCoinsDescription": "Отмечайтесь каждый день и получайте 1–5 монет для поддержки авторов",
+  "resourceFromCollection": "Из подборки {name}",
+  "@resourceFromCollection": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "resourceCoin": "Монета",
+  "resourceCoinNotSignedIn": "Вход не выполнен",
+  "resourceCoinDialogTitle": "Отправить монеты ресурсу",
+  "resourceCoinDialogMessage": "Отправить монеты этому ресурсу?\\nОтменить действие нельзя\\n\\nМонеты помогают ресурсу получить больше внимания\\nАвтор получает 10% внесённой суммы\\nОтметьтесь в Настройки → аккаунт BandBBS, чтобы получать монеты",
+  "resourceCoinOne": "Отправить 1 монету",
+  "resourceCoinTwo": "Отправить 2 монеты",
+  "resourceCoinCount": "Монет: {count}",
+  "@resourceCoinCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resourceCoinSuccess": "Монета отправлена",
+  "resourceCoinVoted": "Монета отправлена",
+  "resourceFeatured": "Рекомендуемое",
+  "resourceCollection": "Подборка",
+  "resourceCollectionType": "Подборка: {type}",
+  "@resourceCollectionType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "creatorCollections": "Подборки ресурсов",
+  "creatorCollectionTag": "Подборка",
+  "creatorNewCollection": "Новая подборка",
+  "creatorMoveToCollection": "Переместить в подборку",
+  "creatorMoveToCollectionConfirm": "Переместить выбранные ресурсы ({count}) в эту подборку?",
+  "@creatorMoveToCollectionConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorDissolveCollection": "Расформировать подборку",
+  "creatorResourceList": "Ресурсы",
+  "creatorAdditionalLinks": "Дополнительные ссылки",
+  "creatorAddLink": "Добавить ссылку",
+  "creatorLinkTitle": "Название ссылки",
+  "creatorLinkUrl": "URL ссылки",
+  "creatorCollectionName": "Название подборки",
+  "creatorCollectionSummary": "Описание подборки",
+  "creatorCollectionRepresentative": "Представительный ресурс",
+  "creatorCollectionDeleteConfirm": "Удалить эту подборку? Ресурсы будут только отвязаны",
+  "creatorContentAttributes": "Атрибуты содержимого",
+  "creatorConfirm": "Подтвердить",
+  "creatorCollectionAddResource": "Добавить в подборку",
+  "creatorCollectionResourceCount": "Ресурсов: {count}",
+  "@creatorCollectionResourceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "communityImportSelected": "Выбрано: {count}",
+  "@communityImportSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "communityImportResultCreated": "Черновик создан",
+  "communityImportResultFailed": "Ошибка",
+  "communityImportUnsupported": "Этот тип пока нельзя импортировать",
+  "communityImportDuplicate": "Уже существует в центре автора",
+  "communityImportNoArtifacts": "Нет файлов ресурсов для импорта",
+  "creatorImportExternal": "Импортировать существующие ресурсы с других платформ",
+  "creatorNewResourceDescription": "Создайте и поддерживайте ресурс в OronBox",
+  "creatorNewCollectionDescription": "Создайте подборку связанных ресурсов",
+  "creatorImportExternalDescription": "Эксперимент: импорт существующих ресурсов из BandBBS или AstroBox-Repo",
+  "creatorImportAlreadyImported": "Импортировано и связано",
+  "creatorImportReviewNotice": "Импортированное содержимое может быть неполным или распознано неверно. Проверьте и исправьте каждое поле перед отправкой",
+  "creatorImportLogTitle": "Журнал обработки",
+  "communityImportPickerEmpty": "Ресурсов нет",
+  "creatorWizardChooseAction": "Создать",
+  "creatorImportSelectTitle": "Выберите ресурсы",
+  "creatorImportProgressTitle": "Импорт",
+  "creatorImportResultTitle": "Результат импорта",
+  "creatorImportGitHubHint": "Подключите GitHub, чтобы увидеть ресурсы AstroBox",
+  "creatorImportGitHubConnect": "Подключить GitHub",
+  "creatorImportStageDetails": "Получение сведений",
+  "creatorImportStageDownloading": "Загрузка файлов",
+  "creatorImportStageMedia": "Обработка изображений",
+  "creatorImportStageUploading": "Создание черновика",
+  "creatorImportContinue": "Импортировать ещё",
+  "creatorImportPartialFailureTitle": "Некоторые ресурсы не удалось прочитать",
+  "creatorImportPartialFailureMessage": "Не удалось прочитать ресурсов: {count}\\nМожно повторить для неудачных элементов или продолжить с успешно прочитанными",
+  "@creatorImportPartialFailureMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorImportRetryFailed": "Повторить неудачные элементы",
+  "creatorImportContinuePartial": "Продолжить всё равно",
+  "creatorImportWarnings": "Предупреждений: {count}",
+  "@creatorImportWarnings": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "creatorDeleteExternalBandbbs": "Также удалить ресурсы BandBBS",
+  "creatorDeleteExternalAstrobox": "Также отправить PR на удаление в AstroBox-Repo",
+  "creatorDeleteExternalWarning": "Удаление на внешних платформах нельзя отменить",
+  "creatorDeletePrSubmitted": "PR на удаление отправлен",
+  "githubCdnFallback": "Запрос GitHub не выполнен, повтор через {cdn}",
+  "@githubCdnFallback": {
+    "placeholders": {
+      "cdn": {}
+    }
+  },
+  "deviceConnectBle": "Подключить по BLE",
+  "deviceConnectBtClassic": "Подключить по BT Classic",
+  "bandBbsIdLabel": "ID BandBBS: {id}",
+  "@bandBbsIdLabel": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "oobeCdnTestFailed": "Ошибка",
+  "settingsGithubCdnAuto": "Автоматически",
+  "updateDownloading": "Загрузка обновления",
+  "updateInstalling": "Установка обновления",
+  "updateFailed": "Обновление не выполнено",
+  "updateNoApkForAbi": "Для ABI {abi} нет APK",
+  "@updateNoApkForAbi": {
+    "placeholders": {
+      "abi": {
+        "type": "String"
+      }
+    }
+  },
+  "cleanUpdateGroup": "Обновления",
+  "cleanCheckUpdates": "Проверять обновления при запуске",
+  "updateLater": "Позже",
+  "updateNow": "Обновить сейчас",
+  "updateGoToPage": "Открыть страницу загрузки",
+  "updateDownloadFromCloud": "Скачать с облачного диска",
+  "updateDownloadFromOfficial": "Скачать с официального сайта",
+  "creatorImportNoticeTitle": "Импорт существующих ресурсов",
+  "creatorImportNoticeMessage": "Ресурсы для нескольких устройств могут публиковаться в нескольких разделах BandBBS\\nПри импорте можно выбрать несколько записей BandBBS, но выбирайте записи одного ресурса\\nНажмите «Импортировать», чтобы объединить их в один ресурс\\nЕсли импорт завершится ошибкой, откройте соответствующий черновик и удалите его\\nУдаление черновика не удаляет связанные ресурсы на других платформах",
+  "creatorImportNoticeConfirm": "Продолжить импорт",
+  "creatorImportSameResourceHint": "При каждом импорте выбирайте только один ресурс",
+  "creatorFullVersionExternalPurchase": "Требуется внешняя покупка",
+  "creatorExternalPurchaseDescription": "OronBox и AstroBox опубликуют файлы ресурса как пробную версию с кнопкой покупки, а BandBBS — как ресурс «Покупка у третьей стороны». Все вопросы, связанные с оплатой, вы решаете самостоятельно",
+  "creatorExternalPurchaseLink": "Ссылка для покупки",
+  "creatorExternalPurchaseAmount": "Сумма (CNY)",
+  "creatorExternalPurchaseLinkRequired": "Введите действительную ссылку на внешнюю покупку",
+  "creatorExternalPurchaseAmountRequired": "Введите действительную сумму в CNY",
+  "resourcePurchaseFullVersion": "Внешняя покупка",
+  "creatorBandBbsOverwritePrevious": "Перезаписать предыдущую публикацию",
+  "creatorBandBbsOverwritePreviousDescription": "Сначала создать новую версию, затем удалить предыдущую публикацию на BandBBS",
+  "deviceHealthAutoSyncTitle": "Автоматически синхронизировать данные о здоровье",
+  "deviceHealthAutoSyncDescription": "Автоматически синхронизировать данные о здоровье при синхронизации данных устройства",
+  "weatherAutoSyncTitle": "Автоматически синхронизировать данные о погоде",
+  "weatherAutoSyncDescription": "Автоматически синхронизировать данные о погоде при синхронизации данных устройства",
+  "weatherAqiGood": "Хорошо",
+  "weatherAqiModerate": "Умеренно",
+  "weatherAqiSensitive": "Вредно для чувствительных групп",
+  "weatherAqiUnhealthy": "Вредно",
+  "weatherAqiVeryUnhealthy": "Очень вредно",
+  "weatherAqiHazardous": "Опасно",
+  "weatherDataSource": "Источник данных: {source}",
+  "@weatherDataSource": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "xiaomiScreenshotTitle": "Снимок экрана устройства",
+  "xiaomiScreenshotDescription": "Сделайте снимок сочетанием клавиш на устройстве, и он автоматически появится здесь",
+  "xiaomiScreenshotAction": "Сделать снимок экрана",
+  "xiaomiScreenshotLoading": "Получение…",
+  "xiaomiScreenshotEmpty": "Снимков экрана пока нет",
+  "xiaomiScreenshotFailed": "Не удалось получить снимок экрана",
+  "xiaomiScreenshotSaved": "Снимок экрана часов сохранён в: {path}",
+  "@xiaomiScreenshotSaved": {
+    "placeholders": {
+      "path": {}
+    }
+  },
+  "deviceHealthRecoveryTime": "Восстановление",
+  "deviceHealthTodayLoad": "Нагрузка сегодня",
+  "deviceHealthSevenDayLoad": "Нагрузка за 7 дней",
+  "deviceHealthLoadLevel": "Уровень нагрузки",
+  "deviceHealthFitnessBalance": "Баланс формы",
+  "deviceHealthFitnessLevel": "Форма",
+  "deviceHealthFatigueLevel": "Усталость",
+  "deviceHealthTrainingStress": "Тренировочный стресс",
+  "deviceHealthTrainingStatus": "Статус тренировки",
+  "deviceHealthSevenDayVitality": "Активность за 7 дней",
+  "deviceHealthEarnedToday": "Заработано за день",
+  "deviceHealthEarnedInPeriod": "Заработано за период",
+  "deviceHealthModerateIntensity": "Средняя",
+  "deviceHealthHighIntensity": "Высокая",
+  "deviceHealthNap": "Дневной сон",
+  "deviceHealthNapSingular": "Дневной сон",
+  "deviceHealthWorkoutOverview": "Обзор тренировок",
+  "deviceHealthWorkoutHistory": "История",
+  "deviceHealthWorkoutDuration": "Длительность",
+  "deviceHealthWorkoutRoute": "Маршрут",
+  "deviceHealthWorkoutDetails": "Подробности",
+  "deviceHealthSwimmingSections": "Секции плавания",
+  "deviceHealthWorkoutCharts": "Графики тренировки",
+  "deviceHealthActiveDuration": "Активное время",
+  "deviceHealthAveragePace": "Средний темп",
+  "deviceHealthBestPace": "Лучший темп",
+  "deviceHealthHeartRateRange": "Диапазон пульса",
+  "deviceHealthBloodOxygenRange": "Диапазон SpO2",
+  "deviceHealthMainStroke": "Основной стиль",
+  "deviceHealthHeartRateZones": "Зоны пульса",
+  "deviceHealthZoneLabel": "Зона {zone}",
+  "@deviceHealthZoneLabel": {
+    "placeholders": {
+      "zone": {}
+    }
+  },
+  "deviceHealthZoneWarmup": "Разминка",
+  "deviceHealthZoneFatBurning": "Жиросжигание",
+  "deviceHealthZoneAerobic": "Аэробная",
+  "deviceHealthZoneAnaerobic": "Анаэробная",
+  "deviceHealthZoneExtreme": "Предельная",
+  "deviceHealthRecoveryAfterWorkout": "Восстановление пульса",
+  "deviceHealthRecoveredHeartRate": "Пульс восстановления",
+  "deviceHealthRecoveryRate": "Скорость восстановления",
+  "deviceHealthSamples": "Точки",
+  "deviceHealthAverageSpeed": "Средняя скорость",
+  "deviceHealthTopSpeed": "Макс. скорость",
+  "deviceHealthAverageStride": "Средний шаг",
+  "deviceHealthAverageCadence": "Средняя каденция",
+  "deviceHealthMaximumCadence": "Макс. каденция",
+  "deviceHealthAverageBloodOxygenDetail": "Средний SpO2",
+  "deviceHealthTotalAscent": "Общий подъём",
+  "deviceHealthTotalDescent": "Общий спуск",
+  "deviceHealthAverageAltitude": "Средняя высота",
+  "deviceHealthAerobicEffect": "Аэробный эффект",
+  "deviceHealthAnaerobicEffect": "Анаэробный эффект",
+  "deviceHealthPeakEffect": "Пиковый эффект",
+  "deviceHealthVo2Max": "VO₂ max",
+  "deviceHealthBodyEnergyUsed": "Расход энергии",
+  "deviceHealthExpectedRecovery": "Ожидаемое восстановление",
+  "deviceHealthTrainingLoad": "Тренировочная нагрузка",
+  "deviceHealthVitalityEarned": "Заработанная активность",
+  "deviceHealthAveragePower": "Средняя мощность",
+  "deviceHealthMaximumPower": "Макс. мощность",
+  "deviceHealthArmPulls": "Гребки",
+  "deviceHealthAverageStrokeRate": "Средний темп гребка",
+  "deviceHealthMaximumStrokeRate": "Макс. темп гребка",
+  "deviceHealthTurns": "Повороты",
+  "deviceHealthAverageSwolf": "Средний SWOLF",
+  "deviceHealthBestSwolf": "Лучший SWOLF",
+  "deviceHealthPoolLength": "Длина бассейна",
+  "deviceHealthJumps": "Прыжки",
+  "deviceHealthAverageJumpRate": "Средняя частота прыжков",
+  "deviceHealthBestJumpRate": "Лучшая частота прыжков",
+  "deviceHealthTrips": "Спотыкания",
+  "deviceHealthSets": "Подходы",
+  "deviceHealthTotalStrokes": "Всего гребков",
+  "deviceHealthAverageRowingRate": "Средний темп гребли",
+  "deviceHealthBestRowingRate": "Лучший темп гребли",
+  "deviceHealthChartHeartRate": "Пульс",
+  "deviceHealthChartCadence": "Каденция",
+  "deviceHealthChartPace": "Темп",
+  "deviceHealthChartSpeed": "Скорость",
+  "deviceHealthChartPower": "Мощность",
+  "deviceHealthChartStrokeRate": "Темп гребка",
+  "deviceHealthChartJumpRate": "Частота прыжков",
+  "deviceHealthChartBloodOxygen": "SpO2",
+  "deviceHealthChartStress": "Стресс",
+  "deviceHealthWorkoutOutdoorRunning": "Бег на улице",
+  "deviceHealthWorkoutOutdoorWalking": "Ходьба на улице",
+  "deviceHealthWorkoutIndoorRunning": "Бег в помещении",
+  "deviceHealthWorkoutMountaineering": "Восхождение",
+  "deviceHealthWorkoutTrailRunning": "Трейлраннинг",
+  "deviceHealthWorkoutOutdoorCycling": "Велоспорт на улице",
+  "deviceHealthWorkoutIndoorCycling": "Велоспорт в помещении",
+  "deviceHealthWorkoutFreeTraining": "Свободная тренировка",
+  "deviceHealthWorkoutSwimming": "Плавание",
+  "deviceHealthWorkoutElliptical": "Эллиптический",
+  "deviceHealthWorkoutRowing": "Гребля",
+  "deviceHealthWorkoutJumpRope": "Скакалка",
+  "deviceHealthWorkoutHiking": "Поход",
+  "deviceHealthWorkoutGeneric": "Тренировка",
+  "deviceHealthStrokeMedley": "Комбинированный",
+  "deviceHealthStrokeBreaststroke": "Брасс",
+  "deviceHealthStrokeFreestyle": "Кроль",
+  "deviceHealthStrokeBackstroke": "На спине",
+  "deviceHealthStrokeButterfly": "Баттерфляй",
+  "deviceHealthSectionLabel": "Секция",
+  "deviceHealthVitalityRunSuggestion": "Бег {minutes} мин до следующей цели",
+  "@deviceHealthVitalityRunSuggestion": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "deviceHealthVitalityActiveMinutes": "Ещё {minutes} мин активности до цели",
+  "@deviceHealthVitalityActiveMinutes": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "deviceHealthLatestHeartRate": "Последний пульс",
+  "deviceHealthLatestBloodOxygen": "Последний SpO2",
+  "deviceHealthLatestStress": "Последний стресс",
+  "deviceHealthDebugModeTitle": "Режим разработки здоровья",
+  "deviceHealthDebugModeDescription": "Включить снимки данных о здоровье и перезагрузку",
+  "deviceHealthDebugSnapshots": "Снимки",
+  "deviceHealthDebugSnapshotList": "Список снимков",
+  "deviceHealthDebugSnapshotsDescription": "Сохранённые исходные файлы активности можно воспроизвести без часов",
+  "deviceHealthDebugRefresh": "Обновить",
+  "deviceHealthDebugRefreshDescription": "Перечитать сохранённый список снимков",
+  "deviceHealthDebugClearAll": "Очистить всё",
+  "deviceHealthDebugClearAllDescription": "Удалить все сохранённые снимки здоровья",
+  "deviceHealthDebugNoSnapshots": "Снимков пока нет",
+  "deviceHealthDebugReload": "Воспроизвести",
+  "deviceHealthDebugReloaded": "Снимок воспроизведён",
+  "deviceHealthDebugFiles": "Файлов: {count}",
+  "@deviceHealthDebugFiles": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "creatorAccounts": "Аккаунты",
+  "creatorPendingItems": "Требуют внимания",
+  "creatorResourceStatus": "Статус ресурсов",
+  "creatorOverview": "Обзор",
+  "creatorManage": "Управление",
+  "creatorManageUnavailable": "Управление недоступно",
+  "creatorReviewTab": "Проверка",
+  "creatorReviewQueue": "Очередь проверки",
+  "creatorReviewStatus": "Статус проверки",
+  "creatorReviewActive": "Активные",
+  "creatorReviewChangesRequested": "Требуются изменения",
+  "creatorReviewDeclined": "Отклонено",
+  "creatorReviewClosed": "Закрыто",
+  "creatorReviewFixedPending": "Исправлено, ожидает проверки",
+  "creatorNoPendingReviews": "Нет проверок в ожидании",
+  "creatorNoReviews": "Нет проверок",
+  "creatorNeedsChanges": "Требуются изменения",
+  "creatorConnected": "Подключено",
+  "creatorNotConnected": "Не подключено",
+  "creatorCenterExitTitle": "Выйти из центра авторов",
+  "creatorCenterExitMessage": "Выйти из центра авторов?",
+  "creatorEditComment": "Изменить комментарий",
+  "creatorReply": "Ответить",
+  "creatorReplyingTo": "Ответ на #{id}",
+  "@creatorReplyingTo": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "creatorReplyPrefix": "Ответ #{id}: ",
+  "@creatorReplyPrefix": {
+    "placeholders": {
+      "id": {}
+    }
+  },
+  "creatorSupplement": "Дополнительно",
+  "creatorModifyResource": "Изменить ресурс",
+  "creatorAstroBoxReview": "Проверка AstroBox",
+  "creatorGithubPr": "Репозиторий и PR GitHub",
+  "creatorApplyChanges": "Применить изменения",
+  "creatorUpdatedAt": "Обновлено",
+  "creatorSubmittedAt": "Отправлено",
+  "creatorPublicationStatus": "Статус публикации",
+  "creatorStageInfo": "Редактирование",
+  "creatorStageFiles": "Привязка файлов",
+  "creatorStagePublish": "Публикация",
+  "creatorNextStep": "Далее",
+  "creatorWatchfaceMissingId": "Не удалось распознать циферблат или он нулевой: нет ID, загрузка невозможна",
+  "creatorWatchfaceZeroIdTitle": "Обнаружен нулевой ID циферблата, измените его перед загрузкой",
+  "creatorWatchfacePayloadTooShort": "Файл циферблата слишком мал, чтобы содержать поле ID",
+  "creatorQuickAppMissingPackage": "Не удалось распознать мини-приложение: нет имени пакета, загрузка невозможна",
+  "creatorVelajsDefaultPackage": "Обнаружено имя пакета мини-приложения com.application.watch.demo — это значение по умолчанию проекта VelaJS, измените его перед загрузкой",
+  "creatorFilteredSupport": "Поддержка отфильтрована",
+  "creatorSkippedPublication": "Публикация пропущена",
+  "creatorAstroBoxUnsupportedDevicesNotice": "Некоторые выбранные поддерживаемые устройства пока не поддерживают публикацию в AstroBox; их заявления о поддержке будут отфильтрованы",
+  "creatorBandBbsUnsupportedDevicesNotice": "Некоторые выбранные поддерживаемые устройства пока не поддерживают публикацию в BandBBS; их публикация будет пропущена",
+  "errorSppBondRemovalFailed": "В Android ниже 11 removeBond не поддерживается системой. Если устройство часто отключается, переключитесь на другое устройство в Xiaomi Fitness или отключите разрешение «Устройства поблизости»",
+  "viewAllResources": "Показать все",
+  "deviceHealthMinimum": "Минимум",
+  "deviceHealthMaximum": "Максимум",
+  "deviceHealthResting": "Покой",
+  "deviceHealthDebugExport": "Экспорт снимка",
+  "deviceHealthDebugExportTooltip": "Экспортировать необработанные файлы активности",
+  "deviceHealthDebugExported": "Экспортировано в {path}",
+  "deviceHealthDebugExportFailed": "Не удалось экспортировать снимок: {error}",
+  "deviceHealthDebugImport": "Импорт",
+  "deviceHealthDebugImportDescription": "Импортировать ранее экспортированный файл снимка",
+  "deviceHealthDebugImported": "Импортирован {deviceCode} ({files} файлов)",
+  "deviceHealthDebugImportFailed": "Не удалось импортировать снимок: {error}"
+}
