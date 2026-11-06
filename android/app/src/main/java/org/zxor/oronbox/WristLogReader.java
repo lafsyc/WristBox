@@ -14,6 +14,9 @@ public final class WristLogReader {
     static final long MAX_TOTAL = 128L * 1024 * 1024;
     static final long MAX_ENTRY = 64L * 1024 * 1024;
     static final int MAX_LINE = 128 * 1024;
+    // Keep Key fields that cross a window boundary without retaining a whole
+    // physical line. Oversized lines are fragments, never device metadata.
+    static final int OVERLAP = 1024;
     private long expanded, retained;
     private final long deadline = System.nanoTime() + 30_000_000_000L;
     private final List<Map<String, Object>> matches = new ArrayList<>();
@@ -79,22 +82,32 @@ public final class WristLogReader {
         InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
         char[] buffer = new char[4096];
         StringBuilder line = new StringBuilder();
+        boolean continued = false;
         int number = 1, size;
         while ((size = reader.read(buffer)) != -1) {
             check();
             for (int i = 0; i < size; i++) {
                 char c = buffer[i];
-                if (c == '\n') { retain(line, name, number++); line.setLength(0); }
+                if (c == '\n') {
+                    retain(line, name, number++, continued, false);
+                    line.setLength(0);
+                    continued = false;
+                }
                 else {
-                    if (line.length() >= MAX_LINE) throw new LogReadException("日志单行过长，已停止读取，请重新导出日志");
+                    if (line.length() >= MAX_LINE) {
+                        retain(line, name, number, continued, true);
+                        line.delete(0, line.length() - OVERLAP);
+                        continued = true;
+                    }
                     line.append(c);
                 }
             }
         }
-        if (line.length() > 0) retain(line, name, number);
+        if (line.length() > 0) retain(line, name, number, continued, false);
     }
 
-    private void retain(StringBuilder text, String source, int number) throws IOException {
+    private void retain(StringBuilder text, String source, int number,
+                        boolean truncatedStart, boolean truncatedEnd) throws IOException {
         String line = text.toString();
         String lower = line.toLowerCase(Locale.ROOT);
         if (!lower.contains("encryptkey") && !lower.contains("devicekey")) return;
@@ -103,6 +116,8 @@ public final class WristLogReader {
             throw new LogReadException("日志中的候选记录过多，请重新导出最近的日志");
         Map<String, Object> record = new HashMap<>();
         record.put("text", line); record.put("source", source); record.put("line", number);
+        record.put("truncatedStart", truncatedStart);
+        record.put("truncatedEnd", truncatedEnd);
         matches.add(record);
     }
 }

@@ -100,6 +100,8 @@ List<LogKeyCandidate> parseLogKeyRecords(List<Map<String, dynamic>> records) {
   var size = 0;
   for (final record in records) {
     final text = record['text'] as String? ?? '';
+    final truncatedStart = record['truncatedStart'] == true;
+    final truncatedEnd = record['truncatedEnd'] == true;
     size += text.length;
     if (text.length > 128 * 1024 || size > 2 * 1024 * 1024) {
       throw const FormatException('日志候选内容过大，请重新导出日志');
@@ -159,7 +161,10 @@ List<LogKeyCandidate> parseLogKeyRecords(List<Map<String, dynamic>> records) {
       }
     }
 
-    for (final object in _objects(text)) {
+    // A window can start inside a JSON string; apparent objects in it cannot
+    // safely establish which device owns the Key.
+    for (final object
+        in truncatedStart || truncatedEnd ? const <String>[] : _objects(text)) {
       dynamic value;
       try {
         value = jsonDecode(object);
@@ -175,6 +180,12 @@ List<LogKeyCandidate> parseLogKeyRecords(List<Map<String, dynamic>> records) {
       r'''["']?\b(encryptKey|deviceKey)["']?\s*[:=]\s*["']?([A-Za-z0-9:_-]+)''',
     );
     for (final match in pattern.allMatches(plain)) {
+      // Never accept an incomplete field/token at a cut edge. The overlapping
+      // next window supplies the complete field, including its delimiter.
+      if ((truncatedStart && match.start == 0) ||
+          (truncatedEnd && match.end == plain.length)) {
+        continue;
+      }
       final key = _key(match.group(2), legacy: match.group(1) == 'deviceKey');
       if (key != null && !associated.contains(key)) add(key);
     }

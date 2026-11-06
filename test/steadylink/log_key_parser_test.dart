@@ -80,4 +80,37 @@ void main() {
     expect(() => parse(['x' * (128 * 1024 + 1)]), throwsFormatException);
     expect(() => parse(List.filled(20, 'x' * 120000)), throwsFormatException);
   });
+  test('long-line windows recover keys without guessing device metadata', () {
+    final items = parseLogKeyRecords([
+      {
+        'text':
+            '{"encryptKey":"$keyA","productName":"Untrusted","mac":"AA:BB:CC:DD:EE:01"}',
+        'truncatedEnd': true,
+      },
+      {'text': 'prefix encryptKey=$keyA ', 'truncatedStart': true},
+      {'text': 'prefix deviceKey=legacy:$keyB', 'truncatedStart': true},
+    ]);
+    expect(items.map((item) => item.key), [keyA, keyB]);
+    expect(
+      items.every((item) => item.name.isEmpty && item.address.isEmpty),
+      isTrue,
+    );
+  });
+  test('cut tokens are ignored until an overlapping window completes them', () {
+    expect(
+      parseLogKeyRecords([
+        {'text': 'prefix encryptKey=$keyA', 'truncatedEnd': true},
+        {'text': 'prefix encryptKey=${keyA}0 ', 'truncatedStart': true},
+        {'text': 'encryptKey=$keyB ', 'truncatedStart': true},
+      ]),
+      isEmpty,
+    );
+    expect(
+      parseLogKeyRecords([
+        {'text': 'encryptKey=$keyA ', 'truncatedEnd': true},
+        {'text': 'prefix encryptKey=$keyA ', 'truncatedStart': true},
+      ]).single.key,
+      keyA,
+    );
+  });
 }

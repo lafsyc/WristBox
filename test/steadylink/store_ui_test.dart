@@ -387,7 +387,10 @@ void main() {
       // A missing model must be explicit, not a fallback to any existing package.
       await tester.tap(find.byType(DropdownButtonFormField<String>));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('小米手环 8 Pro').last);
+      expect(find.text('小米手环 8 Pro'), findsNothing);
+      expect(find.text('小米手表 S3'), findsNothing);
+      expect(find.text('REDMI Watch 4'), findsNothing);
+      await tester.tap(find.text('小米手环 10 NFC').last);
       await tester.pumpAndSettle();
       expect(find.text('以下为其他型号的预览，仅供参考。'), findsOneWidget);
       expect(

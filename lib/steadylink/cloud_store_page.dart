@@ -955,6 +955,20 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
 }
 
 class _ModelPicker extends StatelessWidget {
+  // Limit browsing choices without narrowing device recognition or changing
+  // existing resource compatibility and device-bound entitlements.
+  static const _browseModels = [
+    'n66',
+    'n66nfc',
+    'o66',
+    'o66nfc',
+    'band11',
+    'band11nfc',
+    'n67',
+    'p67',
+    'o65',
+    'p65',
+  ];
   const _ModelPicker({
     required this.value,
     required this.current,
@@ -985,11 +999,11 @@ class _ModelPicker extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      for (final model in storeModelNames.entries)
+      for (final model in _browseModels)
         DropdownMenuItem(
-          value: model.key,
+          value: model,
           child: Text(
-            model.value,
+            storeModelNames[model]!,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

@@ -16,8 +16,8 @@ import 'operation_queue.dart';
 import 'wristbox_account.dart';
 import 'network_error.dart';
 
-const clientVersion = '0.14.8';
-const clientBuild = 37;
+const clientVersion = '0.14.9';
+const clientBuild = 38;
 const _native = MethodChannel('wristbox/updates');
 
 String updateError(Object error) {
