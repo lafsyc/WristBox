@@ -170,6 +170,10 @@ tmp/script.md
 **/.pytest_cache/
 **/.venv/
 
+# Deployment values are injected during private packaging, never exported.
+/config/*.json
+!/config/build.example.json
+
 # This repository publishes the Android client only.
 /windows/
 /account_server/

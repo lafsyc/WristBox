@@ -10,12 +10,8 @@ import 'package:oronbox/src/core/services/shared_prefs_service.dart';
 import 'network_error.dart';
 import 'account_profile_dialog.dart';
 import 'profile_dashboard.dart';
+import 'server_config.dart';
 
-const _accountBase = String.fromEnvironment(
-  'WRISTBOX_AUTH_URL',
-  // Configure the deployment endpoint at build time.
-  defaultValue: 'https://api.example.invalid/wristbox-accounts',
-);
 const _sessionKey = 'wristbox.account.session';
 
 class WristBoxSession {
@@ -67,16 +63,14 @@ class WristBoxAccountService {
               followRedirects: false,
             ),
           ),
-      _baseUrl = baseUrl ?? _accountBase,
+      _baseUrl = baseUrl ?? wristBoxAuthUrl,
       _customDio = dio != null;
   final Dio _dio;
   final String _baseUrl;
   final bool _customDio;
   bool _trustConfigured = false;
   Future<void> _configureTrust() async {
-    if (_trustConfigured ||
-        _customDio ||
-        Uri.parse(_baseUrl).host != Uri.parse(_accountBase).host) {
+    if (_trustConfigured || _customDio || !shouldUseBundledCa(_baseUrl)) {
       return;
     }
     final certificate = await rootBundle.load(
@@ -96,13 +90,7 @@ class WristBoxAccountService {
   }
 
   String _url(String path) {
-    final uri = Uri.tryParse(_baseUrl);
-    if (uri == null ||
-        uri.scheme != 'https' ||
-        uri.host.isEmpty ||
-        uri.userInfo.isNotEmpty ||
-        uri.hasQuery ||
-        uri.hasFragment) {
+    if (!isSecureServiceUrl(_baseUrl)) {
       throw StateError('账号服务尚未配置安全连接，请联系管理员');
     }
     return '${_baseUrl.replaceAll(RegExp(r"/+$"), '')}$path';

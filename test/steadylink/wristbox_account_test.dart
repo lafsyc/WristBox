@@ -81,7 +81,10 @@ void main() {
       throwsA(isA<StateError>()),
     );
     expect(adapter.requests, isEmpty);
-    final defaultApi = WristBoxAccountService(dio: dio);
+    final defaultApi = WristBoxAccountService(
+      dio: dio,
+      baseUrl: 'https://api.example.invalid/wristbox-accounts',
+    );
     await defaultApi.sendCode('test@example.com', false);
     expect(adapter.requests.last.uri.host, 'api.example.invalid');
     expect(adapter.requests.last.uri.path, '/wristbox-accounts/v1/auth/code');

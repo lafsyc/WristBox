@@ -1,6 +1,7 @@
 param(
   [string]$Flutter = 'flutter',
   [string]$AndroidSdk = '',
+  [string]$ConfigFile = '',
   [switch]$SkipTests,
   [switch]$Offline
 )
@@ -14,6 +15,8 @@ if ($AndroidSdk) {
 }
 Push-Location $projectRoot
 try {
+  . (Join-Path $PSScriptRoot 'read-build-config.ps1')
+  $serviceConfig = Get-WristBoxBuildConfig -ProjectRoot $projectRoot -ConfigFile $ConfigFile
   & (Join-Path $PSScriptRoot 'sync-client-version.ps1')
   if (!(Test-Path -LiteralPath 'android/key.properties')) {
     throw 'Configure android/key.properties with your release signing key before building. Do not commit signing credentials.'
@@ -40,12 +43,12 @@ try {
     [IO.File]::WriteAllText($propertiesPath, $properties, [Text.UTF8Encoding]::new($false))
     Push-Location 'android'
     try {
-      & ./gradlew.bat :app:assembleRelease --offline --console=plain '-Ptarget-platform=android-arm,android-arm64,android-x64' '-Ptarget=lib/main_android.dart' '-Pbuild-mode=release'
+      & ./gradlew.bat :app:assembleRelease --offline --console=plain '-Ptarget-platform=android-arm,android-arm64,android-x64' '-Ptarget=lib/main_android.dart' '-Pbuild-mode=release' "-Pdart-defines=$($serviceConfig.DartDefines)"
       if ($LASTEXITCODE -ne 0) { throw 'Android offline build failed.' }
     } finally { Pop-Location }
     $apk = 'build/app/outputs/apk/release/app-release.apk'
   } else {
-    & $Flutter build apk --release --no-pub --target lib/main_android.dart
+    & $Flutter build apk --release --no-pub --target lib/main_android.dart "--dart-define-from-file=$($serviceConfig.Path)"
     if ($LASTEXITCODE -ne 0) { throw 'Android build failed.' }
     $apk = 'build/app/outputs/flutter-apk/app-release.apk'
   }

@@ -1,0 +1,4 @@
+{
+  "WRISTBOX_AUTH_URL": "https://api.example.invalid/wristbox-accounts",
+  "WRISTBOX_AUTH_USE_BUNDLED_CA": false
+}

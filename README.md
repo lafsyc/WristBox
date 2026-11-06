@@ -36,15 +36,19 @@ flutter pub get
 flutter build apk --debug --target lib/main_android.dart
 ```
 
-正式构建需使用自己的签名：复制 `android/key.properties.example` 为 `android/key.properties` 并填写本机签名配置，再执行：
+不注入服务配置时，可调试本地连接与安装；邮箱和商店等云端功能不会连接任何默认服务器。
+
+正式构建需使用自己的签名：复制 `android/key.properties.example` 为 `android/key.properties` 并填写本机签名配置。将 `config/build.example.json` 复制为 `config/production.local.json`，填写自己的 HTTPS 服务地址，再执行：
 
 ```sh
-flutter build apk --release --target lib/main_android.dart
+flutter build apk --release --target lib/main_android.dart --dart-define-from-file=config/production.local.json
 ```
 
-Windows PowerShell 也可执行 `./tool/build-android.ps1 -Flutter flutter`。生成文件位于 `build/app/outputs/flutter-apk/`。不要提交 `key.properties` 和签名文件；使用自己的签名构建的应用不能直接覆盖官方签名版本。
+Windows PowerShell 也可执行 `./tool/build-android.ps1 -Flutter flutter`，默认读取上述本地配置，也可用 `-ConfigFile` 指定路径；缺失配置或仍为示例地址时会停止打包。生成文件位于 `build/app/outputs/flutter-apk/`。不要提交本地配置、`key.properties` 和签名文件；使用自己的签名构建的应用不能直接覆盖官方签名版本。
 
-本地连接与安装不依赖 WristBox 邮箱账号。云端功能依赖服务可用性和服务器授权；源码不包含线上账号、激活记录或自托管服务端。服务地址可通过 `--dart-define=WRISTBOX_AUTH_URL=https://your-service.example/api` 配置，替换服务还需实现相同接口并配置对应的公钥/证书，不能通过跳过 TLS 或签名校验来接入。
+本地连接与安装不依赖 WristBox 邮箱账号。云端功能依赖服务可用性和服务器授权；源码不包含线上账号、激活记录或自托管服务端。仓库仅保留示例配置，官方服务地址由私有打包配置注入。替换服务需实现相同接口并配置对应的公钥/证书，不能通过跳过 TLS 或签名校验来接入。
+
+`WRISTBOX_AUTH_USE_BUNDLED_CA` 默认为 `false`，使用系统信任根；只有服务确实使用随包 CA 时才设为 `true`，且该 CA 仅用于配置的 HTTPS 主机和端口。本地配置已被 Git 忽略，导出源码时也不会复制。编译参数会进入应用二进制，不能用于隐藏密码、私钥或访问令牌。
 
 ## 验证
 
