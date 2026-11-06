@@ -223,4 +223,43 @@ void main() {
     expect(recovered, hasLength(1));
     expect(recovered.single.address, 'AA:BB:CC:DD:EE:01');
   });
+  test('redacted address resolves from the local log address pool', () {
+    final items = parseLogKeyRecords([
+      {
+        'text': jsonEncode({
+          'mac': '**:**:**:DD:EE:01',
+          'encrypt_key': keyA,
+          'model': 'n67',
+        }),
+        'addressCandidates': ['AA:BB:CC:DD:EE:01'],
+        'addressPoolComplete': true,
+      },
+    ]);
+    expect(items.single.address, 'AA:BB:CC:DD:EE:01');
+    expect(items.single.addressInferred, isTrue);
+  });
+  test('short suffix resolves against paired devices, while a collision remains selectable', () {
+    final c = parse([
+      jsonEncode({'mac': 'EE:01', 'encryptKey': keyA}),
+    ]).single;
+    expect(c.addressSuffix, 'EE01');
+    final inferred = resolveLogAddress(c, ['AA:BB:CC:DD:EE:01']);
+    expect(inferred.address, 'AA:BB:CC:DD:EE:01');
+    final conflict = resolveLogAddress(inferred, ['11:22:33:44:EE:01']);
+    expect(conflict.address, isEmpty);
+    expect(logAddressMatches(conflict, 'AA:BB:CC:DD:EE:02'), isFalse);
+  });
+  test('incomplete address pool disables automatic suffix resolution', () {
+    final items = parseLogKeyRecords([
+      {
+        'text': jsonEncode({'mac': 'DD:EE:01', 'encryptKey': keyA}),
+        'addressCandidates': ['AA:BB:CC:DD:EE:01'],
+        'addressPoolComplete': false,
+      },
+    ]);
+    expect(
+      resolveLogAddress(items.single, ['AA:BB:CC:DD:EE:01']).address,
+      isEmpty,
+    );
+  });
 }

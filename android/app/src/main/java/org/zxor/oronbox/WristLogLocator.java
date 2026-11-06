@@ -7,7 +7,7 @@ import java.util.*;
 public final class WristLogLocator {
     public static boolean supported(String name) {
         String n = name.toLowerCase(Locale.ROOT);
-        return n.endsWith(".zip") || n.matches("xiaomifit\\.(main|device)\\.log(?:\\.[0-9]+)?");
+        return n.endsWith(".zip") || n.matches("xiaomifit\\.(main|device)\\.log(?:\\.(?:bak\\.)?[0-9]+)?");
     }
     public static File latest(File[] roots, long notBefore) throws IOException {
         File newest = null;

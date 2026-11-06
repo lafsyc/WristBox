@@ -20,6 +20,26 @@ public final class WristLogReader {
     private long expanded, retained;
     private final long deadline = System.nanoTime() + 30_000_000_000L;
     private final List<Map<String, Object>> matches = new ArrayList<>();
+    private final Set<String> addresses = new LinkedHashSet<>();
+    private boolean addressPoolComplete = true;
+    private static final java.util.regex.Pattern MAC = java.util.regex.Pattern.compile(
+        "(?<![0-9a-fA-F])(?:[0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(?![0-9a-fA-F])");
+    private void collectAddresses(CharSequence text) {
+        java.util.regex.Matcher matcher = MAC.matcher(text);
+        while (matcher.find()) {
+            String address = matcher.group().replace('-', ':').toUpperCase(Locale.ROOT);
+            if (address.equals("00:00:00:00:00:00") || address.equals("FF:FF:FF:FF:FF:FF") || address.equals("02:00:00:00:00:00")) continue;
+            if (addresses.size() < 512 || addresses.contains(address)) addresses.add(address);
+            else addressPoolComplete = false;
+        }
+    }
+    private List<Map<String, Object>> finish() {
+        if (!matches.isEmpty()) {
+            matches.get(0).put("addressCandidates", new ArrayList<>(addresses));
+            matches.get(0).put("addressPoolComplete", addressPoolComplete);
+        }
+        return matches;
+    }
 
     private void check() throws IOException {
         if (Thread.currentThread().isInterrupted() || System.nanoTime() > deadline)
@@ -46,7 +66,7 @@ public final class WristLogReader {
         BudgetInput input = new BudgetInput(source, MAX_INPUT, false);
         if (!zip) {
             lines(new BudgetInput(input, MAX_ENTRY, true), "所选日志");
-            return matches;
+            return finish();
         }
         try (ZipInputStream archive = new ZipInputStream(input, StandardCharsets.UTF_8)) {
             int count = 0;
@@ -61,9 +81,12 @@ public final class WristLogReader {
                 if (entry.getSize() > MAX_ENTRY) throw new LogReadException("日志解压后过大，已停止读取");
                 String name = path.substring(path.lastIndexOf('/') + 1);
                 BudgetInput content = new BudgetInput(archive, MAX_ENTRY, true);
-                if (!entry.isDirectory() && name.matches("(?i)XiaomiFit\\.(main|device)\\.log(?:\\.[0-9]+)?")) {
+                if (!entry.isDirectory() && name.matches("(?i)XiaomiFit\\.(main|device)\\.log(?:\\.(?:bak\\.)?[0-9]+)?")) {
                     found = true;
                     lines(content, name);
+                } else if (!entry.isDirectory() && name.matches("(?i).+\\.log(?:\\.(?:bak\\.)?[0-9]+)?")) {
+                    // Other diagnostic logs supply only address candidates, never Keys.
+                    lines(content, name, false);
                 } else {
                     // closeEntry() alone would inflate skipped ZIP entries without a budget.
                     byte[] buffer = new byte[8192];
@@ -75,10 +98,11 @@ public final class WristLogReader {
         } catch (ZipException e) {
             throw new LogReadException("ZIP 已损坏、加密或格式不支持，请重新导出日志");
         }
-        return matches;
+        return finish();
     }
 
-    private void lines(InputStream stream, String name) throws IOException {
+    private void lines(InputStream stream, String name) throws IOException { lines(stream, name, true); }
+    private void lines(InputStream stream, String name, boolean parseKeys) throws IOException {
         InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
         char[] buffer = new char[4096];
         StringBuilder line = new StringBuilder();
@@ -89,16 +113,18 @@ public final class WristLogReader {
             check();
             for (int i = 0; i < size; i++) {
                 char c = buffer[i];
-                objects.accept(c, number);
+                if (parseKeys) objects.accept(c, number);
                 if (c == '\n') {
-                    if (!objects.coversLine(line, number)) retain(line, name, number, continued, false);
+                    collectAddresses(line);
+                    if (parseKeys && !objects.coversLine(line, number)) retain(line, name, number, continued, false);
                     number++;
                     line.setLength(0);
                     continued = false;
                 }
                 else {
                     if (line.length() >= MAX_LINE) {
-                        retain(line, name, number, continued, true);
+                        collectAddresses(line);
+                        if (parseKeys) retain(line, name, number, continued, true);
                         line.delete(0, line.length() - OVERLAP);
                         continued = true;
                     }
@@ -106,7 +132,8 @@ public final class WristLogReader {
                 }
             }
         }
-        if (line.length() > 0 && !objects.coversLine(line, number)) retain(line, name, number, continued, false);
+        collectAddresses(line);
+        if (parseKeys && line.length() > 0 && !objects.coversLine(line, number)) retain(line, name, number, continued, false);
     }
 
     /** Follow string/escape context across windows, so braces inside strings are

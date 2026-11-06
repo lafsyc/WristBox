@@ -148,56 +148,74 @@ void main() {
     expect(find.textContaining(RegExp(r'^识别到 \d+ 台设备')), findsNothing);
     expect(tester.takeException(), isNull);
   });
-  testWidgets(
-    'recognized devices are grouped and historical keys require a choice',
-    (tester) async {
-      tester.view.physicalSize = const Size(430, 2200);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      await tester.pumpWidget(
-        ProviderScope(
-          child: MaterialApp(
-            home: LogImportPage(
-              pickLog: () async => {
-                'name': 'synthetic.log',
-                'records': [
-                  {
-                    'text':
-                        '{"mac":"AA:BB:CC:DD:EE:01","model":"n67","encryptKey":"$sampleKey"}',
-                  },
-                  {
-                    'text':
-                        '{"mac":"AA:BB:CC:DD:EE:01","model":"n67","encryptKey":"${'b' * 32}"}',
-                  },
-                ],
-              },
+
+  for (final withAddress in [true, false]) {
+    testWidgets(
+      'read then tap a device without forms (log has address: $withAddress)',
+      (tester) async {
+        tester.view.physicalSize = const Size(430, 1000);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        var selected = 0;
+        await tester.pumpWidget(
+          ProviderScope(
+            child: MaterialApp(
+              home: LogImportPage(
+                knownDevices: () async => withAddress
+                    ? []
+                    : [
+                        const MiWearState(
+                          name: '小米手环 9 Pro',
+                          addr: 'AA:BB:CC:DD:EE:01',
+                          connectType: 'spp',
+                        ),
+                      ],
+                importChoice: (choice) async {
+                  selected++;
+                  expect(choice.device.addr, 'AA:BB:CC:DD:EE:01');
+                  expect(choice.candidates.length, 2);
+                },
+                pickLog: () async => {
+                  'name': 'synthetic.log',
+                  'records': [
+                    {
+                      'text': withAddress
+                          ? '{"mac":"AA:BB:CC:DD:EE:01","model":"n67","encryptKey":"$sampleKey"}'
+                          : 'encryptKey=$sampleKey',
+                    },
+                    {
+                      'text': withAddress
+                          ? '{"mac":"AA:BB:CC:DD:EE:01","model":"n67","encryptKey":"${'b' * 32}"}'
+                          : 'encryptKey=${'b' * 32}',
+                    },
+                  ],
+                },
+              ),
             ),
           ),
-        ),
-      );
-      await tester.scrollUntilVisible(find.text('手动选择日志（备用）'), 200);
-      await tester.runAsync(() async {
-        await tester.tap(find.text('手动选择日志（备用）'));
-        for (var i = 0; i < 100; i++) {
-          await Future<void>.delayed(const Duration(milliseconds: 20));
-          await tester.pump();
-          if (find.text('已识别').evaluate().isNotEmpty) break;
-        }
-      });
-      await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(find.text('选择并导入'), 200);
-      expect(find.text('小米手环 9 Pro'), findsOneWidget);
-      expect(find.text('已识别'), findsOneWidget);
-      expect(find.byType(TextFormField), findsNothing);
-      final button = find.widgetWithText(FilledButton, '选择并导入');
-      expect(tester.widget<FilledButton>(button).onPressed, isNull);
-      await tester.tap(find.byType(DropdownButtonFormField<String>));
-      await tester.pumpAndSettle();
-      await tester.tap(find.textContaining('记录 1 ·').last);
-      await tester.pumpAndSettle();
-      expect(tester.widget<FilledButton>(button).onPressed, isNotNull);
-      expect(tester.takeException(), isNull);
-    },
-  );
+        );
+        await tester.scrollUntilVisible(find.text('手动选择日志（备用）'), 200);
+        await tester.runAsync(() async {
+          await tester.tap(find.text('手动选择日志（备用）'));
+          for (var i = 0; i < 100; i++) {
+            await Future<void>.delayed(const Duration(milliseconds: 20));
+            await tester.pump();
+            if (find.text('选择你的设备').evaluate().isNotEmpty) break;
+          }
+        });
+        await tester.pumpAndSettle();
+        expect(find.byType(TextFormField), findsNothing);
+        expect(find.byType(DropdownButtonFormField<String>), findsNothing);
+        expect(find.text('确认保存'), findsNothing);
+        expect(find.text('验证连接'), findsNothing);
+        expect(find.text('操作教程'), findsNothing);
+        expect(find.textContaining('••••'), findsNothing);
+        await tester.tap(find.text('小米手环 9 Pro'));
+        await tester.pumpAndSettle();
+        expect(selected, 1);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 }

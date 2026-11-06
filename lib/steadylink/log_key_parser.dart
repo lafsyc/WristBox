@@ -10,8 +10,14 @@ class LogKeyCandidate {
     this.name = '',
     this.model = '',
     this.address = '',
+    this.addressSuffix = '',
+    this.addressInferred = false,
+    this.addressOptions = const [],
+    this.addressPoolComplete = true,
   });
-  final String key, source, name, model, address;
+  final String key, source, name, model, address, addressSuffix;
+  final bool addressInferred, addressPoolComplete;
+  final List<String> addressOptions;
   final int line;
   String get hint =>
       '•••• •••• •••• ${key.substring(key.length - 6).toUpperCase()}';
@@ -56,12 +62,73 @@ String _address(Map<dynamic, dynamic> value) {
       }
       if (RegExp(r'^[0-9A-F]{2}(:[0-9A-F]{2}){5}$').hasMatch(mac) &&
           mac != '00:00:00:00:00:00' &&
-          mac != 'FF:FF:FF:FF:FF:FF') {
+          mac != 'FF:FF:FF:FF:FF:FF' &&
+          mac != '02:00:00:00:00:00') {
         return mac;
       }
     }
   }
   return '';
+}
+
+String _suffix(Map metadata) {
+  for (final field in [
+    'mac',
+    'macAddress',
+    'mac_address',
+    'bluetoothAddress',
+    'deviceMac',
+    'btMac',
+    'address',
+  ]) {
+    final value = metadata[field];
+    if (value is! String) continue;
+    var text = value.trim().toUpperCase().replaceAll('-', ':');
+    text = text.replaceFirst(RegExp(r'^(?:(?:\*\*|XX|\.\.):)+'), '');
+    if (RegExp(r'^[0-9A-F]{2}(?::[0-9A-F]{2}){1,4}$').hasMatch(text)) {
+      return text.replaceAll(':', '');
+    }
+  }
+  return '';
+}
+
+LogKeyCandidate resolveLogAddress(
+  LogKeyCandidate candidate,
+  Iterable<String> addresses,
+) {
+  if ((candidate.address.isNotEmpty && !candidate.addressInferred) ||
+      candidate.addressSuffix.isEmpty ||
+      !candidate.addressPoolComplete) {
+    return candidate;
+  }
+  final matches = <String>{};
+  for (final raw in [...candidate.addressOptions, ...addresses]) {
+    final address = _address({'mac': raw});
+    if (address.isNotEmpty &&
+        address.replaceAll(':', '').endsWith(candidate.addressSuffix)) {
+      matches.add(address);
+    }
+  }
+  if (matches.length != 1 && !candidate.addressInferred) return candidate;
+  return LogKeyCandidate(
+    key: candidate.key,
+    source: candidate.source,
+    line: candidate.line,
+    name: candidate.name,
+    model: candidate.model,
+    address: matches.length == 1 ? matches.single : '',
+    addressSuffix: candidate.addressSuffix,
+    addressOptions: matches.toList(),
+    addressInferred: matches.length == 1,
+  );
+}
+
+bool logAddressMatches(LogKeyCandidate candidate, String address) {
+  final normalized = _address({'mac': address});
+  if (normalized.isEmpty) return false;
+  if (candidate.address.isNotEmpty) return normalized == candidate.address;
+  return candidate.addressSuffix.isEmpty ||
+      normalized.replaceAll(':', '').endsWith(candidate.addressSuffix);
 }
 
 Iterable<String> _objects(String line) sync* {
@@ -191,7 +258,24 @@ List<LogKeyCandidate> parseLogKeyRecords(List<Map<String, dynamic>> records) {
   final byIdentity = <String, Map<String, Map>>{};
   final byAddress = <String, Map>{};
   var size = 0, objects = 0;
+  final addressPool = <String>{};
+  var poolComplete = true;
   for (final record in records) {
+    if (record['addressPoolComplete'] == false) poolComplete = false;
+    final rawAddresses = record['addressCandidates'];
+    if (rawAddresses is List) {
+      if (rawAddresses.length > 512) poolComplete = false;
+      for (final raw in rawAddresses.take(512)) {
+        final address = _address({'mac': raw});
+        if (address.isNotEmpty) {
+          if (addressPool.length < 512 || addressPool.contains(address)) {
+            addressPool.add(address);
+          } else {
+            poolComplete = false;
+          }
+        }
+      }
+    }
     final text = record['text'] as String? ?? '';
     final truncatedStart = record['truncatedStart'] == true;
     final truncatedEnd = record['truncatedEnd'] == true;
@@ -288,21 +372,34 @@ List<LogKeyCandidate> parseLogKeyRecords(List<Map<String, dynamic>> records) {
       if (matches.length > 1) ambiguousKeys.add(entry.key);
     }
     if (address.isNotEmpty) metadata = {...?byAddress[address], ...metadata};
-    final candidate = LogKeyCandidate(
-      key: entry.key,
-      source: entry.source,
-      line: entry.line,
-      address: address,
-      name: _label(
-        metadata['productName'] ?? metadata['deviceName'] ?? metadata['name'],
+    final suffix = _suffix(metadata);
+    final candidate = resolveLogAddress(
+      LogKeyCandidate(
+        addressSuffix: suffix,
+        addressPoolComplete: poolComplete && !ambiguousKeys.contains(entry.key),
+        addressOptions: {...addressPool, ...byAddress.keys}
+            .where(
+              (a) =>
+                  suffix.isNotEmpty && a.replaceAll(':', '').endsWith(suffix),
+            )
+            .toList(),
+        key: entry.key,
+        source: entry.source,
+        line: entry.line,
+        address: address,
+        name: _label(
+          metadata['productName'] ?? metadata['deviceName'] ?? metadata['name'],
+        ),
+        model: _label(metadata['model'] ?? metadata['codename']),
       ),
-      model: _label(metadata['model'] ?? metadata['codename']),
+      const [],
     );
-    final id = '${entry.key}\u0000$address';
+    final id = '${entry.key}\u0000${candidate.address}';
     final old = found[id];
     if (old == null ||
         candidate.name.isNotEmpty ||
-        candidate.model.isNotEmpty) {
+        candidate.model.isNotEmpty ||
+        candidate.addressSuffix.isNotEmpty) {
       found[id] = candidate;
     }
   }

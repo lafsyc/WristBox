@@ -8,6 +8,10 @@ import 'package:oronbox/src/features/devices/controllers/device_manager.dart';
 import 'backend.dart';
 import 'error_message.dart';
 import 'log_key_parser.dart';
+import 'log_device_selection.dart';
+
+import 'package:oronbox/src/device/core/connect_type.dart';
+
 import 'store_models.dart';
 
 const _logChannel = MethodChannel('wristbox/log_import');
@@ -56,15 +60,29 @@ MiWearState? deviceFromLogCandidate(
 }
 
 class LogImportPage extends ConsumerStatefulWidget {
-  const LogImportPage({super.key, this.pickLog});
+  const LogImportPage({
+    super.key,
+    this.pickLog,
+    this.knownDevices,
+    this.importChoice,
+  });
   final Future<Map<String, dynamic>?> Function()? pickLog;
+  final Future<List<MiWearState>> Function()? knownDevices;
+  final Future<void> Function(LogDeviceChoice)? importChoice;
   @override
   ConsumerState<LogImportPage> createState() => _LogImportPageState();
 }
 
 class _LogImportPageState extends ConsumerState<LogImportPage>
     with WidgetsBindingObserver {
-  bool _busy = false;
+  bool _busy = false,
+      _connecting = false,
+      _cancelled = false,
+      _ownsScan = false;
+  final _scroll = ScrollController();
+  List<MiWearState> _knownDevices = [];
+  List<LogDeviceChoice> get _choices =>
+      logDeviceChoices(_candidates, _knownDevices);
   List<LogKeyCandidate> _candidates = [];
   final Map<String, String> _selectedKeys = {};
   String? _file, _error, _notice, _savedDevice;
@@ -80,6 +98,7 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
 
   @override
   void dispose() {
+    _scroll.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -164,7 +183,14 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
       final records = (result['records'] as List)
           .map((r) => (r as Map).cast<String, dynamic>())
           .toList();
-      final items = await compute(parseLogKeyRecords, records);
+      var items = await compute(parseLogKeyRecords, records);
+      if (items.isNotEmpty) {
+        _knownDevices =
+            await (widget.knownDevices?.call() ?? _readKnownDevices());
+        items = items
+            .map((c) => resolveLogAddress(c, _knownDevices.map((d) => d.addr)))
+            .toList();
+      }
       if (!mounted) return;
       setState(() {
         _file = result['name'] as String;
@@ -177,6 +203,15 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
               .first;
         }
         _candidates = items;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && _scroll.hasClients) {
+            _scroll.animateTo(
+              0,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+            );
+          }
+        });
         if (items.isEmpty) _notice = '未找到有效的 32 位连接 Key。请先让运动健康连接手环，再重新导出日志；某些版本可能不再输出 Key，仍可使用原来的小米账号同步。';
       });
     } on PlatformException catch (e) {
@@ -188,6 +223,165 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+    if (mounted && _candidates.isNotEmpty && _choices.isEmpty) {
+      await _scanDevices();
+    }
+  }
+
+  Future<List<MiWearState>> _readKnownDevices() async {
+    final known = {
+      for (final d in ref.read(deviceManagerProvider).pairedDevices)
+        d.addr.toUpperCase(): d,
+    };
+    try {
+      final rows =
+          await const MethodChannel('oronbox/classic_spp')
+              .invokeListMethod<dynamic>('listBondedDevices') ??
+          [];
+      for (final row in rows.whereType<Map>()) {
+        final d = MiWearState(
+          name: row['name'] as String? ?? '蓝牙设备',
+          addr: row['addr'] as String? ?? '',
+          connectType: 'spp',
+        );
+        if (logAddressMatches(
+          const LogKeyCandidate(key: '', source: '', line: 0),
+          d.addr,
+        )) {
+          known.putIfAbsent(d.addr.toUpperCase(), () => d);
+        }
+      }
+    } on PlatformException {
+      /* Scanning explicitly requests permissions if needed. */
+    } on MissingPluginException {
+      /* Non-Android test/runtime. */
+    }
+    return known.values.toList();
+  }
+
+  Future<void> _scanDevices() async {
+    if (_busy) return;
+    final backend = ref.read(steadyBackendProvider);
+    if (backend.queue.busy) {
+      setState(() => _error = '请等待当前连接或安装任务完成');
+      return;
+    }
+    final manager = ref.read(deviceManagerProvider.notifier);
+    if (ref.read(deviceManagerProvider).scanning) return;
+    setState(() {
+      _busy = true;
+      _error = null;
+      _notice = '正在查找已配对和附近的设备…';
+    });
+    _ownsScan = true;
+    try {
+      await manager.startBluetoothScan(connectType: ConnectType.spp);
+      while (mounted && ref.read(deviceManagerProvider).scanning) {
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+      }
+      if (!mounted) return;
+      final state = ref.read(deviceManagerProvider);
+      final found = {
+        for (final d in await _readKnownDevices()) d.addr.toUpperCase(): d,
+      };
+      for (final d in state.scannedDevices) {
+        if (logAddressMatches(
+          const LogKeyCandidate(key: '', source: '', line: 0),
+          d.addr,
+        )) {
+          found.putIfAbsent(
+            d.addr.toUpperCase(),
+            () => MiWearState(name: d.name, addr: d.addr, connectType: 'spp'),
+          );
+        }
+      }
+      setState(() {
+        _knownDevices = found.values.toList();
+        _notice = found.isEmpty
+            ? '没有发现设备。请开启手机蓝牙，让手环进入可被发现的状态后重试。'
+            : '请选择你的手环，地址会自动填入。';
+        if (state.error != null) _error = friendlyError(state.error!);
+      });
+    } catch (e) {
+      if (mounted) setState(() => _error = friendlyError(e));
+    } finally {
+      if (_ownsScan) {
+        _ownsScan = false;
+        await manager.stopBluetoothScan();
+      }
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _selectDevice(LogDeviceChoice choice) async {
+    if (_busy) return;
+    if (widget.importChoice != null) {
+      await widget.importChoice!(choice);
+      return;
+    }
+    final backend = ref.read(steadyBackendProvider);
+    if (backend.queue.busy) {
+      setState(() => _error = '请等待当前连接或安装任务完成');
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _connecting = true;
+      _cancelled = false;
+      _error = null;
+      _savedDevice = null;
+      _notice = '正在连接并验证「${choice.device.name}」…';
+    });
+    try {
+      await backend.queue.maintain(() async {
+        final original = backend.state.pairedDevices
+            .where(
+              (d) => d.addr.toUpperCase() == choice.device.addr.toUpperCase(),
+            )
+            .firstOrNull;
+        await verifyLogDeviceChoice(
+          choice: choice,
+          save: backend.manager.importSharedDevice,
+          connect: (id) => backend.ensureConnected(
+            id,
+            isCancelled: () => _cancelled || !mounted,
+          ),
+          cancelled: () => _cancelled || !mounted,
+          rollback: () => original == null
+              ? backend.manager.removeDevice(choice.device.addr)
+              : backend.manager.importSharedDevice(original),
+        );
+      });
+      if (mounted) {
+        setState(() {
+          _savedDevice = choice.device.addr;
+          _notice = '已连接「${choice.device.name}」，设备已保存，可以安装应用了。';
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _notice = null;
+          _error = e is LogImportRestoreFailed
+              ? '连接未完成，恢复原设备资料时也出现错误，请通过账号同步重新获取设备资料。'
+              : e is LogImportCancelled
+              ? '已取消，未替换原有设备资料。'
+              : '${friendlyError(e)}\n未确认的 Key 不会覆盖原有设备资料。';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _connecting = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _cancelSelection() async {
+    _cancelled = true;
+    await ref.read(steadyBackendProvider).cancelConnection();
   }
 
   Future<void> _save(LogKeyCandidate candidate) async {
@@ -225,6 +419,7 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+    if (_savedDevice != null && mounted) await _verify();
   }
 
   Future<void> _verify() async {
@@ -265,100 +460,172 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 720),
             child: ListView(
+              controller: _scroll,
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
               children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: colors.primaryContainer.withValues(alpha: .4),
-                    borderRadius: BorderRadius.circular(24),
+                if (_file != null && _candidates.isNotEmpty) ...[
+                  Text(
+                    '选择你的设备',
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 8),
+                  const Text('点击设备即可导入并连接，无需填写蓝牙地址。'),
+                  for (final choice in _choices)
+                    Card(
+                      child: ListTile(
+                        enabled: !_busy,
+                        leading: const Icon(Icons.watch_rounded),
+                        title: Text(choice.device.name),
+                        subtitle: Text(choice.device.addr),
+                        trailing: Icon(
+                          _savedDevice == choice.device.addr
+                              ? Icons.check_circle_rounded
+                              : Icons.chevron_right_rounded,
+                        ),
+                        onTap: _busy ? null : () => _selectDevice(choice),
+                      ),
+                    ),
+                  if (_choices.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text('已读到连接信息，点击下方搜索并选择你的手环。'),
+                    ),
+                  OutlinedButton.icon(
+                    onPressed: _busy ? null : _scanDevices,
+                    icon: const Icon(Icons.bluetooth_searching_rounded),
+                    label: const Text('搜索蓝牙设备'),
+                  ),
+                  if (_busy) const LinearProgressIndicator(),
+                  if (_connecting)
+                    TextButton(
+                      onPressed: _cancelSelection,
+                      child: const Text('取消连接'),
+                    ),
+                  if (_notice != null)
+                    Text(_notice!, style: const TextStyle(height: 1.5)),
+                  if (_error != null)
+                    Text(
+                      _error!,
+                      style: TextStyle(color: colors.error, height: 1.5),
+                    ),
+                  ExpansionTile(
+                    title: const Text('高级选项'),
                     children: [
-                      Icon(
-                        Icons.folder_zip_outlined,
-                        size: 32,
-                        color: colors.primary,
+                      TextButton(
+                        onPressed: _busy ? null : () => _pick(),
+                        child: const Text('重新选择日志文件'),
                       ),
-                      const SizedBox(height: 14),
-                      Text(
-                        '日志留在手机，连接由你确认',
-                        style: Theme.of(context).textTheme.titleLarge
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                      TextButton(
+                        onPressed: _busy ? null : _grantFolder,
+                        child: const Text('更换日志文件夹'),
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        '授权日志文件夹后，自动查找最新日志并在本机解析，无需逐个选择文件。日志和 Key 不上传，也不生成解压缓存。小米账号同步仍然保留。',
-                        style: TextStyle(height: 1.6),
-                      ),
+                      for (final group in groupLogDevices(_candidates))
+                        _deviceCard(group),
                     ],
                   ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  '操作教程',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 12),
-                _step('1', '先连接手环', '打开小米运动健康，让目标手环连接并同步一次。恢复出厂后需先在运动健康重新绑定。'),
-                _step(
-                  '2',
-                  '导出设备日志',
-                  '进入“我的 → 关于”，快速连续点击页面上的小米运动健康 Logo；看到导出 / 迁移日志提示后确认。部分版本入口可能不同。',
-                ),
-                _step(
-                  '3',
-                  '首次授权，之后自动读取',
-                  '首次点击“授权日志文件夹”，选择 Download/wearablelog 或 Download/ResearchLog 文件夹，并允许访问。不要选择整个 Download。之后从本页打开运动健康、导出日志并返回，会自动查找本次的新日志；也可点击“自动读取最新日志”。',
-                ),
-                _step(
-                  '4',
-                  '选择设备并验证',
-                  '读取后直接选择识别到的设备，已有设备自动更新 Key。同一设备存在多条历史 Key 时，请选择一条再导入并验证连接；仅未识别的记录需要手动补充。请勿把日志公开分享。',
-                ),
-                OutlinedButton.icon(
-                  onPressed: _busy ? null : _openHealth,
-                  icon: const Icon(Icons.open_in_new_rounded),
-                  label: const Text('打开运动健康，返回后自动读取'),
-                ),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  onPressed: _busy ? null : () => _pick(automatic: true),
-                  icon: const Icon(Icons.manage_search_rounded),
-                  label: Text(_busy ? '正在读取…' : '自动读取最新日志'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: _busy ? null : _grantFolder,
-                  icon: const Icon(Icons.folder_open_rounded),
-                  label: const Text('授权日志文件夹'),
-                ),
-                TextButton(
-                  onPressed: _busy ? null : _forgetFolder,
-                  child: const Text('取消日志文件夹授权'),
-                ),
-                const SizedBox(height: 8),
-                FilledButton.icon(
-                  onPressed: _busy ? null : _pick,
-                  icon: _busy
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.file_open_outlined),
-                  label: Text(_busy ? '正在处理…' : '手动选择日志（备用）'),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  '文件上限 32 MB。不会后台持续扫描；只在你点击读取或从本页打开运动健康后返回时查找。若此前已开启所有文件访问，也可直接查找默认日志目录，无需重复授权。',
-                  style: TextStyle(
-                    fontSize: 12,
-                    height: 1.6,
-                    color: colors.onSurfaceVariant,
+                  TextButton(
+                    onPressed: _busy ? null : () => _pick(automatic: true),
+                    child: const Text('重新读取日志'),
                   ),
-                ),
-                if (_error != null)
+                ],
+                if (_candidates.isEmpty) ...[
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: colors.primaryContainer.withValues(alpha: .4),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.folder_zip_outlined,
+                          size: 32,
+                          color: colors.primary,
+                        ),
+                        const SizedBox(height: 14),
+                        Text(
+                          '日志留在手机，连接由你确认',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          '授权日志文件夹后，自动查找最新日志并在本机解析，无需逐个选择文件。日志和 Key 不上传，也不生成解压缓存。小米账号同步仍然保留。',
+                          style: TextStyle(height: 1.6),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    '操作教程',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 12),
+                  _step(
+                    '1',
+                    '先连接手环',
+                    '打开小米运动健康，让目标手环连接并同步一次。恢复出厂后需先在运动健康重新绑定。',
+                  ),
+                  _step(
+                    '2',
+                    '导出设备日志',
+                    '进入“我的 → 关于”，快速连续点击页面上的小米运动健康 Logo；看到导出 / 迁移日志提示后确认。部分版本入口可能不同。',
+                  ),
+                  _step(
+                    '3',
+                    '首次授权，之后自动读取',
+                    '首次点击“授权日志文件夹”，选择 Download/wearablelog 或 Download/ResearchLog 文件夹，并允许访问。不要选择整个 Download。之后从本页打开运动健康、导出日志并返回，会自动查找本次的新日志；也可点击“自动读取最新日志”。',
+                  ),
+                  _step(
+                    '4',
+                    '选择设备即可连接',
+                    '读取后点击你的设备，自动填入地址、导入并验证连接；没有看到设备时点击搜索蓝牙设备。Key 详情和手动输入保留在高级选项中。',
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: _busy ? null : _openHealth,
+                    icon: const Icon(Icons.open_in_new_rounded),
+                    label: const Text('打开运动健康，返回后自动读取'),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: _busy ? null : () => _pick(automatic: true),
+                    icon: const Icon(Icons.manage_search_rounded),
+                    label: Text(_busy ? '正在读取…' : '自动读取最新日志'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: _busy ? null : _grantFolder,
+                    icon: const Icon(Icons.folder_open_rounded),
+                    label: const Text('授权日志文件夹'),
+                  ),
+                  TextButton(
+                    onPressed: _busy ? null : _forgetFolder,
+                    child: const Text('取消日志文件夹授权'),
+                  ),
+                  const SizedBox(height: 8),
+                  FilledButton.icon(
+                    onPressed: _busy ? null : _pick,
+                    icon: _busy
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.file_open_outlined),
+                    label: Text(_busy ? '正在处理…' : '手动选择日志（备用）'),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    '文件上限 32 MB。不会后台持续扫描；只在你点击读取或从本页打开运动健康后返回时查找。若此前已开启所有文件访问，也可直接查找默认日志目录，无需重复授权。',
+                    style: TextStyle(
+                      fontSize: 12,
+                      height: 1.6,
+                      color: colors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+                if (_error != null && _candidates.isEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Text(
@@ -366,33 +633,16 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
                       style: TextStyle(color: colors.error, height: 1.5),
                     ),
                   ),
-                if (_notice != null)
+                if (_notice != null && _candidates.isEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Text(_notice!, style: const TextStyle(height: 1.6)),
                   ),
-                if (_savedDevice != null)
-                  OutlinedButton.icon(
-                    onPressed: _busy ? null : _verify,
-                    icon: const Icon(Icons.bluetooth_connected_rounded),
-                    label: const Text('验证连接'),
-                  ),
-                if (_file != null) ...[
-                  const SizedBox(height: 20),
+                if (_file != null)
                   Text(
-                    '识别到 ${groupLogDevices(_candidates).where((g) => g.device.address.isNotEmpty).length} 台设备 · ${_candidates.length} 条 Key',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    '日志：$_file${_modified == null ? '' : ' · $_modified'}',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  Text(
-                    _file!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: colors.onSurfaceVariant),
-                  ),
-                  if (_modified != null) Text('日志修改时间：$_modified；请核对是否刚刚导出'),
-                ],
-                for (final group in groupLogDevices(_candidates))
-                  _deviceCard(group),
               ],
             ),
           ),

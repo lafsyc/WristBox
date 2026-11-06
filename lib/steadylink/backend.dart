@@ -59,7 +59,11 @@ class SteadyBackend {
     queue.forget(id);
   });
 
-  Future<void> ensureConnected(String id) async {
+  Future<void> ensureConnected(
+    String id, {
+    bool Function()? isCancelled,
+  }) async {
+    if (isCancelled?.call() == true) throw StateError('已取消连接');
     final target = device(id);
     if (state.currentDevice?.addr == id &&
         state.protocolState == ProtocolState.ready) {
@@ -79,6 +83,7 @@ class SteadyBackend {
         throw StateError(error.message ?? '蓝牙不可用，请检查权限和蓝牙开关后重试');
       }
     }
+    if (isCancelled?.call() == true) throw StateError('已取消连接');
     // Android already retries in the transport manager. Do not cancel the
     // user's pairing confirmation with an overlapping outer retry cycle.
     final attempts = Platform.isAndroid ? 1 : 2;

@@ -611,6 +611,7 @@ class MainActivity : FlutterActivity() {
                         result.success(null)
                     }
                 }
+                "listBondedDevices" -> listBondedDevices(result)
                 "startScan" -> startSppScan(call, result)
                 "stopScan" -> {
                     val results = stopSppScan()
@@ -1170,6 +1171,26 @@ class MainActivity : FlutterActivity() {
         webView?.destroy()
         if (notify && appId != null) {
             zeppSettingsChannel?.invokeMethod("closed", mapOf("appId" to appId))
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun listBondedDevices(result: MethodChannel.Result) {
+        // Reading a log never triggers a new Bluetooth permission prompt.
+        // The explicit scan action uses the existing permission flow.
+        if (!hasBluetoothConnectPermission()) {
+            result.error("PERMISSION_REQUIRED", "请点击搜索蓝牙设备并允许附近设备权限", null)
+            return
+        }
+        try {
+            val adapter = BluetoothAdapter.getDefaultAdapter()
+            result.success(adapter?.bondedDevices?.map { device ->
+                mapOf("name" to (device.name ?: "蓝牙设备"), "addr" to device.address, "connectType" to "spp")
+            } ?: emptyList<Map<String, String>>())
+        } catch (_: SecurityException) {
+            result.error("PERMISSION_REQUIRED", "蓝牙权限未开启，请点击搜索并授权", null)
+        } catch (_: Exception) {
+            result.error("BLUETOOTH_UNAVAILABLE", "暂时无法读取已配对设备，请开启蓝牙后重试", null)
         }
     }
 

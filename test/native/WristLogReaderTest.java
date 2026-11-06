@@ -104,6 +104,26 @@ public final class WristLogReaderTest {
         // Literal/escaped braces inside a skipped deep string are never devices.
         rows = read(("[".repeat(80) + "\"" + escapedDevice + "\"" + "]".repeat(80)).getBytes(StandardCharsets.UTF_8), false);
         assert rows.stream().noneMatch(r -> Boolean.TRUE.equals(r.get("metadataAllowed")));
+        // MAC-only records are retained as a bounded candidate pool, not Key associations.
+        rows = read(("Bluetooth connected AA:BB:CC:DD:EE:01\n" + device).getBytes(StandardCharsets.UTF_8), false);
+        assert ((List<?>) rows.get(0).get("addressCandidates")).contains("AA:BB:CC:DD:EE:01");
+        assert read(zip("XiaomiFit.device.log.bak.1", device), true).stream().anyMatch(r -> r.get("text").equals(device));
+        ByteArrayOutputStream mixed = new ByteArrayOutputStream();
+        try (ZipOutputStream out = new ZipOutputStream(mixed)) {
+            out.putNextEntry(new ZipEntry("bluetooth.log"));
+            out.write(("connected 11:22:33:44:EE:01\n" + keyLine.replace("0123456789abcdef0123456789abcdef", "ffffffffffffffffffffffffffffffff")).getBytes(StandardCharsets.UTF_8));
+            out.closeEntry();
+            out.putNextEntry(new ZipEntry("XiaomiFit.device.log.bak.1"));
+            out.write(device.getBytes(StandardCharsets.UTF_8)); out.closeEntry();
+        }
+        rows = read(mixed.toByteArray(), true);
+        assert ((List<?>) rows.get(0).get("addressCandidates")).contains("11:22:33:44:EE:01");
+        assert rows.stream().noneMatch(r -> ((String) r.get("text")).contains("ffffffffffffffffffffffffffffffff"));
+        StringBuilder manyAddresses = new StringBuilder();
+        for (int i = 0; i < 520; i++) manyAddresses.append(String.format("11:22:33:44:%02X:%02X\n", i / 256, i % 256));
+        rows = read((manyAddresses + device).getBytes(StandardCharsets.UTF_8), false);
+        assert ((List<?>) rows.get(0).get("addressCandidates")).size() == 512;
+        assert Boolean.FALSE.equals(rows.get(0).get("addressPoolComplete"));
         ByteArrayOutputStream entries = new ByteArrayOutputStream();
         try (ZipOutputStream out = new ZipOutputStream(entries)) {
             for (int i = 0; i < 257; i++) {
