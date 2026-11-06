@@ -204,4 +204,23 @@ void main() {
     expect(items, hasLength(2));
     expect(items.any((c) => c.address.isEmpty), isTrue);
   });
+  test('native fallback recovers keys without treating rejected JSON as device metadata', () {
+    final object = jsonEncode({
+      'encryptKey': keyA,
+      'mac': 'AA:BB:CC:DD:EE:01',
+      'name': 'not trusted',
+    });
+    final unassigned = parseLogKeyRecords([
+      {'text': object, 'metadataAllowed': false},
+    ]);
+    expect(unassigned.single.key, keyA);
+    expect(unassigned.single.address, isEmpty);
+    expect(unassigned.single.name, isEmpty);
+    final recovered = parseLogKeyRecords([
+      {'text': object, 'metadataAllowed': false},
+      {'text': object, 'metadataAllowed': true},
+    ]);
+    expect(recovered, hasLength(1));
+    expect(recovered.single.address, 'AA:BB:CC:DD:EE:01');
+  });
 }

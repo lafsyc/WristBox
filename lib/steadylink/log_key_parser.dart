@@ -250,7 +250,9 @@ List<LogKeyCandidate> parseLogKeyRecords(List<Map<String, dynamic>> records) {
     // Truncated windows cannot prove JSON context. Native code additionally
     // emits complete objects with string context preserved across all windows.
     for (final object
-        in truncatedStart || truncatedEnd ? const <String>[] : _objects(text)) {
+        in truncatedStart || truncatedEnd || record['metadataAllowed'] == false
+            ? const <String>[]
+            : _objects(text)) {
       dynamic decoded;
       try {
         decoded = jsonDecode(object);

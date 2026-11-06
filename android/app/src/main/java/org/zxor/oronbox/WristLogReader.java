@@ -91,7 +91,8 @@ public final class WristLogReader {
                 char c = buffer[i];
                 objects.accept(c, number);
                 if (c == '\n') {
-                    retain(line, name, number++, continued, false);
+                    if (!objects.coversLine(line, number)) retain(line, name, number, continued, false);
+                    number++;
                     line.setLength(0);
                     continued = false;
                 }
@@ -105,62 +106,161 @@ public final class WristLogReader {
                 }
             }
         }
-        if (line.length() > 0) retain(line, name, number, continued, false);
+        if (line.length() > 0 && !objects.coversLine(line, number)) retain(line, name, number, continued, false);
     }
 
     /** Follow string/escape context across windows, so braces inside strings are
      * never interpreted as device records. Each frame and the output are bounded.
      * Oversized outer objects can still contain small complete device objects. */
+    private static final int KEY_OR_END = 0, KEY = 1, COLON = 2,
+        VALUE = 3, VALUE_OR_END = 4, AFTER_VALUE = 5;
+    private static boolean whitespace(char c) {
+        return c == ' ' || c == 9 || c == 10 || c == 13;
+    }
     private final class JsonRecords {
         final String source;
         final Deque<Frame> stack = new ArrayDeque<>();
-        boolean quoted, escaped;
+        boolean quoted, escaped, stringIsKey, discardLine;
+        int unicodeRemaining, skippedDepth;
+        StringBuilder primitive;
+        String completedRoot;
+        int completedRootLine = -1;
+        boolean coversLine(StringBuilder raw, int line) {
+            return completedRootLine == line && completedRoot != null && completedRoot.equals(raw.toString().trim());
+        }
         JsonRecords(String source) { this.source = source; }
+
+        void reset() {
+            stack.clear(); quoted = false; escaped = false;
+            unicodeRemaining = 0; skippedDepth = 0; primitive = null; discardLine = false;
+        }
+        void restart(char c, int line) {
+            reset();
+            if (c == '{' || c == '[') stack.push(new Frame(line, c));
+        }
         void accept(char c, int line) throws IOException {
-            if (stack.isEmpty()) {
+            if (discardLine) {
+                if (c == 10 || c == 13) reset();
+                return;
+            }
+            // Skip an over-deep subtree using a counter, without allocating
+            // frames or parsing apparent objects inside its quoted strings.
+            if (skippedDepth > 0) {
+                // A fresh physical line is a recovery boundary. The discarded
+                // parents cannot supply metadata to any subsequently found object.
+                if (c == 10 || c == 13) { reset(); return; }
                 if (quoted) {
                     if (escaped) escaped = false;
                     else if (c == '\\') escaped = true;
-                    else if (c == '"' || c == '\n' || c == '\r') quoted = false;
+                    else if (c == '"') quoted = false;
                 } else if (c == '"') quoted = true;
-                else if (c == '{' || c == '[') { stack.push(new Frame(line, c)); escaped = false; }
+                else if (c == '{' || c == '[') skippedDepth++;
+                else if (c == '}' || c == ']') {
+                    if (--skippedDepth == 0 && !stack.isEmpty()) stack.peek().stage = AFTER_VALUE;
+                }
+                return;
+            }
+            if (stack.isEmpty()) {
+                if (c == 10 || c == 13) { reset(); return; }
+                if (quoted) {
+                    if (escaped) escaped = false;
+                    else if (c == '\\') escaped = true;
+                    else if (c == '"') quoted = false;
+                } else if (c == '"') quoted = true;
+                else if (c == '{' || c == '[') stack.push(new Frame(line, c));
                 return;
             }
             Frame top = stack.peek();
             if (quoted) {
+                // Reject malformed string syntax instead of carrying its state
+                // into unrelated log lines. Completed objects are validated again in Dart.
+                if (c < 0x20) { reset(); discardLine = c != 10 && c != 13; return; }
                 top.append(c);
-                if (escaped) escaped = false;
-                else if (c == '\\') escaped = true;
-                else if (c == '"') quoted = false;
-                // Raw newlines are invalid inside JSON strings. Do not let a
-                // malformed log record poison all following physical lines.
-                else if (c == '\n' || c == '\r') { stack.clear(); quoted = false; }
+                if (unicodeRemaining > 0) {
+                    if (Character.digit(c, 16) < 0) { reset(); discardLine = true; return; }
+                    unicodeRemaining--;
+                } else if (escaped) {
+                    escaped = false;
+                    if (c == 'u') unicodeRemaining = 4;
+                    else if ("\"\\/bfnrt".indexOf(c) < 0) { reset(); discardLine = true; }
+                } else if (c == '\\') escaped = true;
+                else if (c == '"') {
+                    quoted = false;
+                    top.stage = stringIsKey ? COLON : AFTER_VALUE;
+                }
                 return;
             }
-            if (c == '"') { quoted = true; top.append(c); }
-            else if (c == '{' || c == '[') {
-                if (stack.size() >= 32) throw new LogReadException("日志结构嵌套过深，请重新导出日志");
-                stack.push(new Frame(line, c));
-            } else if (c == '}' || c == ']') {
-                if (top.opening != (c == '}' ? '{' : '[')) { stack.clear(); return; }
-                top.append(c);
-                stack.pop();
+            if (primitive != null) {
+                if (whitespace(c) || c == ',' || c == ']' || c == '}') {
+                    String token = primitive.toString();
+                    primitive = null;
+                    if (!(token.equals("true") || token.equals("false") || token.equals("null") ||
+                            token.matches("-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?"))) {
+                        restart(c, line); return;
+                    }
+                    top.stage = AFTER_VALUE;
+                } else {
+                    if (primitive.length() >= 128 || !(Character.isLetterOrDigit(c) || c == '.' || c == '+' || c == '-')) {
+                        restart(c, line); return;
+                    }
+                    primitive.append(c); top.append(c); return;
+                }
+            }
+            if (whitespace(c)) { top.append(c); return; }
+            if (c == '}' || c == ']') {
+                boolean endAllowed = top.stage == AFTER_VALUE || top.stage == KEY_OR_END || top.stage == VALUE_OR_END;
+                if (!endAllowed || top.opening != (c == '}' ? '{' : '[')) { reset(); return; }
+                top.append(c); stack.pop();
                 if (top.text != null) {
                     retain(top.text, source, top.line, false, false, true);
+                    if (stack.isEmpty() && top.line == line) {
+                        completedRoot = top.text.toString();
+                        completedRootLine = line;
+                    }
                 }
                 if (!stack.isEmpty()) {
                     Frame parent = stack.peek();
+                    parent.stage = AFTER_VALUE;
                     if (top.text == null) parent.text = null;
                     else parent.append(top.text);
                 }
-            } else top.append(c);
+                return;
+            }
+            if (top.stage == KEY_OR_END || top.stage == KEY) {
+                if (c != '"') { restart(c, line); return; }
+                quoted = true; stringIsKey = true; top.append(c); return;
+            }
+            if (top.stage == COLON) {
+                if (c != ':') { restart(c, line); return; }
+                top.stage = VALUE; top.append(c); return;
+            }
+            if (top.stage == AFTER_VALUE) {
+                if (c != ',') { restart(c, line); return; }
+                top.stage = top.opening == '{' ? KEY : VALUE;
+                top.append(c); return;
+            }
+            if (c == '"') {
+                quoted = true; stringIsKey = false; top.append(c);
+            } else if (c == '{' || c == '[') {
+                if (stack.size() >= 32) {
+                    for (Frame frame : stack) frame.text = null;
+                    skippedDepth = 1;
+                } else stack.push(new Frame(line, c));
+            } else if (c == '-' || (c >= '0' && c <= '9') || c == 't' || c == 'f' || c == 'n') {
+                primitive = new StringBuilder().append(c); top.append(c);
+            } else restart(c, line);
         }
     }
     private static final class Frame {
         StringBuilder text;
         final int line;
         final char opening;
-        Frame(int line, char opening) { this.line = line; this.opening = opening; text = new StringBuilder().append(opening); }
+        int stage;
+        Frame(int line, char opening) {
+            this.line = line; this.opening = opening;
+            stage = opening == '{' ? KEY_OR_END : VALUE_OR_END;
+            text = new StringBuilder().append(opening);
+        }
         void append(char c) {
             if (text != null) {
                 if (text.length() >= MAX_LINE) text = null;
@@ -187,14 +287,15 @@ public final class WristLogReader {
         boolean key = lower.contains("encryptkey") || lower.contains("devicekey") || lower.contains("encrypt_key") || lower.contains("authkey") || lower.contains("auth_key");
         boolean identity = structured && (lower.contains("\"mac\"") || lower.contains("\"macaddress\"") || lower.contains("\"mac_address\"") || lower.contains("\"bluetoothaddress\"") || lower.contains("\"devicemac\"") || lower.contains("\"btmac\"") || lower.contains("\"address\""));
         if (!key && !identity) return;
-        // Complete JSON is supplied by the context-aware collector, not twice
-        // as both a physical line and an object. Plain text remains a fallback.
-        if (!structured && !truncatedStart && !truncatedEnd && line.trim().startsWith("{") && line.trim().endsWith("}")) return;
+        // Only the grammar-aware collector may establish device metadata.
+        // Raw windows are retained for Key-only fallback and deduplicated in Dart.
+
         retained += line.length();
         if (matches.size() >= 512 || retained > 2 * 1024 * 1024)
             throw new LogReadException("日志中的候选记录过多，请重新导出最近的日志");
         Map<String, Object> record = new HashMap<>();
         record.put("text", line); record.put("source", source); record.put("line", number);
+        record.put("metadataAllowed", structured);
         record.put("truncatedStart", truncatedStart);
         record.put("truncatedEnd", truncatedEnd);
         matches.add(record);
