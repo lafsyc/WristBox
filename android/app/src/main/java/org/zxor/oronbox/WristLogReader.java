@@ -84,10 +84,12 @@ public final class WristLogReader {
         StringBuilder line = new StringBuilder();
         boolean continued = false;
         int number = 1, size;
+        JsonRecords objects = new JsonRecords(name);
         while ((size = reader.read(buffer)) != -1) {
             check();
             for (int i = 0; i < size; i++) {
                 char c = buffer[i];
+                objects.accept(c, number);
                 if (c == '\n') {
                     retain(line, name, number++, continued, false);
                     line.setLength(0);
@@ -106,11 +108,88 @@ public final class WristLogReader {
         if (line.length() > 0) retain(line, name, number, continued, false);
     }
 
+    /** Follow string/escape context across windows, so braces inside strings are
+     * never interpreted as device records. Each frame and the output are bounded.
+     * Oversized outer objects can still contain small complete device objects. */
+    private final class JsonRecords {
+        final String source;
+        final Deque<Frame> stack = new ArrayDeque<>();
+        boolean quoted, escaped;
+        JsonRecords(String source) { this.source = source; }
+        void accept(char c, int line) throws IOException {
+            if (stack.isEmpty()) {
+                if (quoted) {
+                    if (escaped) escaped = false;
+                    else if (c == '\\') escaped = true;
+                    else if (c == '"' || c == '\n' || c == '\r') quoted = false;
+                } else if (c == '"') quoted = true;
+                else if (c == '{' || c == '[') { stack.push(new Frame(line, c)); escaped = false; }
+                return;
+            }
+            Frame top = stack.peek();
+            if (quoted) {
+                top.append(c);
+                if (escaped) escaped = false;
+                else if (c == '\\') escaped = true;
+                else if (c == '"') quoted = false;
+                // Raw newlines are invalid inside JSON strings. Do not let a
+                // malformed log record poison all following physical lines.
+                else if (c == '\n' || c == '\r') { stack.clear(); quoted = false; }
+                return;
+            }
+            if (c == '"') { quoted = true; top.append(c); }
+            else if (c == '{' || c == '[') {
+                if (stack.size() >= 32) throw new LogReadException("日志结构嵌套过深，请重新导出日志");
+                stack.push(new Frame(line, c));
+            } else if (c == '}' || c == ']') {
+                if (top.opening != (c == '}' ? '{' : '[')) { stack.clear(); return; }
+                top.append(c);
+                stack.pop();
+                if (top.text != null) {
+                    retain(top.text, source, top.line, false, false, true);
+                }
+                if (!stack.isEmpty()) {
+                    Frame parent = stack.peek();
+                    if (top.text == null) parent.text = null;
+                    else parent.append(top.text);
+                }
+            } else top.append(c);
+        }
+    }
+    private static final class Frame {
+        StringBuilder text;
+        final int line;
+        final char opening;
+        Frame(int line, char opening) { this.line = line; this.opening = opening; text = new StringBuilder().append(opening); }
+        void append(char c) {
+            if (text != null) {
+                if (text.length() >= MAX_LINE) text = null;
+                else text.append(c);
+            }
+        }
+        void append(StringBuilder child) {
+            if (text != null) {
+                if (text.length() + child.length() > MAX_LINE) text = null;
+                else text.append(child);
+            }
+        }
+    }
+
     private void retain(StringBuilder text, String source, int number,
                         boolean truncatedStart, boolean truncatedEnd) throws IOException {
+        retain(text, source, number, truncatedStart, truncatedEnd, false);
+    }
+
+    private void retain(StringBuilder text, String source, int number,
+                        boolean truncatedStart, boolean truncatedEnd, boolean structured) throws IOException {
         String line = text.toString();
         String lower = line.toLowerCase(Locale.ROOT);
-        if (!lower.contains("encryptkey") && !lower.contains("devicekey")) return;
+        boolean key = lower.contains("encryptkey") || lower.contains("devicekey") || lower.contains("encrypt_key") || lower.contains("authkey") || lower.contains("auth_key");
+        boolean identity = structured && (lower.contains("\"mac\"") || lower.contains("\"macaddress\"") || lower.contains("\"mac_address\"") || lower.contains("\"bluetoothaddress\"") || lower.contains("\"devicemac\"") || lower.contains("\"btmac\"") || lower.contains("\"address\""));
+        if (!key && !identity) return;
+        // Complete JSON is supplied by the context-aware collector, not twice
+        // as both a physical line and an object. Plain text remains a fallback.
+        if (!structured && !truncatedStart && !truncatedEnd && line.trim().startsWith("{") && line.trim().endsWith("}")) return;
         retained += line.length();
         if (matches.size() >= 512 || retained > 2 * 1024 * 1024)
             throw new LogReadException("日志中的候选记录过多，请重新导出最近的日志");

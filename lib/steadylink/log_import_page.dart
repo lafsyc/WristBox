@@ -12,6 +12,49 @@ import 'store_models.dart';
 
 const _logChannel = MethodChannel('wristbox/log_import');
 
+String logDeviceName(LogKeyCandidate candidate) {
+  if (candidate.name.isNotEmpty) return candidate.name;
+  final model = storeModelForDevice(
+    MiWearState(
+      name: '',
+      addr: '',
+      connectType: 'spp',
+      codename: candidate.model,
+    ),
+  );
+  return storeModelNames[model] ??
+      (candidate.address.isEmpty
+          ? '未识别设备'
+          : '蓝牙设备 ${candidate.address.substring(12)}');
+}
+
+MiWearState? deviceFromLogCandidate(
+  LogKeyCandidate candidate,
+  List<MiWearState> devices,
+) {
+  if (candidate.address.isEmpty) return null;
+  final existing = devices
+      .where((d) => d.addr.toUpperCase() == candidate.address)
+      .firstOrNull;
+  if (existing != null) return existing.copyWith(authkey: candidate.key);
+  final model = storeModelForDevice(
+    MiWearState(
+      name: candidate.name,
+      addr: '',
+      connectType: 'spp',
+      codename: candidate.model,
+    ),
+  );
+  return MiWearState(
+    name: logDeviceName(candidate),
+    addr: candidate.address,
+    connectType: 'spp',
+    codename: model,
+    authkey: candidate.key,
+    disconnected: true,
+  );
+}
+
 class LogImportPage extends ConsumerStatefulWidget {
   const LogImportPage({super.key, this.pickLog});
   final Future<Map<String, dynamic>?> Function()? pickLog;
@@ -23,6 +66,7 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
     with WidgetsBindingObserver {
   bool _busy = false;
   List<LogKeyCandidate> _candidates = [];
+  final Map<String, String> _selectedKeys = {};
   String? _file, _error, _notice, _savedDevice;
   bool _awaitingHealth = false, _healthLeft = false;
   int _openedAt = 0;
@@ -105,6 +149,7 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
       _notice = null;
       _savedDevice = null;
       _candidates = [];
+      _selectedKeys.clear();
       _file = null;
       _modified = null;
     });
@@ -151,13 +196,15 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
       setState(() => _error = '请等待当前连接或安装任务完成后再导入');
       return;
     }
-    final target = await showDialog<MiWearState>(
-      context: context,
-      builder: (_) => LogKeyTargetDialog(
-        candidate: candidate,
-        devices: ref.read(deviceManagerProvider).pairedDevices,
-      ),
-    );
+    final devices = ref.read(deviceManagerProvider).pairedDevices;
+    final identified = deviceFromLogCandidate(candidate, devices);
+    final target =
+        identified ??
+        await showDialog<MiWearState>(
+          context: context,
+          builder: (_) =>
+              LogKeyTargetDialog(candidate: candidate, devices: devices),
+        );
     if (target == null || !mounted) return;
     setState(() {
       _busy = true;
@@ -267,8 +314,8 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
                 ),
                 _step(
                   '4',
-                  '核对目标并验证',
-                  '选择一条 Key 记录，指定已有手环或补充蓝牙地址新增设备。保存后验证连接；请勿把日志公开分享。',
+                  '选择设备并验证',
+                  '读取后直接选择识别到的设备，已有设备自动更新 Key。同一设备存在多条历史 Key 时，请选择一条再导入并验证连接；仅未识别的记录需要手动补充。请勿把日志公开分享。',
                 ),
                 OutlinedButton.icon(
                   onPressed: _busy ? null : _openHealth,
@@ -333,7 +380,7 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
                 if (_file != null) ...[
                   const SizedBox(height: 20),
                   Text(
-                    '识别到 ${_candidates.length} 条 Key',
+                    '识别到 ${groupLogDevices(_candidates).where((g) => g.device.address.isNotEmpty).length} 台设备 · ${_candidates.length} 条 Key',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
@@ -344,8 +391,8 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
                   ),
                   if (_modified != null) Text('日志修改时间：$_modified；请核对是否刚刚导出'),
                 ],
-                for (var i = 0; i < _candidates.length; i++)
-                  _candidate(_candidates[i], i),
+                for (final group in groupLogDevices(_candidates))
+                  _deviceCard(group),
               ],
             ),
           ),
@@ -378,44 +425,94 @@ class _LogImportPageState extends ConsumerState<LogImportPage>
     ),
   );
 
-  Widget _candidate(LogKeyCandidate item, int index) => Card(
-    margin: const EdgeInsets.only(top: 14),
-    elevation: 0,
-    color: Theme.of(context).colorScheme.surfaceContainerLow,
-    child: Padding(
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            item.name.isEmpty ? '待确认设备 · 记录 ${index + 1}' : item.name,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          if (item.model.isNotEmpty) Text(item.model),
-          Text(item.address.isEmpty ? '日志未提供可靠地址，请手动选择目标' : item.address),
-          const SizedBox(height: 12),
-          Text(
-            'Key  ${item.hint}',
-            style: const TextStyle(fontFamily: 'monospace'),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '${item.source} · 第 ${item.line} 行',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: _busy ? null : () => _save(item),
-              icon: const Icon(Icons.add_link_rounded),
-              label: const Text('选择目标设备'),
+  Widget _deviceCard(LogDeviceGroup group) {
+    final device = group.device;
+    final selection = _selectedKeys[device.address];
+    final selected = group.candidates.length == 1
+        ? device
+        : group.candidates.where((c) => c.key == selection).firstOrNull;
+    final known = device.address.isNotEmpty;
+    return Card(
+      margin: const EdgeInsets.only(top: 14),
+      elevation: 0,
+      color: Theme.of(context).colorScheme.surfaceContainerLow,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(known ? Icons.watch_rounded : Icons.help_outline_rounded),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    logDeviceName(device),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                if (known) const Chip(label: Text('已识别')),
+              ],
             ),
-          ),
-        ],
+            if (device.model.isNotEmpty) Text(device.model),
+            Text(known ? device.address : '无法可靠关联设备，仅此记录需要手动选择'),
+            const SizedBox(height: 12),
+            if (group.candidates.length > 1) ...[
+              const Text(
+                '发现多个历史 Key，请选择后验证连接；日志顺序不代表当前有效。',
+                style: TextStyle(height: 1.5),
+              ),
+              const SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                key: ValueKey('history-${device.address}'),
+                initialValue: selection,
+                isExpanded: true,
+                decoration: const InputDecoration(labelText: '选择连接 Key'),
+                items: [
+                  for (var i = 0; i < group.candidates.length; i++)
+                    DropdownMenuItem(
+                      value: group.candidates[i].key,
+                      child: Text('记录 ${i + 1} · ${group.candidates[i].hint}'),
+                    ),
+                ],
+                onChanged: _busy
+                    ? null
+                    : (value) => setState(() {
+                        if (value != null) {
+                          _selectedKeys[device.address] = value;
+                        }
+                      }),
+              ),
+            ] else
+              Text(
+                'Key  ${device.hint}',
+                style: const TextStyle(fontFamily: 'monospace'),
+              ),
+            if (selected != null) ...[
+              const SizedBox(height: 6),
+              Text(
+                '${selected.source} · 第 ${selected.line} 行',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledButton.tonalIcon(
+                onPressed: _busy || selected == null
+                    ? null
+                    : () => _save(selected),
+                icon: Icon(
+                  known ? Icons.add_link_rounded : Icons.edit_outlined,
+                ),
+                label: Text(known ? '选择并导入' : '手动选择目标'),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class LogKeyTargetDialog extends StatefulWidget {

@@ -113,4 +113,95 @@ void main() {
       keyA,
     );
   });
+  test(
+    'separate records associate only through an unambiguous explicit ID',
+    () {
+      final items = parse([
+        jsonEncode({'did': 'device-1', 'encryptKey': keyA}),
+        jsonEncode({
+          'did': 'device-1',
+          'mac_address': 'aabbccddee01',
+          'name': '我的手环',
+          'model': 'n67',
+        }),
+        jsonEncode({
+          'did': 'device-2',
+          'mac': 'AA:BB:CC:DD:EE:02',
+          'name': '不能错配',
+        }),
+      ]);
+      expect(items.single.address, 'AA:BB:CC:DD:EE:01');
+      expect(items.single.name, '我的手环');
+      expect(items.single.model, 'n67');
+    },
+  );
+  test('conflicting ID mappings remain unassigned, even across files', () {
+    final items = parse([
+      jsonEncode({'deviceId': 'same-id', 'encryptKey': keyA}),
+      jsonEncode({'deviceId': 'same-id', 'mac': 'AA:BB:CC:DD:EE:01'}),
+      jsonEncode({'device_id': 'same-id', 'mac': 'AA:BB:CC:DD:EE:02'}),
+    ]);
+    expect(items.single.address, isEmpty);
+  });
+  test(
+    'known cloud device schema supports nested detail and product metadata',
+    () {
+      final items = parse([
+        jsonEncode({
+          'deviceInfo': {
+            'device': {
+              'name': '我的9Pro',
+              'product': {'model': 'n67'},
+              'detail': {'mac': 'AA:BB:CC:DD:EE:01', 'encrypt_key': keyA},
+            },
+          },
+        }),
+      ]);
+      expect(items, hasLength(1));
+      expect(items.single.name, '我的9Pro');
+      expect(items.single.model, 'n67');
+      expect(items.single.address, 'AA:BB:CC:DD:EE:01');
+    },
+  );
+  test('complete native object supersedes long-line key-only windows', () {
+    final object = jsonEncode({
+      'mac': 'AA:BB:CC:DD:EE:01',
+      'encryptKey': keyA,
+      'model': 'n67',
+    });
+    final items = parseLogKeyRecords([
+      {'text': object, 'truncatedStart': true},
+      {'text': object, 'source': 'XiaomiFit.device.log', 'line': 10},
+    ]);
+    expect(items, hasLength(1));
+    expect(items.single.address, 'AA:BB:CC:DD:EE:01');
+  });
+  test(
+    'device grouping preserves multiple historical keys and separate devices',
+    () {
+      final groups = groupLogDevices(
+        parse([
+          jsonEncode({'mac': 'AA:BB:CC:DD:EE:01', 'encryptKey': keyA}),
+          jsonEncode({'mac': 'AA:BB:CC:DD:EE:01', 'encryptKey': keyB}),
+          jsonEncode({'mac': 'AA:BB:CC:DD:EE:02', 'encryptKey': keyA}),
+        ]),
+      );
+      expect(groups, hasLength(2));
+      expect(groups.first.candidates.map((c) => c.key), [keyA, keyB]);
+      expect(groups.last.candidates.single.address, 'AA:BB:CC:DD:EE:02');
+    },
+  );
+  test('a known Key does not hide an explicit conflicting ID record', () {
+    final items = parse([
+      jsonEncode({'did': 'conflict', 'encryptKey': keyA}),
+      jsonEncode({
+        'did': 'conflict',
+        'mac': 'AA:BB:CC:DD:EE:01',
+        'encryptKey': keyA,
+      }),
+      jsonEncode({'did': 'conflict', 'mac': 'AA:BB:CC:DD:EE:02'}),
+    ]);
+    expect(items, hasLength(2));
+    expect(items.any((c) => c.address.isEmpty), isTrue);
+  });
 }

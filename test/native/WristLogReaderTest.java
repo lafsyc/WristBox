@@ -60,6 +60,22 @@ public final class WristLogReaderTest {
         assert read("x".repeat(300000).getBytes(StandardCharsets.UTF_8), false).isEmpty();
         rejects((keyLine + "\n").repeat(513).getBytes(StandardCharsets.UTF_8), false);
         rejects((keyLine + "x".repeat(120000) + "\n").repeat(18).getBytes(StandardCharsets.UTF_8), false);
+        // Complete device objects survive oversized outer arrays and windows.
+        String device = "{\"did\":\"d1\",\"mac\":\"AA:BB:CC:DD:EE:01\",\"encryptKey\":\"0123456789abcdef0123456789abcdef\",\"model\":\"n67\"}";
+        String longArray = "[\"" + "x".repeat(300000) + "\"," + device + "]";
+        rows = read(longArray.getBytes(StandardCharsets.UTF_8), false);
+        assert rows.stream().anyMatch(r -> r.get("text").equals(device) && r.get("truncatedStart").equals(false) && r.get("truncatedEnd").equals(false));
+        // A quoted fake object in a huge string must not establish identity.
+        String escapedDevice = device.replace("\"", "\\\"");
+        String quotedFake = "[\"" + "x".repeat(131050) + escapedDevice + "x".repeat(150000) + "\"]";
+        rows = read(quotedFake.getBytes(StandardCharsets.UTF_8), false);
+        assert rows.stream().noneMatch(r -> r.get("text").equals(device));
+        String multi = device.replace(",", ",\n");
+        rows = read(multi.getBytes(StandardCharsets.UTF_8), false);
+        assert rows.stream().anyMatch(r -> r.get("text").equals(multi));
+        String info = "{\"did\":\"d1\",\"mac\":\"AA:BB:CC:DD:EE:01\"}";
+        assert read(info.getBytes(StandardCharsets.UTF_8), false).stream().anyMatch(r -> r.get("text").equals(info));
+        rejects(("[".repeat(33) + device + "]".repeat(33)).getBytes(StandardCharsets.UTF_8), false);
         ByteArrayOutputStream entries = new ByteArrayOutputStream();
         try (ZipOutputStream out = new ZipOutputStream(entries)) {
             for (int i = 0; i < 257; i++) {

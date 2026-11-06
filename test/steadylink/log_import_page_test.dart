@@ -9,6 +9,27 @@ const sampleKey = '0123456789abcdef0123456789abcdef';
 const candidate = LogKeyCandidate(key: sampleKey, source: 'log', line: 1);
 
 void main() {
+  test('recognized devices import without a target form and preserve existing metadata', () {
+    const recognized = LogKeyCandidate(
+      key: sampleKey,
+      source: 'log',
+      line: 1,
+      address: 'AA:BB:CC:DD:EE:01',
+      model: 'n67',
+    );
+    final fresh = deviceFromLogCandidate(recognized, [])!;
+    expect(fresh.name, '小米手环 9 Pro');
+    expect(fresh.codename, 'n67');
+    expect(fresh.addr, recognized.address);
+    expect(fresh.authkey, sampleKey);
+    final saved = fresh.copyWith(name: '我的自定义名称', authkey: 'a' * 32);
+    final updated = deviceFromLogCandidate(recognized, [saved])!;
+    expect(updated.name, '我的自定义名称');
+    expect(updated.authkey, sampleKey);
+    expect(saved.authkey, 'a' * 32);
+    expect(deviceFromLogCandidate(candidate, [saved]), isNull);
+  });
+
   testWidgets(
     'unknown key requires explicit target; selected device metadata survives',
     (tester) async {
@@ -124,7 +145,59 @@ void main() {
     await tester.pumpAndSettle();
     expect(picks, 1);
     expect(find.text('操作教程'), findsOneWidget);
-    expect(find.textContaining('识别到'), findsNothing);
+    expect(find.textContaining(RegExp(r'^识别到 \d+ 台设备')), findsNothing);
     expect(tester.takeException(), isNull);
   });
+  testWidgets(
+    'recognized devices are grouped and historical keys require a choice',
+    (tester) async {
+      tester.view.physicalSize = const Size(430, 2200);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: LogImportPage(
+              pickLog: () async => {
+                'name': 'synthetic.log',
+                'records': [
+                  {
+                    'text':
+                        '{"mac":"AA:BB:CC:DD:EE:01","model":"n67","encryptKey":"$sampleKey"}',
+                  },
+                  {
+                    'text':
+                        '{"mac":"AA:BB:CC:DD:EE:01","model":"n67","encryptKey":"${'b' * 32}"}',
+                  },
+                ],
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.scrollUntilVisible(find.text('手动选择日志（备用）'), 200);
+      await tester.runAsync(() async {
+        await tester.tap(find.text('手动选择日志（备用）'));
+        for (var i = 0; i < 100; i++) {
+          await Future<void>.delayed(const Duration(milliseconds: 20));
+          await tester.pump();
+          if (find.text('已识别').evaluate().isNotEmpty) break;
+        }
+      });
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(find.text('选择并导入'), 200);
+      expect(find.text('小米手环 9 Pro'), findsOneWidget);
+      expect(find.text('已识别'), findsOneWidget);
+      expect(find.byType(TextFormField), findsNothing);
+      final button = find.widgetWithText(FilledButton, '选择并导入');
+      expect(tester.widget<FilledButton>(button).onPressed, isNull);
+      await tester.tap(find.byType(DropdownButtonFormField<String>));
+      await tester.pumpAndSettle();
+      await tester.tap(find.textContaining('记录 1 ·').last);
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(button).onPressed, isNotNull);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
