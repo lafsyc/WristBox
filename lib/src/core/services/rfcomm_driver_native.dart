@@ -44,7 +44,8 @@ class NativeRfcommConnection implements RfcommConnection {
   }
 }
 
-class NativeRfcommDriver implements RfcommDriver {
+class NativeRfcommDriver
+    implements RfcommDriver, BluetoothConnectionProgressSource {
   NativeRfcommDriver() : _log = getLogger('RfcommDriver');
 
   static const _method = MethodChannel('oronbox/classic_spp');
@@ -56,6 +57,8 @@ class NativeRfcommDriver implements RfcommDriver {
   StreamSubscription<Object?>? _eventSubscription;
   final _incomingController = StreamController<Uint8List>.broadcast();
   final _connectionController = StreamController<bool>.broadcast();
+  final _progressController =
+      StreamController<BluetoothConnectProgress>.broadcast();
   final _scanResults = <String, BluetoothEndpoint>{};
 
   String _canonicalAddress(String address) {
@@ -74,6 +77,12 @@ class NativeRfcommDriver implements RfcommDriver {
   Stream<bool> get connectionState {
     _ensureEventSubscription();
     return _connectionController.stream;
+  }
+
+  @override
+  Stream<BluetoothConnectProgress> get connectionProgress {
+    _ensureEventSubscription();
+    return _progressController.stream;
   }
 
   void _ensureEventSubscription() {
@@ -102,6 +111,16 @@ class NativeRfcommDriver implements RfcommDriver {
     }
     if (event is Map) {
       final kind = event['event'] as String?;
+      if (kind == 'connectionProgress') {
+        final phase = BluetoothConnectPhase.values
+            .where((value) => value.name == event['phase'])
+            .firstOrNull;
+        final address = event['address'];
+        if (phase != null && address is String) {
+          _progressController.add(BluetoothConnectProgress(address, phase));
+        }
+        return;
+      }
       if (kind == 'diagnostic') {
         final levelName = event['level']?.toString() ?? Level.INFO.name;
         final level = Level.LEVELS.firstWhere(
@@ -269,7 +288,7 @@ class NativeRfcommDriver implements RfcommDriver {
       if (e.code == 'BOND_REMOVAL_FAILED') {
         throw SppBondRemovalFailed(e.message);
       }
-      throw StateError('SPP connect failed: ${e.code}: ${e.message}');
+      throw SppConnectFailure(e.code);
     }
     _log.info(
       '[$deviceId] SPP connected '

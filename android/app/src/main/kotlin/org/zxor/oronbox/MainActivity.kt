@@ -66,6 +66,7 @@ class MainActivity : FlutterActivity() {
     private var wristLogImport: WristLogImport? = null
     private var wristAvatarPicker: WristAvatarPicker? = null
     private class BondRemovalException(message: String) : IOException(message)
+    private class SppConnectionException(val code: String, message: String) : IOException(message)
 
     @Volatile
     private var sppSocket: BluetoothSocket? = null
@@ -1467,12 +1468,16 @@ class MainActivity : FlutterActivity() {
             return
         }
 
+        // Allocate on the platform thread so worker scheduling cannot revive
+        // a request that was cancelled before its worker started.
+        val generation = connectGeneration.incrementAndGet()
         Thread {
-            // Invalidate and close the previous attempt before starting a new
-            // one.  The UI can issue a second connect while the first socket
-            // is still blocked in BluetoothSocket.connect().
-            val generation = connectGeneration.incrementAndGet()
-            closeSppTransport()
+            if (!closeSppTransport(generation)) {
+                mainHandler.post {
+                    result.error("CONNECT_CANCELLED", "SPP connect was cancelled", null)
+                }
+                return@Thread
+            }
             // Set when bond removal was requested but the unbond could not be
             // confirmed. The connect may still succeed (stale bond that the
             // remote accepts), so this only upgrades the reported error if
@@ -1481,6 +1486,9 @@ class MainActivity : FlutterActivity() {
             try {
                 val adapter = BluetoothAdapter.getDefaultAdapter()
                     ?: throw IOException("BluetoothAdapter is unavailable")
+                if (!adapter.isEnabled) {
+                    throw SppConnectionException("BLUETOOTH_OFF", "Bluetooth is disabled")
+                }
                 val device = adapter.getRemoteDevice(addr)
 
                 if (adapter.isDiscovering) adapter.cancelDiscovery()
@@ -1489,33 +1497,32 @@ class MainActivity : FlutterActivity() {
                 if (removeBond && !resetBond(device, generation)) {
                     bondRemovalUnconfirmed = true
                 }
-                // Default: let RFCOMM establish the link using the existing bond,
-                // or let Android request pairing when the socket needs it.
-                // Explicit bonding is reserved for the user's repair mode.
-                if (removeBond) ensureBonded(device, generation)
+                // Xiaomi's standard SPP path completes system pairing before
+                // opening the socket. Existing bonds are preserved and reused.
+                // Custom service profiles retain their own pairing behaviour.
+                if (serviceUuid == null || serviceUuid == sppUuid || removeBond) {
+                    emitConnectionPhase(addr, "pairing", generation)
+                    ensureBonded(device, generation)
+                }
                 if (generation != connectGeneration.get()) {
                     throw IOException("SPP connect was cancelled")
                 }
 
                 val failures = mutableListOf<String>()
-                val connected = serviceUuid?.let {
-                    tryUuid(device, it, generation, failures, "configured UUID")
+                emitConnectionPhase(addr, "openingSpp", generation)
+                val preferredUuid = serviceUuid ?: sppUuid
+                val primary = tryUuid(
+                    device, preferredUuid, generation, failures, "preferred SPP UUID",
+                    secureFirst = preferredUuid == sppUuid,
+                )
+                if (primary == null) {
+                    emitConnectionPhase(addr, "compatibility", generation)
                 }
+                val connected = primary
                     ?: fallbackChannels.firstNotNullOfOrNull { channel ->
                         tryChannel(device, channel, generation, failures)
                     }
-                    ?: if (serviceUuid == null) {
-                        tryUuid(
-                            device,
-                            sppUuid,
-                            generation,
-                            failures,
-                            "standard SPP UUID",
-                        )
-                    } else {
-                        null
-                    }
-                    ?: trySdpUuid(device, serviceUuid, generation, failures)
+                    ?: trySdpUuid(device, preferredUuid, generation, failures)
                     ?: throw IOException(
                         buildString {
                             append("No SPP channel/UUID available")
@@ -1541,18 +1548,24 @@ class MainActivity : FlutterActivity() {
                     throw IOException("SPP connect was cancelled")
                 }
                 mainHandler.post {
-                    result.success(mapOf("channel" to connected.channel))
+                    if (generation == connectGeneration.get() && sppSocket === connected.socket) {
+                        result.success(mapOf("channel" to connected.channel))
+                    } else {
+                        result.error("CONNECT_CANCELLED", "SPP connect was cancelled", null)
+                    }
                 }
             } catch (e: Exception) {
                 // A stale attempt must never tear down the socket established
                 // by a newer attempt.
                 if (generation == connectGeneration.get()) {
-                    closeSppTransport()
+                    closeSppTransport(generation)
                 }
                 mainHandler.post {
                     result.error(
                         when {
                             generation != connectGeneration.get() -> "CONNECT_CANCELLED"
+                            e is SppConnectionException -> e.code
+                            e is SecurityException -> "BLUETOOTH_PERMISSION_DENIED"
                             // An unconfirmed bond removal plus a failed
                             // connect is exactly the case the UI can act on
                             // (manual unpair in system settings).
@@ -1566,6 +1579,16 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }.start()
+    }
+
+    private fun emitConnectionPhase(address: String, phase: String, generation: Long) {
+        mainHandler.post {
+            if (generation == connectGeneration.get()) {
+                eventSink?.success(mapOf(
+                    "event" to "connectionProgress", "address" to address, "phase" to phase,
+                ))
+            }
+        }
     }
 
     private fun send(call: MethodCall, result: MethodChannel.Result) {
@@ -1758,8 +1781,20 @@ class MainActivity : FlutterActivity() {
                 if (changed?.address != device.address) return
                 when (changed.bondState) {
                     BluetoothDevice.BOND_BONDED -> latch.countDown()
-                    // A BOND_NONE broadcast is handled by the polling loop,
-                    // which knows whether bonding was actually observed.
+                    BluetoothDevice.BOND_NONE -> {
+                        if (intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, -1) ==
+                            BluetoothDevice.BOND_BONDING
+                        ) {
+                            val reason = intent.getIntExtra("android.bluetooth.device.extra.REASON", 0)
+                            val code = if (reason in listOf(2, 3, 8)) {
+                                "PAIRING_REJECTED"
+                            } else {
+                                "PAIRING_FAILED"
+                            }
+                            error.compareAndSet(null, SppConnectionException(code, "System pairing did not complete"))
+                            latch.countDown()
+                        }
+                    }
                 }
             }
         }
@@ -1791,6 +1826,8 @@ class MainActivity : FlutterActivity() {
             ) {
                 val started = try {
                     device.createBond()
+                } catch (e: SecurityException) {
+                    throw e
                 } catch (e: Exception) {
                     emitSppDiagnostic(
                         level = "WARNING",
@@ -1815,9 +1852,9 @@ class MainActivity : FlutterActivity() {
             // The pairing dialog is user-driven, but the loop above bails via
             // the generation check, so the deadline only bounds the silent
             // case where the bond never progresses at all.
-            val deadline = System.currentTimeMillis() + 30_000
+            val deadline = android.os.SystemClock.elapsedRealtime() + 60_000
             var sawBonding = false
-            while (latch.count > 0 && System.currentTimeMillis() < deadline) {
+            while (latch.count > 0 && android.os.SystemClock.elapsedRealtime() < deadline) {
                 if (generation != connectGeneration.get()) {
                     throw IOException("SPP connect was cancelled")
                 }
@@ -1829,7 +1866,7 @@ class MainActivity : FlutterActivity() {
                         // before it flips to BONDING; only fail once bonding was
                         // observed to have ended without a bond.
                         if (sawBonding) {
-                            error.compareAndSet(null, IOException("Bonding failed"))
+                            error.compareAndSet(null, SppConnectionException("PAIRING_FAILED", "System pairing did not complete"))
                             latch.countDown()
                         }
                     }
@@ -1838,7 +1875,7 @@ class MainActivity : FlutterActivity() {
             }
             error.get()?.let { throw it }
             if (device.bondState != BluetoothDevice.BOND_BONDED) {
-                throw IOException("Bonding timed out")
+                throw SppConnectionException("PAIRING_TIMEOUT", "System pairing confirmation timed out")
             }
         } finally {
             try {
@@ -1855,22 +1892,27 @@ class MainActivity : FlutterActivity() {
         generation: Long,
         failures: MutableList<String>,
         label: String,
+        secureFirst: Boolean = false,
     ): ConnectedSocket? {
-        try {
-            val socket = device.createInsecureRfcommSocketToServiceRecord(uuid)
-            if (connectSocket(socket, 6_000, generation)) {
-                return ConnectedSocket(socket, -1)
+        for (secure in if (secureFirst) listOf(true, false) else listOf(false, true)) {
+            if (generation != connectGeneration.get()) throw IOException("SPP connect was cancelled")
+            if (secureFirst && !secure) {
+                emitConnectionPhase(device.address, "compatibility", generation)
             }
-        } catch (error: Exception) {
-            failures += "$label insecure: ${describeBluetoothError(error)}"
-        }
-        try {
-            val socket = device.createRfcommSocketToServiceRecord(uuid)
-            if (connectSocket(socket, 6_000, generation)) {
-                return ConnectedSocket(socket, -1)
+            try {
+                val socket = if (secure) {
+                    device.createRfcommSocketToServiceRecord(uuid)
+                } else {
+                    device.createInsecureRfcommSocketToServiceRecord(uuid)
+                }
+                if (connectSocket(socket, if (secureFirst && secure) 12_000 else 6_000, generation)) {
+                    return ConnectedSocket(socket, -1)
+                }
+            } catch (error: SecurityException) {
+                throw error
+            } catch (error: Exception) {
+                failures += "$label ${if (secure) "secure" else "insecure"}: ${describeBluetoothError(error)}"
             }
-        } catch (error: Exception) {
-            failures += "$label secure: ${describeBluetoothError(error)}"
         }
         return null
     }
@@ -2053,18 +2095,36 @@ class MainActivity : FlutterActivity() {
                     val length = input.read(buffer)
                     if (length <= 0) break
                     val packet = buffer.copyOf(length)
-                    mainHandler.post { eventSink?.success(packet) }
+                    mainHandler.post {
+                        if (generation == connectGeneration.get() && sppSocket === socket) {
+                            eventSink?.success(packet)
+                        }
+                    }
                 }
             } catch (e: IOException) {
-                mainHandler.post { eventSink?.error("READ_FAILED", e.message, null) }
+                mainHandler.post {
+                    if (generation == connectGeneration.get()) {
+                        eventSink?.error("READ_FAILED", e.message, null)
+                    }
+                }
             } finally {
-                val isCurrent = readThread == Thread.currentThread() &&
-                    sppSocket === socket &&
-                    generation == connectGeneration.get()
+                val isCurrent = synchronized(sppStateLock) {
+                    if (readThread == Thread.currentThread() && sppSocket === socket &&
+                        generation == connectGeneration.get()
+                    ) {
+                        readThread = null
+                        sppSocket = null
+                        true
+                    } else {
+                        false
+                    }
+                }
                 if (isCurrent) {
-                    closeSppTransport()
+                    runCatching { socket.close() }
                     mainHandler.post {
-                        eventSink?.success(mapOf("event" to "disconnected"))
+                        if (generation == connectGeneration.get()) {
+                            eventSink?.success(mapOf("event" to "disconnected"))
+                        }
                     }
                 }
             }
@@ -2087,8 +2147,11 @@ class MainActivity : FlutterActivity() {
         closeSppTransport()
     }
 
-    private fun closeSppTransport() {
+    private fun closeSppTransport(expectedGeneration: Long? = null): Boolean {
         val (thread, socket, sockets) = synchronized(sppStateLock) {
+            if (expectedGeneration != null && expectedGeneration != connectGeneration.get()) {
+                return false
+            }
             val currentThread = readThread
             readThread = null
             val currentSocket = sppSocket
@@ -2110,6 +2173,7 @@ class MainActivity : FlutterActivity() {
             socket?.close()
         } catch (_: IOException) {
         }
+        return true
     }
 
     private fun hasBluetoothConnectPermission(): Boolean {

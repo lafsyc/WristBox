@@ -9,6 +9,20 @@ String friendlyError(Object error, {bool installing = false}) {
       ? '${error.code}: ${error.message ?? ''}'
       : error.toString();
   final text = raw.toLowerCase();
+  if (text.contains('connect_cancelled')) return '已取消连接';
+  if (text.contains('bluetooth_permission_denied') ||
+      text.contains('permission_denied')) {
+    return '蓝牙权限未允许，已停止重试。请在系统设置中允许 WristBox 使用蓝牙和“附近的设备”，再重新连接。';
+  }
+  if (text.contains('pairing_rejected')) {
+    return '配对已取消或被手环拒绝，已停止重试。请重新点击连接，并在手机和手环上确认配对。';
+  }
+  if (text.contains('pairing_timeout')) {
+    return '等待配对确认超时，已停止重试。请唤醒手环，重新连接并确认配对提示。';
+  }
+  if (text.contains('pairing_failed')) {
+    return '系统蓝牙配对未完成，已停止重试。请确认配对提示；若旧配对失效，可在“蓝牙连接方式”中尝试重建配对。';
+  }
   if (error is TimeoutException ||
       text.contains('timeout') ||
       text.contains('timed out')) {
@@ -39,6 +53,7 @@ String friendlyError(Object error, {bool installing = false}) {
     return '无法读取安装包。文件可能已移动、被删除或无访问权限，请重新选择本机保存的 RPK / BIN 文件。';
   }
   if (text.contains('disconnect') ||
+      text.contains('spp connect failed') ||
       text.contains('not connected') ||
       text.contains('not ready') ||
       text.contains('socket') ||

@@ -4,6 +4,19 @@ import 'dart:typed_data';
 import 'package:oronbox/src/device/core/ble_requirement.dart';
 import 'package:oronbox/src/device/core/connect_type.dart';
 
+enum BluetoothConnectPhase { pairing, openingSpp, compatibility }
+
+class BluetoothConnectProgress {
+  const BluetoothConnectProgress(this.address, this.phase);
+  final String address;
+  final BluetoothConnectPhase phase;
+}
+
+/// Optional capability; platforms without native progress keep their API.
+abstract interface class BluetoothConnectionProgressSource {
+  Stream<BluetoothConnectProgress> get connectionProgress;
+}
+
 class BluetoothEndpoint {
   const BluetoothEndpoint({
     required this.name,

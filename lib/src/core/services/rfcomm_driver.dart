@@ -17,6 +17,25 @@ class SppBondRemovalFailed implements Exception {
       : 'SPP bond removal failed: $details';
 }
 
+class SppConnectFailure implements Exception {
+  const SppConnectFailure(this.code);
+  final String code;
+
+  bool get retryable => !const {
+    'CONNECT_CANCELLED',
+    'BLUETOOTH_OFF',
+    'BLUETOOTH_PERMISSION_DENIED',
+    'PERMISSION_DENIED',
+    'PAIRING_REJECTED',
+    'PAIRING_FAILED',
+    'PAIRING_TIMEOUT',
+    'INVALID_ARGUMENT',
+  }.contains(code);
+
+  @override
+  String toString() => 'SPP connect failed: $code';
+}
+
 abstract class RfcommConnection {
   String get deviceId;
   String get deviceName;

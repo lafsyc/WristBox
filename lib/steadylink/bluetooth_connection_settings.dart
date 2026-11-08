@@ -15,6 +15,9 @@ class _BluetoothConnectionSettingsState
       SharedPrefsService.instance.getBool(androidRebuildBondSettingKey) ??
       false;
   bool _saving = false;
+  bool _autoReconnect =
+      SharedPrefsService.instance.getBool('auto_reconnect_on_disconnect') ??
+      true;
   String? _error;
   Future<void> _change(bool value) async {
     if (_saving) return;
@@ -71,7 +74,7 @@ class _BluetoothConnectionSettingsState
         ),
         const SizedBox(height: 12),
         const Text(
-          '默认保留手环与这台手机的系统配对，直接尝试连接。请唤醒手环，确认手机或手环出现的配对提示；不需要先把“连接新设备”作为必做步骤。',
+          '默认保留并复用已有系统配对；尚未配对时会先发起配对，再连接标准蓝牙通道。请唤醒手环，并确认手机或手环出现的提示。标准方式失败后才会尝试兼容通道。',
           style: TextStyle(height: 1.7),
         ),
         const SizedBox(height: 24),
@@ -81,6 +84,33 @@ class _BluetoothConnectionSettingsState
           subtitle: const Text('兼容选项，通常保持关闭。只影响下一次连接。'),
           value: _repair,
           onChanged: _saving ? null : _change,
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('断线自动恢复'),
+          subtitle: const Text('短暂断开时最多尝试三轮；手动断开、取消或切换设备后停止。'),
+          value: _autoReconnect,
+          onChanged: _saving
+              ? null
+              : (value) async {
+                  setState(() => _saving = true);
+                  try {
+                    await SharedPrefsService.instance.setBool(
+                      'auto_reconnect_on_disconnect',
+                      value,
+                    );
+                    if (mounted) {
+                      setState(() {
+                        _autoReconnect = value;
+                        _error = null;
+                      });
+                    }
+                  } catch (_) {
+                    if (mounted) setState(() => _error = '未能保存自动恢复设置，请重试');
+                  } finally {
+                    if (mounted) setState(() => _saving = false);
+                  }
+                },
         ),
         if (_error != null)
           Text(

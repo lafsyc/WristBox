@@ -20,6 +20,7 @@ import 'appearance.dart';
 import 'backend.dart';
 import 'bluetooth_connection_settings.dart';
 import 'connection_guide_page.dart';
+import 'connection_status.dart';
 import 'mobile_motion.dart';
 import 'mobile_dock.dart';
 import 'local_package.dart';
@@ -875,7 +876,7 @@ class _MobileHomeState extends ConsumerState<MobileHome> {
                   ready
                       ? '已连接'
                       : connecting
-                      ? '连接中'
+                      ? mobileConnectionStatus(state.connectionPhase)
                       : target == null
                       ? '未添加设备'
                       : '未连接',
@@ -903,7 +904,11 @@ class _MobileHomeState extends ConsumerState<MobileHome> {
         if (!ready) ...[
           const SizedBox(height: 8),
           Text(
-            target == null ? '登录小米账号同步设备' : '打开蓝牙，保持手环在附近',
+            target == null
+                ? '登录小米账号同步设备'
+                : connecting
+                ? mobileConnectionHint(state.connectionPhase)
+                : '打开蓝牙，保持手环在附近',
             style: TextStyle(
               fontSize: 12,
               height: 1.6,

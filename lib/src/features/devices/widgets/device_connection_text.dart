@@ -10,6 +10,11 @@ String deviceConnectionPhaseText(
   final deviceName = state.connectionTargetName ?? fallbackDeviceName;
   return switch (state.connectionPhase) {
     DeviceConnectionPhase.preparing => l10n.deviceConnectionPreparing,
+    DeviceConnectionPhase.pairing => l10n.deviceConnectionPreparing,
+    DeviceConnectionPhase.compatibility ||
+    DeviceConnectionPhase.waitingToRetry => l10n.deviceConnectionEstablishing(
+      connectType.toUpperCase(),
+    ),
     DeviceConnectionPhase.connectingTransport =>
       l10n.deviceConnectionEstablishing(connectType.toUpperCase()),
     DeviceConnectionPhase.initializingProtocol =>

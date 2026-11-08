@@ -7,7 +7,8 @@ import 'package:oronbox/src/core/services/rfcomm_driver.dart';
 import 'package:oronbox/src/device/core/bluetooth_platform.dart';
 import 'package:oronbox/src/features/devices/utils/device_address.dart';
 
-class DefaultBluetoothPlatform implements BluetoothPlatform {
+class DefaultBluetoothPlatform
+    implements BluetoothPlatform, BluetoothConnectionProgressSource {
   DefaultBluetoothPlatform(this._ble, this._rfcomm)
     : _log = getLogger('BluetoothPlatform') {
     _bleSubscription = _ble.scanStream.listen(
@@ -41,6 +42,14 @@ class DefaultBluetoothPlatform implements BluetoothPlatform {
 
   @override
   Stream<BluetoothEndpoint> get scanStream => _scanController.stream;
+
+  @override
+  Stream<BluetoothConnectProgress> get connectionProgress {
+    final driver = _rfcomm;
+    return driver is BluetoothConnectionProgressSource
+        ? (driver as BluetoothConnectionProgressSource).connectionProgress
+        : const Stream.empty();
+  }
 
   @override
   Future<bool> isAvailable() => _ble.isAvailable();

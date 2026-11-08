@@ -75,6 +75,7 @@ import 'package:oronbox/src/features/devices/health/xiaomi_health_sync_service.d
 import 'package:oronbox/src/features/devices/models/xiaomi_device_features.dart';
 import 'package:oronbox/src/features/devices/services/xiaomi_sync_preferences.dart';
 import 'package:oronbox/src/features/devices/domain/device_scan_results.dart';
+import 'package:oronbox/src/features/devices/domain/connection_retry_policy.dart';
 import 'package:oronbox/src/features/devices/utils/device_address.dart';
 import 'package:oronbox/src/protocols/common/device_protocol.dart'
     hide ChargeStatus, BatteryInfo, DeviceInfo;
@@ -414,7 +415,10 @@ class DeviceManagerState {
 
 enum DeviceConnectionPhase {
   preparing,
+  pairing,
   connectingTransport,
+  compatibility,
+  waitingToRetry,
   initializingProtocol,
   authenticating,
   fetchingDeviceStatus,
@@ -977,6 +981,7 @@ class LocalDeviceManager extends DeviceManager {
   String? _activeConnectType;
   ConnectType? _pendingConnectType;
   var _passiveReconnectInProgress = false;
+  Object? _lastConnectError;
 
   static const String _keyPairedDevices = 'paired_devices';
   static const String _keyAutoReconnect = 'auto_reconnect';
@@ -1023,7 +1028,7 @@ class LocalDeviceManager extends DeviceManager {
       return SharedPrefsService.instance.getBool(
             _keyAutoReconnectOnDisconnect,
           ) ??
-          false;
+          (defaultTargetPlatform == TargetPlatform.android);
     } catch (e) {
       return false;
     }
@@ -1258,80 +1263,121 @@ class LocalDeviceManager extends DeviceManager {
     final retryDelay = isMacOsSpp
         ? _macOsSppConnectRetryDelay
         : _defaultConnectRetryDelay;
-    SppBondRemovalFailed? bondRemovalError;
-    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
-      _throwIfConnectCancelled(generation);
-      _log.info(
-        '${connectType.name.toUpperCase()} connect attempt '
-        '$attempt/$maxAttempts to $addr',
-      );
-      try {
-        final connectFuture = _bluetooth.connect(
-          addr,
-          name,
-          BluetoothConnectOptions(
-            connectType: connectType,
-            bleRequiredCharacteristics: profile.bleRequiredCharacteristics,
-            bleDesiredMtu: profile.bleDesiredMtu,
-            bleAttemptPair: profile.bleAttemptPair,
-            sppServiceUuid: profile.classicServiceUuid,
-            sppFallbackChannels: profile.classicFallbackChannels,
-            sppRemoveBond: _removeBondBeforeSpp(),
-          ),
-        );
-        // The native SPP chain caps every bond/socket stage itself, but a
-        // wedged Bluetooth stack can still hold the method call open past
-        // every poll deadline. Enforce one transport-wide deadline; the
-        // TimeoutException branch below cancels the pending native connect.
-        final connection = connectType == ConnectType.spp
-            ? await connectFuture.timeout(const Duration(seconds: 90))
-            : await connectFuture;
-        _log.info(
-          '${connectType.name.toUpperCase()} connected on attempt $attempt',
-        );
-        return connection;
-      } on TimeoutException catch (e) {
-        lastError = e;
-        _log.warning(
-          '${connectType.name.toUpperCase()} connect attempt $attempt timed out',
-        );
-        if (connectType == ConnectType.spp) {
-          // Release the native worker: the cancel increments the generation
-          // so the superseded attempt exits at its next checkpoint and closes
-          // any socket still blocked in BluetoothSocket.connect().
-          try {
-            await _bluetooth.cancelPendingSppConnection().timeout(
-              const Duration(seconds: 2),
-            );
-          } catch (cancelError, cancelStack) {
-            _log.warning(
-              'cancelling timed-out SPP connect failed',
-              cancelError,
-              cancelStack,
-            );
-          }
-        }
-        await _resetBluetoothAfterFailedConnect(addr, connectType);
-      } catch (e) {
-        if (e is SppBondRemovalFailed) bondRemovalError = e;
-        lastError = e is Exception ? e : Exception(e.toString());
-        _log.warning(
-          '${connectType.name.toUpperCase()} connect attempt $attempt failed: $e',
-        );
-        await _resetBluetoothAfterFailedConnect(addr, connectType);
-      }
-
-      if (attempt < maxAttempts) {
-        await Future.delayed(retryDelay);
+    final mobileSpp =
+        defaultTargetPlatform == TargetPlatform.android &&
+        connectType == ConnectType.spp;
+    final platform = _bluetooth;
+    final progress = mobileSpp && platform is BluetoothConnectionProgressSource
+        ? (platform as BluetoothConnectionProgressSource).connectionProgress
+              .listen((event) {
+                if (generation != _connectGeneration ||
+                    !state.connecting ||
+                    formatDeviceAddress(event.address).toLowerCase() !=
+                        formatDeviceAddress(addr).toLowerCase()) {
+                  return;
+                }
+                state = state.copyWith(
+                  connectionPhase: switch (event.phase) {
+                    BluetoothConnectPhase.pairing =>
+                      DeviceConnectionPhase.pairing,
+                    BluetoothConnectPhase.openingSpp =>
+                      DeviceConnectionPhase.connectingTransport,
+                    BluetoothConnectPhase.compatibility =>
+                      DeviceConnectionPhase.compatibility,
+                  },
+                );
+              })
+        : null;
+    try {
+      SppBondRemovalFailed? bondRemovalError;
+      for (var attempt = 1; attempt <= maxAttempts; attempt++) {
         _throwIfConnectCancelled(generation);
-      }
-    }
-
-    throw bondRemovalError ??
-        lastError ??
-        Exception(
-          '${connectType.name} connect failed after $maxAttempts attempts',
+        _log.info(
+          '${connectType.name.toUpperCase()} connect attempt '
+          '$attempt/$maxAttempts to $addr',
         );
+        try {
+          final connectFuture = _bluetooth.connect(
+            addr,
+            name,
+            BluetoothConnectOptions(
+              connectType: connectType,
+              bleRequiredCharacteristics: profile.bleRequiredCharacteristics,
+              bleDesiredMtu: profile.bleDesiredMtu,
+              bleAttemptPair: profile.bleAttemptPair,
+              sppServiceUuid: profile.classicServiceUuid,
+              sppFallbackChannels: profile.classicFallbackChannels,
+              sppRemoveBond: _removeBondBeforeSpp(),
+            ),
+          );
+          // The native SPP chain caps every bond/socket stage itself, but a
+          // wedged Bluetooth stack can still hold the method call open past
+          // every poll deadline. Enforce one transport-wide deadline; the
+          // TimeoutException branch below cancels the pending native connect.
+          final connection = connectType == ConnectType.spp
+              ? await connectFuture.timeout(const Duration(seconds: 90))
+              : await connectFuture;
+          _log.info(
+            '${connectType.name.toUpperCase()} connected on attempt $attempt',
+          );
+          return connection;
+        } on TimeoutException catch (e) {
+          lastError = e;
+          _log.warning(
+            '${connectType.name.toUpperCase()} connect attempt $attempt timed out',
+          );
+          if (connectType == ConnectType.spp) {
+            // Release the native worker: the cancel increments the generation
+            // so the superseded attempt exits at its next checkpoint and closes
+            // any socket still blocked in BluetoothSocket.connect().
+            try {
+              await _bluetooth.cancelPendingSppConnection().timeout(
+                const Duration(seconds: 2),
+              );
+            } catch (cancelError, cancelStack) {
+              _log.warning(
+                'cancelling timed-out SPP connect failed',
+                cancelError,
+                cancelStack,
+              );
+            }
+          }
+          await _resetBluetoothAfterFailedConnect(addr, connectType);
+        } catch (e) {
+          if (e is SppBondRemovalFailed) bondRemovalError = e;
+          lastError = e is Exception ? e : Exception(e.toString());
+          _log.warning(
+            '${connectType.name.toUpperCase()} connect attempt $attempt failed: $e',
+          );
+          await _resetBluetoothAfterFailedConnect(addr, connectType);
+          _throwIfConnectCancelled(generation);
+          if (mobileSpp && !canRetryDeviceConnection(e)) rethrow;
+        }
+
+        if (attempt < maxAttempts) {
+          if (mobileSpp) {
+            state = state.copyWith(
+              connectionPhase: DeviceConnectionPhase.waitingToRetry,
+            );
+            await waitForDeviceConnectionRetry(
+              deviceConnectionRetryDelay(attempt),
+              isCancelled: () => generation != _connectGeneration,
+            );
+          } else {
+            await Future.delayed(retryDelay);
+          }
+          _throwIfConnectCancelled(generation);
+        }
+      }
+
+      throw bondRemovalError ??
+          lastError ??
+          Exception(
+            '${connectType.name} connect failed after $maxAttempts attempts',
+          );
+    } finally {
+      await progress?.cancel();
+    }
   }
 
   bool _removeBondBeforeSpp() {
@@ -1423,6 +1469,7 @@ class LocalDeviceManager extends DeviceManager {
     required String connectType,
   }) async {
     final generation = ++_connectGeneration;
+    _lastConnectError = null;
     final existingDevice = state.pairedDevices
         .where((d) => d.addr == addr)
         .firstOrNull;
@@ -1744,14 +1791,15 @@ class LocalDeviceManager extends DeviceManager {
       _pendingConnectType = null;
     } on _DeviceConnectCancelled {
       _log.info('connect to $addr cancelled');
-      await _finishCancelledConnect(addr);
+      await _finishCancelledConnect(addr, generation);
     } catch (e, st) {
       if (generation != _connectGeneration) {
         _log.info('connect to $addr cancelled after error: $e');
-        await _finishCancelledConnect(addr);
+        await _finishCancelledConnect(addr, generation);
         return;
       }
       _log.severe('connect to $addr failed', e, st);
+      _lastConnectError = e;
       state = state.copyWith(
         connecting: false,
         connectStatus: 3,
@@ -2098,21 +2146,36 @@ class LocalDeviceManager extends DeviceManager {
     if (authKey == null || authKey.isEmpty) return;
 
     _passiveReconnectInProgress = true;
+    var expectedGeneration = _connectGeneration;
+    final mobile = defaultTargetPlatform == TargetPlatform.android;
+    final maxAttempts = mobile ? 3 : _passiveReconnectMaxAttempts;
+    var attemptsMade = 0;
     try {
-      for (
-        var attempt = 1;
-        attempt <= _passiveReconnectMaxAttempts;
-        attempt++
-      ) {
+      for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+        if (expectedGeneration != _connectGeneration) return;
+        if (mobile) {
+          state = state.copyWith(
+            connecting: true,
+            connectionTargetAddr: device.addr,
+            connectionTargetName: device.name,
+            connectionPhase: DeviceConnectionPhase.waitingToRetry,
+          );
+          final proceed = await waitForDeviceConnectionRetry(
+            deviceConnectionRetryDelay(attempt),
+            isCancelled: () => expectedGeneration != _connectGeneration,
+          );
+          if (!proceed) return;
+        }
         if (state.protocolState == ProtocolState.ready &&
             state.currentDevice?.addr == device.addr &&
             state.currentDevice?.disconnected == false) {
           return;
         }
         _log.warning(
-          'passive reconnect attempt $attempt/$_passiveReconnectMaxAttempts '
+          'passive reconnect attempt $attempt/$maxAttempts '
           'to ${device.addr}',
         );
+        attemptsMade = attempt;
         _runtime.emit(
           PassiveReconnectStatus(
             deviceId: device.addr,
@@ -2121,12 +2184,14 @@ class LocalDeviceManager extends DeviceManager {
           ),
         );
         try {
-          await connect(
+          final pending = connect(
             device.addr,
             device.name,
             authKey,
             connectType: device.connectType,
           );
+          expectedGeneration = _connectGeneration;
+          await pending;
         } catch (error, stackTrace) {
           _log.warning(
             'passive reconnect attempt $attempt failed for ${device.addr}',
@@ -2134,6 +2199,7 @@ class LocalDeviceManager extends DeviceManager {
             stackTrace,
           );
         }
+        if (expectedGeneration != _connectGeneration) return;
         if (state.protocolState == ProtocolState.ready &&
             state.currentDevice?.addr == device.addr &&
             state.currentDevice?.disconnected == false) {
@@ -2147,18 +2213,27 @@ class LocalDeviceManager extends DeviceManager {
           );
           return;
         }
+        final error = _lastConnectError;
+        if (mobile && error != null && !canRetryDeviceConnection(error)) break;
       }
       _log.warning(
-        'passive reconnect failed after $_passiveReconnectMaxAttempts attempts '
+        'passive reconnect failed after $attemptsMade attempts '
         'for ${device.addr}',
       );
       _runtime.emit(
         PassiveReconnectStatus(
           deviceId: device.addr,
           phase: PassiveReconnectPhase.failed,
-          attempt: _passiveReconnectMaxAttempts,
+          attempt: attemptsMade,
         ),
       );
+      if (mobile && expectedGeneration == _connectGeneration) {
+        state = state.copyWith(
+          connecting: false,
+          error: _lastConnectError?.toString() ?? '连接恢复未完成，请手动重试',
+          clearConnectionPhase: true,
+        );
+      }
     } finally {
       _passiveReconnectInProgress = false;
     }
@@ -2243,7 +2318,7 @@ class LocalDeviceManager extends DeviceManager {
 
   @override
   Future<void> cancelConnect() async {
-    if (!state.connecting) return;
+    if (!state.connecting && !_passiveReconnectInProgress) return;
     _activeConnectFuture = null;
     _activeConnectAddress = null;
     _activeConnectType = null;
@@ -2268,7 +2343,16 @@ class LocalDeviceManager extends DeviceManager {
     );
   }
 
-  Future<void> _finishCancelledConnect(String targetAddress) async {
+  Future<void> _finishCancelledConnect(
+    String targetAddress,
+    int generation,
+  ) async {
+    // A cancelled attempt can finish after another device has started or
+    // completed connecting. Its cleanup must not overwrite that session.
+    if (generation != _connectGeneration &&
+        (state.connecting || state.protocolState == ProtocolState.ready)) {
+      return;
+    }
     _pendingConnectType = null;
     final entity = _currentEntity;
     if (entity != null && entity.id != targetAddress) {
@@ -2283,6 +2367,10 @@ class LocalDeviceManager extends DeviceManager {
       return;
     }
     await _cleanupConnection();
+    if (generation != _connectGeneration &&
+        (state.connecting || state.protocolState == ProtocolState.ready)) {
+      return;
+    }
     final current = state.currentDevice;
     final currentIsPooled =
         current != null &&
