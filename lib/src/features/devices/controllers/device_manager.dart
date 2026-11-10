@@ -1383,10 +1383,7 @@ class LocalDeviceManager extends DeviceManager {
   bool _removeBondBeforeSpp() {
     if (kIsWeb) return false;
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return SharedPrefsService.instance.getBool(
-            androidRebuildBondSettingKey,
-          ) ??
-          false;
+      return androidRebuildBondEnabled();
     }
     return SharedPrefsService.instance.getBool(removeBondBeforeSppSettingKey) ??
         true;

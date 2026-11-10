@@ -6,6 +6,30 @@ import 'package:oronbox/src/core/providers/app_settings_providers.dart';
 import 'package:oronbox/steadylink/bluetooth_connection_settings.dart';
 
 void main() {
+  test(
+    'upgrade enables bond rebuilding once and preserves later opt-out',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        androidRebuildBondSettingKey: false,
+        'auto_reconnect_on_disconnect': true,
+      });
+      await SharedPrefsService.instance.init();
+      await SharedPrefsService.instance.reload();
+      await initializeAndroidConnectionPreferences();
+      expect(androidRebuildBondEnabled(), isTrue);
+      expect(
+        SharedPrefsService.instance.getBool('auto_reconnect_on_disconnect'),
+        isTrue,
+      );
+      await SharedPrefsService.instance.setBool(
+        androidRebuildBondSettingKey,
+        false,
+      );
+      await initializeAndroidConnectionPreferences();
+      await SharedPrefsService.instance.reload();
+      expect(androidRebuildBondEnabled(), isFalse);
+    },
+  );
   testWidgets('automatic recovery defaults on and remembers the off choice', (
     tester,
   ) async {
@@ -31,7 +55,7 @@ void main() {
     expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
   });
   testWidgets(
-    'repair mode defaults off, cancellation does not persist, confirmation does',
+    'repair mode defaults on, user can disable it and confirm re-enabling',
     (tester) async {
       SharedPreferences.setMockInitialValues({});
       await SharedPrefsService.instance.init();
@@ -39,14 +63,20 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(home: BluetoothConnectionSettings()),
       );
-      expect(find.text('优先直接连接'), findsOneWidget);
+      expect(find.text('重建系统配对'), findsOneWidget);
       expect(
         tester
             .widget<SwitchListTile>(
               find.widgetWithText(SwitchListTile, '连接前重建系统配对'),
             )
             .value,
-        false,
+        true,
+      );
+      await tester.tap(find.widgetWithText(SwitchListTile, '连接前重建系统配对'));
+      await tester.pumpAndSettle();
+      expect(
+        SharedPrefsService.instance.getBool(androidRebuildBondSettingKey),
+        isFalse,
       );
       await tester.tap(find.widgetWithText(SwitchListTile, '连接前重建系统配对'));
       await tester.pumpAndSettle();

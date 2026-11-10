@@ -11,6 +11,25 @@ enum WideNavigationRailPosition { bottom, center, split }
 
 const removeBondBeforeSppSettingKey = 'remove_bond_before_spp';
 const androidRebuildBondSettingKey = 'wristbox.android.rebuild_bond';
+const _androidRebuildBondDefaultAppliedKey =
+    'wristbox.android.rebuild_bond.default_applied_0_14_14';
+
+bool androidRebuildBondEnabled() =>
+    SharedPrefsService.instance.getBool(androidRebuildBondSettingKey) ?? true;
+
+/// Apply this release's default once for both fresh and upgraded installs.
+/// Subsequent user changes must survive restarting the application.
+Future<void> initializeAndroidConnectionPreferences() async {
+  final prefs = SharedPrefsService.instance;
+  if (prefs.getBool(_androidRebuildBondDefaultAppliedKey) == true) return;
+  if (!await prefs.setBool(androidRebuildBondSettingKey, true)) {
+    throw StateError('未能保存蓝牙配对设置，请重新打开应用');
+  }
+  if (!await prefs.setBool(_androidRebuildBondDefaultAppliedKey, true)) {
+    throw StateError('未能保存蓝牙设置升级状态，请重新打开应用');
+  }
+}
+
 const realtimeActivityNotificationSettingKey = 'realtime_activity_notification';
 
 class CleanSettings {

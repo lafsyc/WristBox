@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oronbox/src/core/services/shared_prefs_service.dart';
+import 'package:oronbox/src/core/providers/app_settings_providers.dart';
 
 import 'steadylink/mobile_app.dart';
 
@@ -9,11 +10,8 @@ Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await SharedPrefsService.instance.init();
+    await initializeAndroidConnectionPreferences();
     await SharedPrefsService.instance.setBool('auto_reconnect', false);
-    await SharedPrefsService.instance.setBool(
-      'auto_reconnect_on_disconnect',
-      false,
-    );
     await SharedPrefsService.instance.setBool('remove_bond_before_spp', false);
     runApp(const ProviderScope(child: SteadyMobileApp()));
   } catch (error) {

@@ -11,9 +11,7 @@ class BluetoothConnectionSettings extends StatefulWidget {
 
 class _BluetoothConnectionSettingsState
     extends State<BluetoothConnectionSettings> {
-  bool _repair =
-      SharedPrefsService.instance.getBool(androidRebuildBondSettingKey) ??
-      false;
+  bool _repair = androidRebuildBondEnabled();
   bool _saving = false;
   bool _autoReconnect =
       SharedPrefsService.instance.getBool('auto_reconnect_on_disconnect') ??
@@ -27,7 +25,7 @@ class _BluetoothConnectionSettingsState
         builder: (context) => AlertDialog(
           title: const Text('启用重建配对？'),
           content: const Text(
-            '下次连接时会尝试移除目标手环的系统蓝牙配对，然后重新配对。运动健康连接、手环解锁手机等功能可能需要重新配置。仅在直接连接失败时尝试。',
+            '下次连接时会尝试移除目标手环的系统蓝牙配对，然后重新配对。请确认手机和手环的配对提示；运动健康连接、手环解锁手机等功能可能需要重新配置。',
           ),
           actions: [
             TextButton(
@@ -73,15 +71,17 @@ class _BluetoothConnectionSettingsState
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 12),
-        const Text(
-          '默认保留并复用已有系统配对；尚未配对时会先发起配对，再连接标准蓝牙通道。请唤醒手环，并确认手机或手环出现的提示。标准方式失败后才会尝试兼容通道。',
+        Text(
+          _repair
+              ? '连接前会先尝试移除目标手环的旧系统配对，再重新配对并连接。请唤醒手环，并确认手机和手环上的配对提示。'
+              : '保留并复用已有系统配对；尚未配对时会先发起配对，再连接标准蓝牙通道。标准方式失败后才会尝试兼容通道。',
           style: TextStyle(height: 1.7),
         ),
         const SizedBox(height: 24),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
           title: const Text('连接前重建系统配对'),
-          subtitle: const Text('兼容选项，通常保持关闭。只影响下一次连接。'),
+          subtitle: const Text('默认开启，下次连接时生效。关闭后优先复用已有配对。'),
           value: _repair,
           onChanged: _saving ? null : _change,
         ),
@@ -121,7 +121,7 @@ class _BluetoothConnectionSettingsState
         const Text('连接提示', style: TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         const Text(
-          '• 使用当前有效的 Key；恢复出厂后需重新同步或导入。\n• “系统蓝牙已连接”不等于 WristBox 已完成设备认证。\n• 这个选项不保证运动健康和 WristBox 能同时操作手环。若其他应用占用连接，可先暂停其连接再试。\n• 不同手机、手环型号和固件的行为可能不同；直接连接失败时再尝试兼容方式。',
+          '• 使用当前有效的 Key；恢复出厂后需重新同步或导入。\n• “系统蓝牙已连接”不等于 WristBox 已完成设备认证。\n• 重建配对可能影响运动健康连接、手环解锁手机等功能，需要时可关闭此选项。\n• 这个选项不保证两个应用能同时操作手环，也不能修复过期的 Key。',
           style: TextStyle(height: 1.8),
         ),
       ],

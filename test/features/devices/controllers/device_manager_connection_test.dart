@@ -21,21 +21,21 @@ void main() {
     await SharedPrefsService.instance.reload();
   });
 
-  for (final repair in [false, true]) {
+  for (final repair in <bool?>[null, false, true]) {
     test(
-      'Android preserves system bond unless repair is explicitly enabled ($repair)',
+      'Android rebuilds by default and honors the explicit setting ($repair)',
       () async {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         addTearDown(() => debugDefaultTargetPlatformOverride = null);
-        // The inherited desktop/global default must not erase a phone's bond.
+        // The Android setting is independent of the legacy desktop setting.
         await SharedPrefsService.instance.setBool(
           removeBondBeforeSppSettingKey,
-          true,
+          false,
         );
-        if (repair) {
+        if (repair != null) {
           await SharedPrefsService.instance.setBool(
             androidRebuildBondSettingKey,
-            true,
+            repair,
           );
         }
         final bluetooth = _BlockingBluetoothPlatform();
@@ -51,7 +51,7 @@ void main() {
           connectType: 'spp',
         );
         await _waitFor(() => bluetooth.connectCalls == 1);
-        expect(bluetooth.lastOptions!.sppRemoveBond, repair);
+        expect(bluetooth.lastOptions!.sppRemoveBond, repair ?? true);
         await manager.cancelConnect();
         await pending;
       },
