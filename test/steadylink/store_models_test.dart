@@ -3,6 +3,72 @@ import 'package:oronbox/steadylink/store_models.dart';
 import 'package:oronbox/src/core/models/bt_models.dart';
 
 void main() {
+  test(
+    'Band 11 NFC product model wins over the generic suffixed Bluetooth name',
+    () {
+      const device = MiWearState(
+        name: 'Xiaomi Smart Band 11 3AE8',
+        addr: 'AA',
+        connectType: 'spp',
+      );
+      const info = SystemInfo(
+        serialNumber: 'SN-FIXTURE',
+        firmwareVersion: '4.100.179',
+        imei: '',
+        model: 'q66nfc',
+      );
+      expect(storeModelForDevice(device, systemInfo: info), 'band11nfc');
+      expect(
+        storeModelForDevice(
+          device,
+          systemInfo: info.copyWith(model: 'miwear.watch.q66nfc'),
+        ),
+        'band11nfc',
+      );
+      expect(
+        storeModelForDevice(device.copyWith(codename: 'q66nfc')),
+        'band11nfc',
+      );
+      expect(storeModelForDevice(device), 'band11');
+      expect(
+        storeModelForDevice(
+          device.copyWith(
+            name: 'Xiaomi Smart Band 11 NFC 3AE8',
+            codename: 'band11',
+          ),
+        ),
+        'band11nfc',
+      );
+      final app = StoreApp('chess', [
+        for (final model in ['band11', 'band11nfc'])
+          {
+            'id': model,
+            'versionCode': 1,
+            'installType': 'watchface',
+            'supportedModels': [model],
+            'firmwareRules': [
+              {
+                'model': model,
+                'mode': 'exact',
+                'versions': ['4.100.179'],
+              },
+            ],
+          },
+      ]);
+      expect(
+        app.forDevice(
+          storeModelForDevice(device, systemInfo: info),
+          '4.100.179',
+        )?['id'],
+        'band11nfc',
+      );
+      expect(app.forDevice('band11nfc', '4.100.188'), isNull);
+      final ordinaryOnly = StoreApp('chess', [
+        app.variants.firstWhere((v) => v['id'] == 'band11'),
+      ]);
+      expect(ordinaryOnly.forDevice('band11nfc', '4.100.179'), isNull);
+    },
+  );
   Map<String, dynamic> item(
     String id,
     List<String> models, {

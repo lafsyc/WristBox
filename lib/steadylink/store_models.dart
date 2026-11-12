@@ -26,39 +26,24 @@ const storeModelNames = <String, String>{
 String? storeModelForDevice(MiWearState? device, {SystemInfo? systemInfo}) {
   if (device == null) return null;
   final values = [systemInfo?.model, device.codename, device.name];
-  final tokens = values
-      .map((v) => v?.toLowerCase().replaceAll(RegExp(r'\s+'), '') ?? '')
-      .toList();
-  bool nfcFor(int generation) => tokens.any(
-    (v) => {
-      '小米手环${generation}nfc',
-      '小米手环${generation}nfc版',
-      'xiaomismartband${generation}nfc',
-      'xiaomiband${generation}nfc',
-      if (generation == 9) ...['n66nfc', 'miwear.watch.n66nfc'],
-      if (generation == 11) 'band11nfc',
-    }.contains(v),
+  final band9NfcHint = values.any(
+    (value) => normalizeXiaomiWearableIdentity(value)?.codename == 'n66nfc',
+  );
+  final band11NfcHint = values.any(
+    (value) => normalizeXiaomiWearableIdentity(value)?.codename == 'q66nfc',
   );
   for (final value in values) {
     final identity = normalizeXiaomiWearableIdentity(value);
-    if (identity != null && storeModelNames.containsKey(identity.codename)) {
-      if (identity.codename == 'n66' && nfcFor(9)) return 'n66nfc';
-      return identity.codename;
-    }
-    // No guessed hardware codename: accept only an explicit Band 11 name.
-    final name = value?.toLowerCase().replaceAll(RegExp(r'\s+'), '') ?? '';
-    if ([
-      '小米手环11',
-      'xiaomismartband11',
-      'xiaomiband11',
-      'band11',
-      '小米手环11nfc',
-      '小米手环11nfc版',
-      'xiaomismartband11nfc',
-      'xiaomiband11nfc',
-      'band11nfc',
-    ].contains(name)) {
-      return nfcFor(11) ? 'band11nfc' : 'band11';
+    // Keep existing server model and entitlement identifiers stable.
+    final model = switch (identity?.codename) {
+      'q66' => 'band11',
+      'q66nfc' => 'band11nfc',
+      final code => code,
+    };
+    if (model != null && storeModelNames.containsKey(model)) {
+      if (model == 'n66' && band9NfcHint) return 'n66nfc';
+      if (model == 'band11' && band11NfcHint) return 'band11nfc';
+      return model;
     }
   }
   return null;

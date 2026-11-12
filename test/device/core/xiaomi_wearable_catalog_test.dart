@@ -3,6 +3,42 @@ import 'package:oronbox/src/device/core/xiaomi_wearable_catalog.dart';
 
 void main() {
   group('Xiaomi wearable identity normalization', () {
+    test('Band 11 product identities and Bluetooth suffixes retain NFC', () {
+      for (final name in [
+        'q66nfc',
+        'miwear.watch.q66nfc',
+        'band11nfc',
+        'Xiaomi Smart Band 11 NFC 3AE8',
+        '小米手环11 NFC版 3ae8',
+      ]) {
+        expect(
+          normalizeXiaomiWearableIdentity(name)?.codename,
+          'q66nfc',
+          reason: name,
+        );
+      }
+      for (final name in [
+        'q66',
+        'q66cn',
+        'miwear.watch.q66cn',
+        'band11',
+        'Xiaomi Smart Band 11 3AE8',
+      ]) {
+        expect(
+          normalizeXiaomiWearableIdentity(name)?.codename,
+          'q66',
+          reason: name,
+        );
+      }
+      expect(
+        normalizeXiaomiWearableIdentity('Xiaomi Smart Band 11 Pro 3AE8'),
+        isNull,
+      );
+      expect(
+        normalizeXiaomiWearableIdentity('Xiaomi Smart Band 111 3AE8'),
+        isNull,
+      );
+    });
     test('normalizes AB v2 id, upstream model, hardware model and names', () {
       final inputs = [
         'xmb9p',

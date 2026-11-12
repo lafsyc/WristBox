@@ -208,6 +208,7 @@ class _CloudStorePageState extends ConsumerState<CloudStorePage> {
                       _ModelPicker(
                         value: _browseModel,
                         current: current,
+                        connected: state.protocolState == ProtocolState.ready,
                         onChanged: (value) =>
                             setState(() => _browseModel = value),
                       ),
@@ -774,6 +775,7 @@ class _StoreAppPageState extends ConsumerState<StoreAppPage> {
                 _ModelPicker(
                   value: _browseModel,
                   current: current,
+                  connected: state.protocolState == ProtocolState.ready,
                   enabled: !_busy,
                   onChanged: (v) => setState(() => _browseModel = v),
                 ),
@@ -974,12 +976,13 @@ class _ModelPicker extends StatelessWidget {
   const _ModelPicker({
     required this.value,
     required this.current,
+    required this.connected,
     required this.onChanged,
     this.enabled = true,
   });
   final String? value, current;
   final ValueChanged<String?> onChanged;
-  final bool enabled;
+  final bool enabled, connected;
   @override
   Widget build(BuildContext context) => DropdownButtonFormField<String>(
     key: ValueKey('$value:$current'),
@@ -995,7 +998,9 @@ class _ModelPicker extends StatelessWidget {
         value: '',
         child: Text(
           current == null
-              ? '自动匹配 · 等待连接'
+              ? connected
+                    ? '自动匹配 · 型号未识别'
+                    : '自动匹配 · 等待连接'
               : '自动匹配 · ${storeModelNames[current]}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

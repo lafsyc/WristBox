@@ -23,6 +23,22 @@ import 'package:oronbox/src/protocols/generated/xiaomi/wear_watch_face.pb.dart'
     as pb_watchface;
 import 'package:oronbox/src/protocols/xiaomi/commands/xiaomi_request_pool.dart';
 
+models.SystemInfo xiaomiSystemInfoFromDeviceInfo(
+  pb_system.DeviceInfo response,
+) {
+  final productIdentity = normalizeXiaomiWearableIdentity(
+    response.productDevice,
+  );
+  return models.SystemInfo(
+    serialNumber: response.serialNumber,
+    firmwareVersion: response.firmwareVersion,
+    imei: response.imei,
+    model: productIdentity?.codename.endsWith('nfc') == true
+        ? productIdentity!.codename
+        : response.model,
+  );
+}
+
 class XiaomiInfoSystem extends XiaomiPbSystem {
   static final _log = getLogger('XiaomiInfoSystem');
 
@@ -88,17 +104,7 @@ class XiaomiInfoSystem extends XiaomiPbSystem {
           p.id == pb_system.System_SystemID.GET_DEVICE_INFO.value,
       responseMapper: (p) => p.system.deviceInfo,
     );
-    final productIdentity = normalizeXiaomiWearableIdentity(
-      response.productDevice,
-    );
-    final info = models.SystemInfo(
-      serialNumber: response.serialNumber,
-      firmwareVersion: response.firmwareVersion,
-      imei: response.imei,
-      model: productIdentity?.codename.endsWith('nfc') == true
-          ? productIdentity!.codename
-          : response.model,
-    );
+    final info = xiaomiSystemInfoFromDeviceInfo(response);
     _model = info.model.trim().isEmpty ? null : info.model.trim();
     _firmwareVersion = info.firmwareVersion.trim().isEmpty
         ? null

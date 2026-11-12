@@ -11,6 +11,23 @@ import 'package:oronbox/src/protocols/generated/xiaomi/wear_system.pb.dart'
     as pb_system;
 
 void main() {
+  test(
+    'Band 11 NFC product device preserves the NFC model for store matching',
+    () {
+      final info = xiaomiSystemInfoFromDeviceInfo(
+        pb_system.DeviceInfo(
+          model: 'hardware-model-not-in-catalog',
+          productDevice: 'miwear.watch.q66nfc',
+          serialNumber: 'SN-FIXTURE',
+          firmwareVersion: '4.100.179',
+          imei: '',
+        ),
+      );
+      expect(info.model, 'q66nfc');
+      expect(info.firmwareVersion, '4.100.179');
+      expect(info.serialNumber, 'SN-FIXTURE');
+    },
+  );
   test('emits battery updates from persistent battery reports', () async {
     final eventBus = DeviceEventBus();
     final entity = DeviceEntity(
